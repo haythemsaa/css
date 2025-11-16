@@ -14,12 +14,10 @@ class Content extends Model
 
     protected $fillable = [
         'author_id',
-        'category_id',
         'title',
         'slug',
-        'description',
-        'content_type',
-        'thumbnail',
+        'excerpt',
+        'type',
         'is_premium',
         'is_featured',
         'published_at',
@@ -42,6 +40,11 @@ class Content extends Model
     public function video(): HasOne
     {
         return $this->hasOne(Video::class);
+    }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable');
     }
 
     // Scopes

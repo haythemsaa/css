@@ -11,8 +11,8 @@ class Player extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'name',
+        'slug',
         'birth_date',
         'nationality',
         'position',
@@ -20,19 +20,40 @@ class Player extends Model
         'photo',
         'height',
         'weight',
-        'preferred_foot',
-        'contract_expires_at',
-        'market_value',
-        'biography',
-        'statistics',
+        'bio',
+        'goals',
+        'assists',
+        'yellow_cards',
+        'red_cards',
+        'matches_played',
+        'contract_start',
+        'contract_end',
+        'is_active',
     ];
 
     protected $casts = [
         'birth_date' => 'date',
-        'contract_expires_at' => 'date',
-        'height' => 'float',
-        'weight' => 'float',
-        'market_value' => 'float',
-        'statistics' => 'array',
+        'contract_start' => 'date',
+        'contract_end' => 'date',
+        'height' => 'integer',
+        'weight' => 'integer',
+        'jersey_number' => 'integer',
+        'goals' => 'integer',
+        'assists' => 'integer',
+        'yellow_cards' => 'integer',
+        'red_cards' => 'integer',
+        'matches_played' => 'integer',
+        'is_active' => 'boolean',
     ];
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeByPosition($query, string $position)
+    {
+        return $query->where('position', $position);
+    }
 }
