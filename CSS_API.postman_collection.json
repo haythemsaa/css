@@ -1,0 +1,734 @@
+{
+	"info": {
+		"_postman_id": "css-api-collection",
+		"name": "CSS Platform API",
+		"description": "Collection complète pour tester l'API du Club Sportif Sfaxien",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('auth_token', jsonData.data.token);",
+									"    pm.environment.set('auth_token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ahmed Ben Ali\",\n    \"email\": \"ahmed@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"+216 20 123 456\",\n    \"city\": \"Sfax\",\n    \"governorate\": \"Sfax\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('auth_token', jsonData.data.token);",
+									"    pm.environment.set('auth_token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@css.tn\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/profile",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "profile"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Name\",\n    \"phone\": \"+216 20 999 888\",\n    \"city\": \"Tunis\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/profile",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "profile"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"password\",\n    \"new_password\": \"newpassword123\",\n    \"new_password_confirmation\": \"newpassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/change-password",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "change-password"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "logout"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Partners (Freeoui)",
+			"item": [
+				{
+					"name": "Get Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/partners/categories",
+							"host": ["{{base_url}}"],
+							"path": ["partners", "categories"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Partners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/partners?per_page=20",
+							"host": ["{{base_url}}"],
+							"path": ["partners"],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "city",
+									"value": "Sfax",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "restauration",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "restaurant",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Partners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/partners/featured",
+							"host": ["{{base_url}}"],
+							"path": ["partners", "featured"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Partner Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/partners/:slug",
+							"host": ["{{base_url}}"],
+							"path": ["partners", ":slug"],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "restaurant-le-corail"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Partner Offers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/partners/:slug/offers",
+							"host": ["{{base_url}}"],
+							"path": ["partners", ":slug", "offers"],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "restaurant-le-corail"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Offers",
+			"item": [
+				{
+					"name": "Get All Offers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/offers",
+							"host": ["{{base_url}}"],
+							"path": ["offers"],
+							"query": [
+								{
+									"key": "type",
+									"value": "flash",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "restauration",
+									"disabled": true
+								},
+								{
+									"key": "min_reduction",
+									"value": "15",
+									"disabled": true
+								},
+								{
+									"key": "featured",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Offer Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/offers/:slug",
+							"host": ["{{base_url}}"],
+							"path": ["offers", ":slug"],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "menu-du-jour-20"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reduction Codes",
+			"item": [
+				{
+					"name": "Generate Code (Premium/Socios)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"qr\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/codes/generate/:offerSlug",
+							"host": ["{{base_url}}"],
+							"path": ["codes", "generate", ":offerSlug"],
+							"variable": [
+								{
+									"key": "offerSlug",
+									"value": "menu-du-jour-20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Codes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/codes/my-codes?active_only=1",
+							"host": ["{{base_url}}"],
+							"path": ["codes", "my-codes"],
+							"query": [
+								{
+									"key": "active_only",
+									"value": "1"
+								},
+								{
+									"key": "status",
+									"value": "active",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "qr",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Code Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/codes/:code",
+							"host": ["{{base_url}}"],
+							"path": ["codes", ":code"],
+							"variable": [
+								{
+									"key": "code",
+									"value": "QR-A8F3K9L2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Code (Public)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"QR-A8F3K9L2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/codes/validate",
+							"host": ["{{base_url}}"],
+							"path": ["codes", "validate"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Use Code (Public)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 50.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/codes/:code/use",
+							"host": ["{{base_url}}"],
+							"path": ["codes", ":code", "use"],
+							"variable": [
+								{
+									"key": "code",
+									"value": "QR-A8F3K9L2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Content",
+			"item": [
+				{
+					"name": "Get All Content",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/content",
+							"host": ["{{base_url}}"],
+							"path": ["content"],
+							"query": [
+								{
+									"key": "type",
+									"value": "article",
+									"disabled": true
+								},
+								{
+									"key": "featured",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "css",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Content",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/content/featured",
+							"host": ["{{base_url}}"],
+							"path": ["content", "featured"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Content Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/content/:slug",
+							"host": ["{{base_url}}"],
+							"path": ["content", ":slug"],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "css-remporte-derby-ess"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Like Content",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/content/:slug/like",
+							"host": ["{{base_url}}"],
+							"path": ["content", ":slug", "like"],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "css-remporte-derby-ess"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Players",
+			"item": [
+				{
+					"name": "Get All Players",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/players",
+							"host": ["{{base_url}}"],
+							"path": ["players"],
+							"query": [
+								{
+									"key": "position",
+									"value": "forward",
+									"disabled": true
+								},
+								{
+									"key": "nationality",
+									"value": "Tunisie",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ali",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Players by Position",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/players/position/:position",
+							"host": ["{{base_url}}"],
+							"path": ["players", "position", ":position"],
+							"variable": [
+								{
+									"key": "position",
+									"value": "forward"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Player Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/players/:slug",
+							"host": ["{{base_url}}"],
+							"path": ["players", ":slug"],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "ali-jemal"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Matches",
+			"item": [
+				{
+					"name": "Get All Matches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/matches",
+							"host": ["{{base_url}}"],
+							"path": ["matches"],
+							"query": [
+								{
+									"key": "status",
+									"value": "scheduled",
+									"disabled": true
+								},
+								{
+									"key": "competition",
+									"value": "ligue1",
+									"disabled": true
+								},
+								{
+									"key": "upcoming",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "past",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Upcoming Matches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/matches/upcoming",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "upcoming"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Latest Results",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/matches/results",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "results"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Match Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/matches/:id",
+							"host": ["{{base_url}}"],
+							"path": ["matches", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
