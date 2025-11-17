@@ -1,0 +1,87 @@
+name: ✨ Feature Request
+description: Proposer une nouvelle fonctionnalité
+title: "[Feature] "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de proposer une amélioration pour la plateforme CSS !
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Composant concerné
+      description: Où cette fonctionnalité devrait-elle être implémentée ?
+      options:
+        - Backend (Laravel)
+        - Frontend (React)
+        - Mobile (React Native)
+        - API
+        - Base de données
+        - CI/CD
+        - Documentation
+        - Plateforme complète
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problème à résoudre
+      description: Quel problème cette fonctionnalité résout-elle ?
+      placeholder: Actuellement, il est difficile de...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+      description: Comment imaginez-vous cette fonctionnalité ?
+      placeholder: |
+        Je propose d'ajouter...
+        Cela permettrait de...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considérées
+      description: Avez-vous pensé à d'autres approches ?
+      placeholder: Une alternative serait...
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte additionnel
+      description: Informations supplémentaires, mockups, liens, etc.
+      placeholder: Voici un exemple de...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorité suggérée
+      description: Selon vous, quelle est l'urgence ?
+      options:
+        - Basse - Nice to have
+        - Normale - Amélioration utile
+        - Haute - Fonctionnalité importante
+        - Critique - Bloquant
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      options:
+        - label: Je suis prêt(e) à implémenter cette fonctionnalité
+          required: false
+        - label: Je peux aider à la tester
+          required: false
