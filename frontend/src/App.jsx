@@ -11,11 +11,13 @@ import Content from './pages/public/Content';
 import ContentDetail from './pages/public/ContentDetail';
 import Players from './pages/public/Players';
 import Matches from './pages/public/Matches';
+import Upgrade from './pages/public/Upgrade';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
 // Dashboard Pages
 import Dashboard from './pages/dashboard/Dashboard';
+import Profile from './pages/dashboard/Profile';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -68,12 +70,23 @@ function App() {
           <Route path="/players" element={<Players />} />
           <Route path="/matches" element={<Matches />} />
 
+          {/* Upgrade */}
+          <Route path="/upgrade" element={<Upgrade />} />
+
           {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />

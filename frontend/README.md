@@ -135,20 +135,52 @@ const nearby = await partnersService.getNearby(latitude, longitude, 10);
 
 ## 🎯 Pages implémentées
 
-### ✅ Complété
+### ✅ Pages Publiques (100%)
 
-- ✅ Home - Page d'accueil avec présentation de la plateforme
-- ✅ Login - Connexion utilisateur
-- ✅ Register - Inscription utilisateur
+- ✅ **Home** (`/`) - Page d'accueil avec présentation de la plateforme, tarifs, et CTA
+- ✅ **Login** (`/login`) - Connexion utilisateur avec comptes de test
+- ✅ **Register** (`/register`) - Inscription utilisateur avec validation
+- ✅ **Partners** (`/partners`) - Liste des 29 partenaires Freeoui avec filtres avancés
+- ✅ **PartnerDetail** (`/partners/:slug`) - Détails d'un partenaire avec ses offres
+- ✅ **Content** (`/content`) - Liste des contenus (articles, vidéos, galeries, podcasts)
+- ✅ **ContentDetail** (`/content/:slug`) - Détails d'un contenu avec lecteur vidéo/galerie
+- ✅ **Players** (`/players`) - Effectif de l'équipe CSS avec filtres par position
+- ✅ **Matches** (`/matches`) - Calendrier et résultats des matchs
+- ✅ **Upgrade** (`/upgrade`) - Présentation des offres Premium et Socios
 
-### 🚧 À venir
+### ✅ Pages Protégées (100%)
 
-- 🚧 Partners - Liste et détails des partenaires Freeoui
-- 🚧 Content - Articles et actualités
-- 🚧 Players - Effectif de l'équipe
-- 🚧 Matches - Calendrier et résultats
-- 🚧 Dashboard - Tableau de bord utilisateur
-- 🚧 Profile - Gestion du profil
+- ✅ **Dashboard** (`/dashboard`) - Tableau de bord utilisateur (stats, codes, actions rapides)
+- ✅ **Profile** (`/profile`) - Gestion du profil utilisateur avec 3 onglets (info, sécurité, préférences)
+
+### 🎯 Fonctionnalités Clés
+
+#### Système Freeoui
+- Génération de codes QR/Promo/NFC
+- Géolocalisation des partenaires à proximité
+- Filtres par catégorie, ville, featured
+- Validation des stocks et dates d'expiration
+- Calcul automatique des réductions selon user_type
+
+#### Gestion de Contenu
+- Types multiples : Articles, Vidéos, Galeries, Podcasts
+- Contrôle d'accès Premium
+- Système de likes
+- Lecteur vidéo intégré
+- Galeries d'images
+
+#### Équipe & Matchs
+- Filtres par position (Gardiens, Défenseurs, Milieux, Attaquants)
+- Stats des joueurs (matchs, buts, assists, cartons)
+- Calendrier avec onglets (Prochains matchs / Résultats)
+- Badges de compétition
+- Détection domicile/extérieur
+
+#### Dashboard Utilisateur
+- Vue d'ensemble avec 4 cartes de stats
+- Liste des codes actifs avec détails
+- Gestion du profil (3 onglets)
+- Actions rapides vers toutes les sections
 
 ## 🛠️ Scripts disponibles
 
@@ -195,20 +227,34 @@ premium1@css.tn / password (Premium)
 free1@css.tn / password (Free)
 ```
 
-## 📝 TODO
+## 📝 Statut du projet
 
-- [ ] Implémenter la page Partenaires avec filtres et géolocalisation
-- [ ] Implémenter la génération de codes QR/Promo/NFC
-- [ ] Créer le dashboard utilisateur
-- [ ] Ajouter la gestion du profil
-- [ ] Implémenter les pages de contenu (articles, vidéos)
-- [ ] Ajouter la page équipe avec filtres par position
-- [ ] Créer le calendrier des matchs
-- [ ] Implémenter le système de notifications
-- [ ] Ajouter les animations et transitions
-- [ ] Optimiser les performances (lazy loading, code splitting)
+### ✅ Fonctionnalités complétées
+
+- [x] Page Partenaires avec filtres avancés et géolocalisation
+- [x] Génération de codes QR/Promo/NFC
+- [x] Dashboard utilisateur complet
+- [x] Gestion complète du profil (3 onglets)
+- [x] Pages de contenu (articles, vidéos, galeries, podcasts)
+- [x] Page équipe avec filtres par position
+- [x] Calendrier des matchs (prochains + résultats)
+- [x] Page upgrade/pricing
+- [x] Système de likes pour le contenu
+- [x] Contrôle d'accès Premium
+- [x] Responsive design complet
+
+### 🚧 Améliorations futures
+
+- [ ] Intégration passerelle de paiement (Premium/Socios)
+- [ ] Système de notifications push
+- [ ] Animations et micro-interactions avancées
+- [ ] Optimisations performances (lazy loading, code splitting, PWA)
 - [ ] Tests unitaires avec Vitest
 - [ ] Tests E2E avec Playwright
+- [ ] Mode sombre
+- [ ] Support multilingue complet (FR/AR/EN)
+- [ ] Partage social (Facebook, Twitter, WhatsApp)
+- [ ] Téléchargement de contenus offline
 
 ## 🤝 Contribution
 

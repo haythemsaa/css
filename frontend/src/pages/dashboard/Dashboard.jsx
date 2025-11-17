@@ -365,9 +365,11 @@ const Dashboard = () => {
               )}
 
               <div className="pt-6 border-t border-gray-200">
-                <Button variant="outline" fullWidth>
-                  Modifier mon profil
-                </Button>
+                <Link to="/profile">
+                  <Button variant="outline" fullWidth>
+                    Modifier mon profil
+                  </Button>
+                </Link>
               </div>
             </div>
           </Card>
