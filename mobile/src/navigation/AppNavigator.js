@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, TouchableOpacity, Text } from 'react-native';
 
 import useAuthStore from '../stores/authStore';
 import { COLORS } from '../constants/theme';
@@ -14,8 +14,13 @@ import RegisterScreen from '../screens/auth/RegisterScreen';
 // Main Screens
 import HomeScreen from '../screens/main/HomeScreen';
 import PartnersScreen from '../screens/partners/PartnersScreen';
+import PartnerDetailScreen from '../screens/partners/PartnerDetailScreen';
 import ContentScreen from '../screens/content/ContentScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+
+// Codes Screens
+import MyCodesScreen from '../screens/codes/MyCodesScreen';
+import QRScannerScreen from '../screens/codes/QRScannerScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,6 +53,75 @@ const AuthNavigator = () => {
   );
 };
 
+// Partners Stack Navigator
+const PartnersStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: COLORS.black,
+        },
+        headerTintColor: COLORS.white,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="PartnersList"
+        component={PartnersScreen}
+        options={{ title: 'Freeoui Partners' }}
+      />
+      <Stack.Screen
+        name="PartnerDetail"
+        component={PartnerDetailScreen}
+        options={{ title: 'Détails partenaire' }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+// Codes Stack Navigator
+const CodesStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: COLORS.black,
+        },
+        headerTintColor: COLORS.white,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="MyCodesList"
+        component={MyCodesScreen}
+        options={({ navigation }) => ({
+          title: 'Mes Codes',
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('QRScanner')}
+              style={{ marginRight: 16 }}
+            >
+              <Text style={{ color: COLORS.gold, fontSize: 24 }}>📷</Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="QRScanner"
+        component={QRScannerScreen}
+        options={{
+          title: 'Scanner QR Code',
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 // Main Tab Navigator
 const MainNavigator = () => {
   return (
@@ -59,13 +133,7 @@ const MainNavigator = () => {
           backgroundColor: COLORS.black,
           borderTopColor: COLORS.gray800,
         },
-        headerStyle: {
-          backgroundColor: COLORS.black,
-        },
-        headerTintColor: COLORS.white,
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
+        headerShown: false,
       }}
     >
       <Tab.Screen
@@ -74,14 +142,30 @@ const MainNavigator = () => {
         options={{
           title: 'Accueil',
           tabBarIcon: ({ color }) => <View>🏠</View>,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: COLORS.black,
+          },
+          headerTintColor: COLORS.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <Tab.Screen
         name="Partners"
-        component={PartnersScreen}
+        component={PartnersStack}
         options={{
           title: 'Freeoui',
           tabBarIcon: ({ color }) => <View>🏪</View>,
+        }}
+      />
+      <Tab.Screen
+        name="MyCodes"
+        component={CodesStack}
+        options={{
+          title: 'Mes Codes',
+          tabBarIcon: ({ color }) => <View>🎫</View>,
         }}
       />
       <Tab.Screen
@@ -90,6 +174,14 @@ const MainNavigator = () => {
         options={{
           title: 'Actualités',
           tabBarIcon: ({ color }) => <View>📰</View>,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: COLORS.black,
+          },
+          headerTintColor: COLORS.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <Tab.Screen
@@ -98,6 +190,14 @@ const MainNavigator = () => {
         options={{
           title: 'Profil',
           tabBarIcon: ({ color }) => <View>👤</View>,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: COLORS.black,
+          },
+          headerTintColor: COLORS.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
     </Tab.Navigator>

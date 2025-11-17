@@ -27,7 +27,7 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 
 ## 🎯 Fonctionnalités
 
-### ✅ Implémentées (v1.0.0)
+### ✅ Implémentées (v1.1.0) **[NOUVEAU]**
 
 #### Authentification
 - ✓ Connexion avec email/mot de passe
@@ -45,7 +45,30 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 - ✓ Liste des 29 partenaires
 - ✓ Filtrage par catégorie (Restaurants, Shopping, Sport, Santé)
 - ✓ Affichage des réductions selon le type d'utilisateur
-- ✓ Compteur d'offres actives par partenaire
+- ✓ **Écran de détail partenaire** ✨
+- ✓ **Liste des offres par partenaire** ✨
+- ✓ **Validation des offres (stock, expiration)** ✨
+
+#### Génération de codes Freeoui ✨ **[NOUVEAU v1.1]**
+- ✓ **Génération de codes QR/Promo/NFC** depuis les offres
+- ✓ **Modal de sélection du type de code**
+- ✓ **Validation Premium/Socios requise**
+- ✓ **Confirmation avec détails du code généré**
+
+#### Mes Codes ✨ **[NOUVEAU v1.1]**
+- ✓ **Liste de tous les codes générés**
+- ✓ **Filtrage par statut** (Actifs, Utilisés, Expirés, Tous)
+- ✓ **Affichage du statut des codes**
+- ✓ **Pull-to-refresh**
+- ✓ **Navigation vers scanner QR**
+- ✓ **Détails complets de chaque code**
+
+#### Scanner QR Code ✨ **[NOUVEAU v1.1]**
+- ✓ **Scanner de QR codes avec caméra**
+- ✓ **Validation des codes Freeoui en temps réel**
+- ✓ **Demande de permission caméra**
+- ✓ **Zone de scan avec coins animés**
+- ✓ **Feedback visuel lors de la validation**
 
 #### Actualités
 - ✓ Liste du contenu (Articles, Vidéos, Galeries, Podcasts)
@@ -57,41 +80,39 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 - ✓ Informations utilisateur
 - ✓ Statistiques (Type de compte, Niveau de fidélité)
 - ✓ Points de fidélité
-- ✓ Menu de navigation (à compléter)
+- ✓ Menu de navigation
 - ✓ Déconnexion
 
-### 🚧 À venir (v1.1+)
+#### Navigation
+- ✓ **5 onglets** (Home, Partners, Mes Codes ✨, Content, Profile)
+- ✓ **Stack navigation** pour Partners et Codes
+- ✓ **Bouton scanner** dans header de Mes Codes ✨
 
-#### Scanner QR Code
-- [ ] Scanner de QR codes avec caméra
-- [ ] Validation des codes Freeoui
-- [ ] Historique des codes scannés
-
-#### Génération de codes
-- [ ] Génération de codes QR/Promo/NFC
-- [ ] Gestion des codes actifs
-- [ ] Dates d'expiration et stock
+### 🚧 À venir (v1.2+)
 
 #### Géolocalisation
 - [ ] Carte interactive des partenaires
-- [ ] Filtrage par proximité
+- [ ] Filtrage par proximité (Haversine)
 - [ ] Itinéraire vers les partenaires
+- [ ] Partenaires à proximité sur la carte
 
 #### Notifications Push
 - [ ] Notifications pour les matchs
 - [ ] Alertes pour les nouvelles offres Freeoui
 - [ ] Actualités du club en temps réel
+- [ ] Rappels codes expiration
 
 #### Contenu détaillé
 - [ ] Lecteur vidéo intégré
 - [ ] Galerie photos swipeable
 - [ ] Player podcast/audio
-- [ ] Système de likes
+- [ ] Système de likes actif
 
 #### Mode hors ligne
 - [ ] Cache des données consultées
 - [ ] Synchronisation automatique
 - [ ] Indicateur de connexion
+- [ ] Gestion file d'attente actions
 
 ---
 
@@ -399,6 +420,31 @@ Pour contribuer:
 
 ## 📝 Changelog
 
+### v1.1.0 (Novembre 2025) **[NOUVEAU]**
+
+**Fonctionnalités Freeoui:**
+- ✨ **Écran de détail partenaire** avec liste complète des offres
+- ✨ **Génération de codes Freeoui** (QR/Promo/NFC) depuis les offres
+- ✨ **Modal de sélection** du type de code avec UI intuitive
+- ✨ **Validation en temps réel** (stock, expiration, Premium requis)
+- ✨ **Écran "Mes Codes"** avec gestion complète des codes générés
+- ✨ **Filtrage par statut** (Actifs, Utilisés, Expirés, Tous)
+- ✨ **Scanner QR Code** avec caméra et validation backend
+- ✨ **Zone de scan** avec coins animés et feedback visuel
+
+**Navigation:**
+- Ajout onglet "Mes Codes" dans bottom tabs (5 onglets total)
+- Stack navigation pour Partners avec détail
+- Stack navigation pour Codes avec scanner
+- Bouton scanner dans header de Mes Codes
+
+**Technique:**
+- Intégration Expo Camera pour QR scanner
+- Permissions caméra gérées
+- Pull-to-refresh sur liste codes
+- Modals avec animations
+- Validation côté client et serveur
+
 ### v1.0.0 (Novembre 2025)
 
 **Fonctionnalités:**
@@ -444,6 +490,6 @@ Copyright © 2025 Club Sportif Sfaxien. Tous droits réservés.
 
 **⚽ يا CSS يا نجوم السما ⚽**
 
-*CSS Platform Mobile v1.0.0*
+*CSS Platform Mobile v1.1.0*
 
 </div>

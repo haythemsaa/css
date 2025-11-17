@@ -13,7 +13,7 @@ import useAuthStore from '../../stores/authStore';
 import { partnersService } from '../../services/api';
 import { COLORS, SPACING, FONT_SIZES, FONT_WEIGHTS } from '../../constants/theme';
 
-const PartnersScreen = () => {
+const PartnersScreen = ({ navigation }) => {
   const { user, isPremium } = useAuthStore();
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -158,18 +158,10 @@ const PartnersScreen = () => {
                   </Text>
 
                   <Button
-                    title={canGenerate ? 'Voir les offres' : 'Voir détails'}
+                    title="Voir les offres"
                     variant="secondary"
                     size="sm"
-                    onPress={() =>
-                      Alert.alert(
-                        partner.name,
-                        `${partner.active_offers_count || 0} offres disponibles\n\n` +
-                          (canGenerate
-                            ? 'Fonctionnalité de génération de codes à venir!'
-                            : 'Passez à Premium pour générer des codes de réduction.')
-                      )
-                    }
+                    onPress={() => navigation.navigate('PartnerDetail', { partnerSlug: partner.slug })}
                   />
                 </View>
               </Card>
