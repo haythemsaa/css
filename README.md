@@ -243,11 +243,33 @@ css/
 │   │   └── index.css                 # Tailwind v4 configuration
 │   ├── public/                       # Static assets
 │   └── README.md                     # Frontend docs
+├── mobile/                     # Application React Native
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── common/               # Button, Card, Input
+│   │   ├── screens/
+│   │   │   ├── auth/                 # Login, Register
+│   │   │   ├── main/                 # Home
+│   │   │   ├── partners/             # Freeoui partners
+│   │   │   ├── content/              # News & content
+│   │   │   └── profile/              # User profile
+│   │   ├── navigation/
+│   │   │   └── AppNavigator.js       # Navigation config
+│   │   ├── services/
+│   │   │   └── api.js                # API client
+│   │   ├── stores/
+│   │   │   └── authStore.js          # Auth state (Zustand)
+│   │   └── constants/
+│   │       ├── theme.js              # CSS colors & theme
+│   │       └── config.js             # App configuration
+│   ├── App.js                        # Entry point
+│   └── README.md                     # Mobile docs
 ├── docs/
 │   ├── API_DOCUMENTATION.md          # Documentation API complète
 │   ├── FILAMENT_ADMIN.md             # Guide panel admin
 │   └── cahier_charges_css_socios.md  # Specs originales
 ├── DEPLOYMENT.md                     # Guide de déploiement
+├── DOCKER.md                         # Guide Docker Compose
 └── README.md                         # Ce fichier
 ```
 
@@ -386,6 +408,42 @@ Accès :
 - **Backend API**: http://localhost:8000/api/v1
 - **Admin Panel**: http://localhost:8000/admin
 
+#### 3. Mobile (React Native) **[NOUVEAU]**
+
+**Ouvrir un nouveau terminal**
+```bash
+cd css/mobile
+```
+
+**Installer les dépendances**
+```bash
+npm install
+```
+
+**Configuration**
+
+L'API est configurée dans `src/constants/config.js`:
+```javascript
+// Pour appareil physique sur même réseau:
+export const API_BASE_URL = 'http://192.168.1.X:8000/api/v1';
+
+// Remplacer X par l'IP de votre machine
+```
+
+**Lancer avec Expo**
+```bash
+npm start
+# Scanner le QR code avec Expo Go sur votre téléphone
+```
+
+**Tester sur émulateur**
+```bash
+npm run android  # Android
+npm run ios      # iOS (Mac uniquement)
+```
+
+Voir [mobile/README.md](mobile/README.md) pour plus de détails.
+
 ---
 
 ## ⚙️ Configuration
@@ -483,7 +541,13 @@ MAIL_HOST=smtp.example.com
    - Pages et fonctionnalités
    - Build et déploiement
 
-5. **[PROJECT_README.md](PROJECT_README.md)**
+5. **[mobile/README.md](mobile/README.md)** **[NOUVEAU]**
+   - Documentation app mobile React Native
+   - Configuration Expo
+   - Écrans et navigation
+   - Build iOS/Android
+
+6. **[PROJECT_README.md](PROJECT_README.md)**
    - Documentation technique complète
    - Architecture et modèles
    - Setup et seeders
@@ -626,14 +690,22 @@ free1@css.tn / password (Free)
 - [x] API integration complète (Axios + interceptors)
 - [x] Build optimisé (376 kB bundle)
 
-### 📱 Phase 3 - Application Mobile
-- [ ] React Native setup
-- [ ] Navigation et UI/UX
-- [ ] Intégration API
-- [ ] Scanner QR codes
-- [ ] Notifications push
-- [ ] Géolocalisation partenaires
-- [ ] Mode offline
+### ✅ Phase 3 - Application Mobile (EN COURS) **[NOUVEAU]**
+- [x] React Native setup (Expo + React Navigation)
+- [x] Design system mobile (couleurs CSS)
+- [x] Authentification (Login, Register, Logout)
+- [x] Navigation (Bottom Tabs + Stack)
+- [x] Écran d'accueil avec stats utilisateur
+- [x] Liste partenaires Freeoui avec filtres
+- [x] Liste contenu avec filtres par type
+- [x] Profil utilisateur avec points de fidélité
+- [x] Intégration API backend complète
+- [x] State management (Zustand + AsyncStorage)
+- [ ] Scanner QR codes (à venir v1.1)
+- [ ] Génération codes Freeoui (à venir v1.1)
+- [ ] Notifications push (à venir v1.1)
+- [ ] Géolocalisation partenaires (à venir v1.1)
+- [ ] Mode offline (à venir v1.2)
 
 ### 🧪 Phase 4 - Tests & Qualité
 - [ ] Tests unitaires (Models, Controllers)
