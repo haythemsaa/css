@@ -7,6 +7,10 @@ import useAuthStore from './stores/authStore';
 import Home from './pages/public/Home';
 import Partners from './pages/public/Partners';
 import PartnerDetail from './pages/public/PartnerDetail';
+import Content from './pages/public/Content';
+import ContentDetail from './pages/public/ContentDetail';
+import Players from './pages/public/Players';
+import Matches from './pages/public/Matches';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
@@ -56,10 +60,13 @@ function App() {
           <Route path="/partners" element={<Partners />} />
           <Route path="/partners/:slug" element={<PartnerDetail />} />
 
-          {/* Placeholder routes - to be implemented */}
-          <Route path="/content" element={<div className="container mx-auto px-4 py-8"><h1 className="text-3xl font-bold">Actualités - À venir</h1></div>} />
-          <Route path="/players" element={<div className="container mx-auto px-4 py-8"><h1 className="text-3xl font-bold">Équipe - À venir</h1></div>} />
-          <Route path="/matches" element={<div className="container mx-auto px-4 py-8"><h1 className="text-3xl font-bold">Matchs - À venir</h1></div>} />
+          {/* Content Routes */}
+          <Route path="/content" element={<Content />} />
+          <Route path="/content/:slug" element={<ContentDetail />} />
+
+          {/* Players & Matches */}
+          <Route path="/players" element={<Players />} />
+          <Route path="/matches" element={<Matches />} />
 
           {/* Protected Routes */}
           <Route
