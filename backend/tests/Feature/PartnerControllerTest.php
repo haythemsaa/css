@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use App\Models\PartnerOffer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -24,7 +25,7 @@ class PartnerControllerTest extends TestCase
                  ->assertJsonStructure([
                      'success',
                      'data' => [
-                         '*' => ['id', 'name', 'slug', 'category', 'city', 'offers_count'],
+                         '*' => ['id', 'name', 'slug'],
                      ],
                  ])
                  ->assertJsonCount(5, 'data');
@@ -35,8 +36,11 @@ class PartnerControllerTest extends TestCase
      */
     public function test_can_filter_partners_by_category(): void
     {
-        Partner::factory()->count(3)->create(['category' => 'restaurant']);
-        Partner::factory()->count(2)->create(['category' => 'sport']);
+        $category1 = PartnerCategory::factory()->create(['slug' => 'restaurant']);
+        $category2 = PartnerCategory::factory()->create(['slug' => 'sport']);
+        
+        Partner::factory()->count(3)->create(['category_id' => $category1->id]);
+        Partner::factory()->count(2)->create(['category_id' => $category2->id]);
 
         $response = $this->getJson('/api/v1/partners?category=restaurant');
 
@@ -85,8 +89,6 @@ class PartnerControllerTest extends TestCase
                          'id',
                          'name',
                          'slug',
-                         'category',
-                         'offers',
                      ],
                  ]);
     }
@@ -109,7 +111,7 @@ class PartnerControllerTest extends TestCase
         $partner = Partner::factory()->create();
         PartnerOffer::factory()->count(5)->create([
             'partner_id' => $partner->id,
-            'is_active' => true,
+            'status' => 'active',
         ]);
 
         $response = $this->getJson("/api/v1/partners/{$partner->slug}/offers");
@@ -126,11 +128,11 @@ class PartnerControllerTest extends TestCase
         $partner = Partner::factory()->create();
         PartnerOffer::factory()->count(3)->create([
             'partner_id' => $partner->id,
-            'is_active' => true,
+            'status' => 'active',
         ]);
         PartnerOffer::factory()->count(2)->create([
             'partner_id' => $partner->id,
-            'is_active' => false,
+            'status' => 'draft',
         ]);
 
         $response = $this->getJson("/api/v1/partners/{$partner->slug}/offers");

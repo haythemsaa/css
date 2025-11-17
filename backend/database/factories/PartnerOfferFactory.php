@@ -22,7 +22,7 @@ class PartnerOfferFactory extends Factory
     public function definition(): array
     {
         $title = fake()->sentence(4);
-        $types = ['standard', 'flash', 'vip'];
+        $types = ['standard', 'flash', 'seasonal', 'exclusive'];
 
         return [
             'partner_id' => Partner::factory(),
@@ -30,13 +30,18 @@ class PartnerOfferFactory extends Factory
             'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(1, 1000),
             'description' => fake()->paragraph(),
             'offer_type' => fake()->randomElement($types),
-            'reduction_percentage' => fake()->randomElement([10, 15, 20, 25]),
-            'conditions' => fake()->sentence(),
-            'stock' => fake()->numberBetween(5, 100),
-            'max_uses_per_user' => fake()->numberBetween(1, 5),
+            'reduction_value' => fake()->randomFloat(2, 10, 25),
+            'reduction_type' => 'percentage',
             'valid_from' => now(),
             'valid_until' => now()->addDays(fake()->numberBetween(7, 90)),
-            'is_active' => true,
+            'stock_available' => fake()->numberBetween(5, 100),
+            'stock_used' => 0,
+            'user_limit_per_day' => fake()->numberBetween(1, 3),
+            'user_limit_per_month' => fake()->numberBetween(5, 10),
+            'membership_required' => fake()->randomElement(['premium', 'socios', 'both']),
+            'status' => 'active',
+            'is_featured' => fake()->boolean(20),
+            'display_order' => fake()->numberBetween(0, 10),
         ];
     }
 }

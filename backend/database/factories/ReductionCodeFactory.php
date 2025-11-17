@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ReductionCode;
 use App\Models\User;
+use App\Models\Partner;
 use App\Models\PartnerOffer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -22,17 +23,20 @@ class ReductionCodeFactory extends Factory
      */
     public function definition(): array
     {
-        $types = ['qr', 'promo', 'nfc'];
+        $types = ['qr', 'promo', 'nfc', 'wallet'];
         $statuses = ['active', 'used', 'expired'];
 
         return [
             'user_id' => User::factory(),
+            'partner_id' => Partner::factory(),
             'offer_id' => PartnerOffer::factory(),
             'code' => strtoupper(Str::random(3)) . '-' . strtoupper(Str::random(6)),
-            'type' => fake()->randomElement($types),
-            'status' => fake()->randomElement($statuses),
+            'code_type' => fake()->randomElement($types),
+            'reduction_value' => fake()->randomFloat(2, 10, 25),
+            'reduction_type' => 'percentage',
+            'generated_at' => now(),
             'expires_at' => now()->addDays(30),
-            'used_at' => null,
+            'status' => fake()->randomElement($statuses),
         ];
     }
 }

@@ -22,8 +22,8 @@ class ReductionCodeControllerTest extends TestCase
         $partner = Partner::factory()->create();
         $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
-            'stock' => 10,
-            'is_active' => true,
+            'stock_available' => 10,
+            'status' => 'active',
         ]);
 
         $token = $premiumUser->createToken('test-token')->plainTextToken;
@@ -49,7 +49,7 @@ class ReductionCodeControllerTest extends TestCase
         $this->assertDatabaseHas('reduction_codes', [
             'user_id' => $premiumUser->id,
             'offer_id' => $offer->id,
-            'type' => 'qr',
+            'code_type' => 'qr',
             'status' => 'active',
         ]);
     }
@@ -63,7 +63,7 @@ class ReductionCodeControllerTest extends TestCase
         $partner = Partner::factory()->create();
         $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
-            'stock' => 10,
+            'stock_available' => 10,
         ]);
 
         $token = $freeUser->createToken('test-token')->plainTextToken;
@@ -89,7 +89,7 @@ class ReductionCodeControllerTest extends TestCase
         $partner = Partner::factory()->create();
         $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
-            'stock' => 0,
+            'stock_available' => 0,
         ]);
 
         $token = $premiumUser->createToken('test-token')->plainTextToken;
@@ -117,6 +117,7 @@ class ReductionCodeControllerTest extends TestCase
 
         $code = ReductionCode::factory()->create([
             'user_id' => $user->id,
+            'partner_id' => $partner->id,
             'offer_id' => $offer->id,
             'code' => 'TEST-CODE-123',
             'status' => 'active',
@@ -148,6 +149,7 @@ class ReductionCodeControllerTest extends TestCase
 
         $code = ReductionCode::factory()->create([
             'user_id' => $user->id,
+            'partner_id' => $partner->id,
             'offer_id' => $offer->id,
             'code' => 'EXPIRED-CODE',
             'status' => 'active',
@@ -179,11 +181,12 @@ class ReductionCodeControllerTest extends TestCase
         $partner = Partner::factory()->create();
         $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
-            'reduction_percentage' => 20,
+            'reduction_value' => 20,
         ]);
 
         $code = ReductionCode::factory()->create([
             'user_id' => $user->id,
+            'partner_id' => $partner->id,
             'offer_id' => $offer->id,
             'code' => 'VALID-CODE',
             'status' => 'active',
@@ -220,6 +223,7 @@ class ReductionCodeControllerTest extends TestCase
 
         ReductionCode::factory()->count(3)->create([
             'user_id' => $user->id,
+            'partner_id' => $partner->id,
             'offer_id' => $offer->id,
         ]);
 
