@@ -88,19 +88,36 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 - ✓ **Stack navigation** pour Partners et Codes
 - ✓ **Bouton scanner** dans header de Mes Codes ✨
 
-### 🚧 À venir (v1.2+)
+### ✅ Implémentées (v1.2.0) **[NOUVEAU]**
 
-#### Géolocalisation
-- [ ] Carte interactive des partenaires
-- [ ] Filtrage par proximité (Haversine)
-- [ ] Itinéraire vers les partenaires
-- [ ] Partenaires à proximité sur la carte
+#### Notifications Push ✨ **[NOUVEAU v1.2]**
+- ✓ **Configuration et permissions** notifications
+- ✓ **Service de gestion** des notifications
+- ✓ **Notifications planifiées** pour les matchs
+- ✓ **Alertes nouvelles offres** CSS Privilèges
+- ✓ **Rappels expiration** de codes (24h avant)
+- ✓ **Notifications actualités** en temps réel
+- ✓ **Badge count** et gestion des notifications
 
-#### Notifications Push
-- [ ] Notifications pour les matchs
-- [ ] Alertes pour les nouvelles offres CSS Privilèges
-- [ ] Actualités du club en temps réel
-- [ ] Rappels codes expiration
+#### Géolocalisation & Carte ✨ **[NOUVEAU v1.2]**
+- ✓ **Carte interactive** des partenaires (React Native Maps)
+- ✓ **Marqueurs colorés** par catégorie
+- ✓ **Calcul de distance** avec formule Haversine
+- ✓ **Filtrage par proximité** (5 km)
+- ✓ **Position utilisateur** en temps réel
+- ✓ **Navigation vers partenaires** (Google Maps/Apple Maps)
+- ✓ **Bouton carte** dans header Partners
+- ✓ **Callouts interactifs** avec infos partenaire
+
+#### Mode Offline ✨ **[NOUVEAU v1.2]**
+- ✓ **Cache automatique** des données consultées
+- ✓ **Détection de connexion** (NetInfo)
+- ✓ **Synchronisation automatique** au retour en ligne
+- ✓ **File d'attente** pour actions offline
+- ✓ **Gestion intelligente** des expirations de cache
+- ✓ **Cache par entité** (partners, offers, content, codes)
+
+### 🚧 À venir (v1.3+)
 
 #### Contenu détaillé
 - [ ] Lecteur vidéo intégré
@@ -108,11 +125,10 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 - [ ] Player podcast/audio
 - [ ] Système de likes actif
 
-#### Mode hors ligne
-- [ ] Cache des données consultées
-- [ ] Synchronisation automatique
-- [ ] Indicateur de connexion
-- [ ] Gestion file d'attente actions
+#### Fonctionnalités avancées
+- [ ] Chat support en temps réel
+- [ ] Partage social
+- [ ] Statistiques personnelles détaillées
 
 ---
 
@@ -129,6 +145,9 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 | **AsyncStorage** | 2.x | Stockage local persistant |
 | **Expo Camera** | 17.x | Accès caméra (QR scanner) |
 | **Expo Location** | 19.x | Géolocalisation |
+| **Expo Notifications** | 0.31 | Notifications push |
+| **React Native Maps** | 1.22 | Carte interactive |
+| **NetInfo** | 11.x | Détection connexion |
 
 ---
 
@@ -420,7 +439,52 @@ Pour contribuer:
 
 ## 📝 Changelog
 
-### v1.1.0 (Novembre 2025) **[NOUVEAU]**
+### v1.2.0 (Novembre 2025) **[NOUVEAU]**
+
+**Fonctionnalités Notifications Push:**
+- ✨ **Service de notifications** complet avec Expo Notifications
+- ✨ **Notifications planifiées** pour matchs à venir (2h avant)
+- ✨ **Alertes nouvelles offres** CSS Privilèges en temps réel
+- ✨ **Rappels expiration codes** (24h avant expiration)
+- ✨ **Notifications actualités** du club
+- ✨ **Badge count** et gestion des notifications reçues
+- ✨ **Permissions iOS/Android** gérées automatiquement
+
+**Fonctionnalités Géolocalisation & Carte:**
+- ✨ **Carte interactive** avec React Native Maps
+- ✨ **29 partenaires** affichés avec marqueurs colorés par catégorie
+- ✨ **Position utilisateur** en temps réel sur la carte
+- ✨ **Calcul de distance** avec formule Haversine
+- ✨ **Filtrage par proximité** (5 km autour de l'utilisateur)
+- ✨ **Callouts personnalisés** avec détails partenaire
+- ✨ **Navigation vers partenaires** (Google Maps/Apple Maps)
+- ✨ **Bouton carte 🗺️** dans header de l'écran Partners
+- ✨ **Zoom automatique** sur partenaires à proximité
+- ✨ **Légende** des catégories avec couleurs
+
+**Fonctionnalités Mode Offline:**
+- ✨ **Cache intelligent** des données consultées
+- ✨ **Détection automatique** de la connexion (NetInfo)
+- ✨ **Synchronisation auto** au retour en ligne
+- ✨ **File d'attente** pour actions offline
+- ✨ **Cache par entité** (partners, offers, content, codes, matches, players)
+- ✨ **Gestion des expirations** (5 min à 24h selon l'entité)
+- ✨ **Indicateur connexion** dans l'app
+
+**Navigation:**
+- Ajout écran MapScreen dans PartnersStack
+- Bouton carte dans header de PartnersList
+- 3 niveaux de navigation: PartnersList → Map → PartnerDetail
+
+**Technique:**
+- Intégration Expo Notifications 0.31
+- Intégration React Native Maps 1.22
+- Intégration NetInfo 11.x
+- Services dédiés: notificationService, cacheService, locationService
+- Initialisation des services au démarrage de l'app (App.js)
+- Permissions caméra, localisation et notifications
+
+### v1.1.0 (Novembre 2025)
 
 **Fonctionnalités CSS Privilèges:**
 - ✨ **Écran de détail partenaire** avec liste complète des offres
@@ -490,6 +554,6 @@ Copyright © 2025 Club Sportif Sfaxien. Tous droits réservés.
 
 **⚽ يا CSS يا نجوم السما ⚽**
 
-*CSS Platform Mobile v1.1.0*
+*CSS Platform Mobile v1.2.0*
 
 </div>

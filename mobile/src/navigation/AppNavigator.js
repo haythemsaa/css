@@ -15,6 +15,7 @@ import RegisterScreen from '../screens/auth/RegisterScreen';
 import HomeScreen from '../screens/main/HomeScreen';
 import PartnersScreen from '../screens/partners/PartnersScreen';
 import PartnerDetailScreen from '../screens/partners/PartnerDetailScreen';
+import MapScreen from '../screens/partners/MapScreen';
 import ContentScreen from '../screens/content/ContentScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 
@@ -70,7 +71,22 @@ const PartnersStack = () => {
       <Stack.Screen
         name="PartnersList"
         component={PartnersScreen}
-        options={{ title: 'CSS Privilèges Partners' }}
+        options={({ navigation }) => ({
+          title: 'CSS Privilèges Partners',
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Map')}
+              style={{ marginRight: 15 }}
+            >
+              <Text style={{ color: COLORS.gold, fontSize: 24 }}>🗺️</Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Map"
+        component={MapScreen}
+        options={{ title: 'Carte des partenaires' }}
       />
       <Stack.Screen
         name="PartnerDetail"
