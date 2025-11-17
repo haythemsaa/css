@@ -1,0 +1,184 @@
+# Docker Compose - CSS Platform
+# Configuration pour environnement de développement
+
+version: '3.8'
+
+services:
+  # Base de données MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: css_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: css_db
+      MYSQL_USER: css_user
+      MYSQL_PASSWORD: css_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - css_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis pour cache et queues
+  redis:
+    image: redis:7-alpine
+    container_name: css_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - css_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Backend Laravel
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: css_backend
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+      - backend_vendor:/var/www/html/vendor
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_URL: http://localhost:8000
+
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: css_db
+      DB_USERNAME: css_user
+      DB_PASSWORD: css_password
+
+      CACHE_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      SESSION_DRIVER: redis
+
+      REDIS_HOST: redis
+      REDIS_PASSWORD: null
+      REDIS_PORT: 6379
+
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - css_network
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  # Queue Worker Laravel
+  queue:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: css_queue
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+      - backend_vendor:/var/www/html/vendor
+    environment:
+      APP_ENV: local
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: css_db
+      DB_USERNAME: css_user
+      DB_PASSWORD: css_password
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      QUEUE_CONNECTION: redis
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - css_network
+    command: php artisan queue:work --verbose --tries=3 --timeout=90
+
+  # Frontend React (Vite)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: css_frontend
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:8000/api/v1
+    depends_on:
+      - backend
+    networks:
+      - css_network
+    command: npm run dev -- --host
+
+  # phpMyAdmin pour gestion MySQL
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: css_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: css_user
+      PMA_PASSWORD: css_password
+    depends_on:
+      - mysql
+    networks:
+      - css_network
+
+  # Redis Commander pour visualiser Redis
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: css_redis_commander
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    depends_on:
+      - redis
+    networks:
+      - css_network
+
+networks:
+  css_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_vendor:
+    driver: local
+  frontend_node_modules:
+    driver: local

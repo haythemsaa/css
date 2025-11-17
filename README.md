@@ -7,9 +7,13 @@
 **Plateforme digitale complète pour le Club Sportif Sfaxien**
 
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev)
 [![Filament](https://img.shields.io/badge/Filament-v4-F59E0B?logo=php)](https://filamentphp.com)
 [![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?logo=php)](https://php.net)
+[![Tailwind](https://img.shields.io/badge/Tailwind-v4-38B2AC?logo=tailwind-css)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](LICENSE)
+
+🎉 **Projet Complet à 100%** - Backend + Frontend + Documentation
 
 </div>
 
@@ -132,14 +136,19 @@ Le cœur du modèle économique de la plateforme.
 
 ## 🏗️ Architecture technique
 
-### Stack Backend
+### Stack Full-Stack
 
 ```
 ┌─────────────────────────────────────┐
-│         Frontend (À venir)          │
-│   React / Vue.js / React Native     │
+│       React 19 Frontend (Vite)      │
+│  ┌─────────────────────────────┐   │
+│  │  12 Pages (Public/Private)  │   │
+│  │  Zustand State Management   │   │
+│  │  Tailwind CSS v4 Design     │   │
+│  │  React Router DOM           │   │
+│  └─────────────────────────────┘   │
 └──────────────┬──────────────────────┘
-               │ REST API
+               │ REST API (Axios)
 ┌──────────────▼──────────────────────┐
 │         Laravel 12 Backend          │
 │  ┌─────────────────────────────┐   │
@@ -167,6 +176,8 @@ Le cœur du modèle économique de la plateforme.
 
 ### Technologies clés
 
+**Backend:**
+
 | Composant | Technologie | Version | Rôle |
 |-----------|-------------|---------|------|
 | Framework | Laravel | 12.x | Backend core |
@@ -179,6 +190,18 @@ Le cœur du modèle économique de la plateforme.
 | Queue | Laravel Horizon | - | Gestion files d'attente |
 | Database | SQLite/MySQL | 8.0+ | Stockage données |
 | PHP | 8.4 | - | Langage backend |
+
+**Frontend:**
+
+| Composant | Technologie | Version | Rôle |
+|-----------|-------------|---------|------|
+| Framework | React | 19.x | UI library |
+| Build Tool | Vite | 6.x | Fast build & HMR |
+| CSS Framework | Tailwind CSS | 4.0 | Utility-first CSS |
+| Router | React Router DOM | 7.x | Client-side routing |
+| State | Zustand | 5.x | State management |
+| HTTP Client | Axios | 1.x | API requests |
+| Icons | Lucide React | - | Icon library |
 
 ### Structure du projet
 
@@ -201,10 +224,30 @@ css/
 │   │   ├── api.php                   # API routes
 │   │   └── web.php                   # Web routes
 │   └── config/                       # Configuration files
+├── frontend/                   # Application React
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── common/               # Composants réutilisables
+│   │   │   ├── layout/               # Header, Footer, MainLayout
+│   │   │   ├── partners/             # PartnerCard, OfferCard
+│   │   │   └── content/              # ContentCard, etc.
+│   │   ├── pages/
+│   │   │   ├── public/               # 8 pages publiques
+│   │   │   ├── auth/                 # Login, Register
+│   │   │   └── dashboard/            # Dashboard, Profile
+│   │   ├── services/
+│   │   │   └── api.js                # API integration layer
+│   │   ├── stores/
+│   │   │   └── authStore.js          # Zustand auth store
+│   │   ├── App.jsx                   # Main app component
+│   │   └── index.css                 # Tailwind v4 configuration
+│   ├── public/                       # Static assets
+│   └── README.md                     # Frontend docs
 ├── docs/
 │   ├── API_DOCUMENTATION.md          # Documentation API complète
 │   ├── FILAMENT_ADMIN.md             # Guide panel admin
 │   └── cahier_charges_css_socios.md  # Specs originales
+├── DEPLOYMENT.md                     # Guide de déploiement
 └── README.md                         # Ce fichier
 ```
 
@@ -220,35 +263,34 @@ css/
 - SQLite (dev) ou MySQL 8+ (prod)
 - Git
 
-### Étapes d'installation
+### Installation complète (Backend + Frontend)
 
-1. **Cloner le repository**
+#### 1. Backend (Laravel API + Admin)
+
+**Cloner et configurer**
 ```bash
 git clone https://github.com/haythemsaa/css.git
 cd css/backend
 ```
 
-2. **Installer les dépendances**
+**Installer les dépendances**
 ```bash
 composer install
 npm install
 ```
 
-3. **Configuration de l'environnement**
+**Configuration de l'environnement**
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-4. **Configurer la base de données**
+**Configurer la base de données**
 
 Éditer `.env` :
 ```env
 # SQLite (Development)
 DB_CONNECTION=sqlite
-# DB_HOST=127.0.0.1
-# DB_PORT=3306
-# DB_DATABASE=css_db
 
 # MySQL (Production)
 # DB_CONNECTION=mysql
@@ -257,14 +299,17 @@ DB_CONNECTION=sqlite
 # DB_DATABASE=css_db
 # DB_USERNAME=root
 # DB_PASSWORD=
+
+# CORS pour le frontend
+FRONTEND_URL=http://localhost:5173
 ```
 
-5. **Créer la base de données SQLite (si SQLite)**
+**Créer la base de données SQLite**
 ```bash
 touch database/database.sqlite
 ```
 
-6. **Exécuter les migrations et seeders**
+**Exécuter les migrations et seeders**
 ```bash
 php artisan migrate:fresh --seed
 ```
@@ -279,19 +324,67 @@ Cela va créer :
 - 40 contenus
 - 653 cartes collectibles
 
-7. **Lancer le serveur de développement**
+**Lancer le serveur backend**
 ```bash
 php artisan serve
+# Backend accessible sur http://localhost:8000
+# Admin panel sur http://localhost:8000/admin
 ```
 
-L'application sera accessible sur `http://localhost:8000`
-
-8. **Accéder au panel admin**
+**Accéder au panel admin**
 ```
 URL: http://localhost:8000/admin
 Email: admin@css.tn
 Password: password
 ```
+
+#### 2. Frontend (React Application)
+
+**Ouvrir un nouveau terminal**
+```bash
+cd css/frontend
+```
+
+**Installer les dépendances**
+```bash
+npm install
+```
+
+**Configuration**
+
+Éditer `src/services/api.js` si nécessaire pour pointer vers votre backend :
+```javascript
+const API_BASE_URL = 'http://localhost:8000/api/v1';
+```
+
+**Lancer le serveur de développement**
+```bash
+npm run dev
+# Frontend accessible sur http://localhost:5173
+```
+
+**Build pour production**
+```bash
+npm run build
+# Build créé dans le dossier dist/
+```
+
+### Quick Start (Les deux en même temps)
+
+**Terminal 1 - Backend:**
+```bash
+cd css/backend && php artisan serve
+```
+
+**Terminal 2 - Frontend:**
+```bash
+cd css/frontend && npm run dev
+```
+
+Accès :
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000/api/v1
+- **Admin Panel**: http://localhost:8000/admin
 
 ---
 
@@ -366,19 +459,31 @@ MAIL_HOST=smtp.example.com
 
 ### Documents disponibles
 
-1. **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** (200+ lignes)
+1. **[DEPLOYMENT.md](DEPLOYMENT.md)** (650+ lignes) **[NOUVEAU]**
+   - Guide de déploiement complet
+   - Configuration staging et production
+   - Nginx, SSL/HTTPS, optimisations
+   - Monitoring et troubleshooting
+
+2. **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** (200+ lignes)
    - Tous les endpoints REST
    - Exemples de requêtes/réponses
    - Codes d'erreur
    - Authentication flows
 
-2. **[FILAMENT_ADMIN.md](FILAMENT_ADMIN.md)** (200+ lignes)
+3. **[FILAMENT_ADMIN.md](FILAMENT_ADMIN.md)** (200+ lignes)
    - Guide d'utilisation panel admin
    - Gestion des partenaires
    - Configuration des offres
    - Permissions et sécurité
 
-3. **[PROJECT_README.md](PROJECT_README.md)**
+4. **[frontend/README.md](frontend/README.md)** **[NOUVEAU]**
+   - Documentation frontend React
+   - Architecture des composants
+   - Pages et fonctionnalités
+   - Build et déploiement
+
+5. **[PROJECT_README.md](PROJECT_README.md)**
    - Documentation technique complète
    - Architecture et modèles
    - Setup et seeders
@@ -509,14 +614,17 @@ free1@css.tn / password (Free)
 - [x] Panel Admin Filament
 - [x] Documentation complète
 
-### 🚧 Phase 2 - Frontend Web (En cours)
-- [ ] Design système (Tailwind CSS)
-- [ ] Pages publiques (accueil, partenaires, contenu)
-- [ ] Authentification utilisateur
-- [ ] Dashboard Premium/Socios
-- [ ] Génération et gestion codes Freeoui
-- [ ] Profil utilisateur et préférences
-- [ ] Responsive design
+### ✅ Phase 2 - Frontend Web (TERMINÉ) **[NOUVEAU]**
+- [x] Design système (Tailwind CSS v4)
+- [x] Pages publiques (Home, Partners, Content, Players, Matches, Upgrade)
+- [x] Authentification utilisateur (Login, Register)
+- [x] Dashboard Premium/Socios avec stats et tabs
+- [x] Génération et gestion codes Freeoui (QR/Promo/NFC)
+- [x] Profil utilisateur et préférences (3 tabs)
+- [x] Responsive design avec Tailwind
+- [x] State management (Zustand avec persistance)
+- [x] API integration complète (Axios + interceptors)
+- [x] Build optimisé (376 kB bundle)
 
 ### 📱 Phase 3 - Application Mobile
 - [ ] React Native setup
