@@ -117,18 +117,23 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 - ✓ **Gestion intelligente** des expirations de cache
 - ✓ **Cache par entité** (partners, offers, content, codes)
 
-### 🚧 À venir (v1.3+)
+### ✅ Implémentées (v1.3.0) **[NOUVEAU]**
 
-#### Contenu détaillé
-- [ ] Lecteur vidéo intégré
-- [ ] Galerie photos swipeable
-- [ ] Player podcast/audio
-- [ ] Système de likes actif
+#### Contenu détaillé ✨ **[NOUVEAU v1.3]**
+- ✓ **ContentDetailScreen complet** pour articles/vidéos/galeries/podcasts
+- ✓ **Lecteur vidéo intégré** avec Expo AV (useNativeControls)
+- ✓ **Galerie photos swipeable** avec react-native-image-viewing
+- ✓ **Player podcast/audio** avec contrôles (play/pause, progression)
+- ✓ **Système de likes actif** avec compteur en temps réel
+- ✓ **Partage social** avec Expo Sharing
+- ✓ **Navigation ContentStack** (ContentList → ContentDetail)
+
+### 🚧 À venir (v1.4+)
 
 #### Fonctionnalités avancées
 - [ ] Chat support en temps réel
-- [ ] Partage social
 - [ ] Statistiques personnelles détaillées
+- [ ] Commentaires sur contenu
 
 ---
 
@@ -148,6 +153,9 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 | **Expo Notifications** | 0.31 | Notifications push |
 | **React Native Maps** | 1.22 | Carte interactive |
 | **NetInfo** | 11.x | Détection connexion |
+| **Expo AV** | ~15.0.3 | Lecteur vidéo/audio |
+| **Expo Sharing** | ~13.0.2 | Partage de contenu |
+| **react-native-image-viewing** | 0.2.2 | Galerie photos swipeable |
 
 ---
 
@@ -173,7 +181,8 @@ mobile/
 │   │   ├── partners/
 │   │   │   └── PartnersScreen.js # Liste partenaires
 │   │   ├── content/
-│   │   │   └── ContentScreen.js  # Liste contenu
+│   │   │   ├── ContentScreen.js     # Liste contenu
+│   │   │   └── ContentDetailScreen.js # Détail contenu (v1.3)
 │   │   └── profile/
 │   │       └── ProfileScreen.js  # Profil utilisateur
 │   ├── navigation/
@@ -439,7 +448,37 @@ Pour contribuer:
 
 ## 📝 Changelog
 
-### v1.2.0 (Novembre 2025) **[NOUVEAU]**
+### v1.3.0 (Novembre 2025) **[NOUVEAU]**
+
+**Fonctionnalités Contenu Détaillé:**
+- ✨ **ContentDetailScreen** complet avec support multi-formats
+- ✨ **Lecteur vidéo** intégré avec Expo AV et contrôles natifs
+- ✨ **Player audio/podcast** avec contrôles personnalisés (play/pause, progression, timer)
+- ✨ **Galerie photos swipeable** avec react-native-image-viewing
+- ✨ **Système de likes** avec compteur en temps réel
+- ✨ **Partage social** via Expo Sharing
+- ✨ **Support 4 types de contenu**: Article, Vidéo, Galerie, Podcast
+- ✨ **Affichage conditionnel** selon le type de contenu
+- ✨ **Type badges** avec emojis et couleurs CSS
+- ✨ **Statistiques du contenu** (vues, likes, date de publication)
+
+**Navigation:**
+- Ajout ContentStack navigator (ContentList → ContentDetail)
+- Navigation depuis ContentScreen vers détail du contenu
+- Header avec bouton retour personnalisé
+
+**Technique:**
+- Intégration Expo AV ~15.0.3 (Video & Audio)
+- Intégration Expo Sharing ~13.0.2
+- Intégration react-native-image-viewing 0.2.2
+- Gestion du cycle de vie audio (cleanup dans useEffect)
+- Audio status callback pour suivi de la lecture
+- Configuration audio iOS (playsInSilentModeIOS)
+- Modal full-screen pour galerie photos
+- Progress bar personnalisée pour audio
+- Formatage du temps (MM:SS)
+
+### v1.2.0 (Novembre 2025)
 
 **Fonctionnalités Notifications Push:**
 - ✨ **Service de notifications** complet avec Expo Notifications
@@ -554,6 +593,6 @@ Copyright © 2025 Club Sportif Sfaxien. Tous droits réservés.
 
 **⚽ يا CSS يا نجوم السما ⚽**
 
-*CSS Platform Mobile v1.2.0*
+*CSS Platform Mobile v1.3.0*
 
 </div>

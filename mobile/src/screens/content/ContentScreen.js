@@ -58,11 +58,8 @@ const ContentScreen = () => {
       return;
     }
 
-    Alert.alert(
-      item.title,
-      `Type: ${item.type}\nVues: ${item.views_count || 0}\n\n${item.excerpt || 'Pas de description disponible'}`,
-      [{ text: 'Fermer' }]
-    );
+    // Navigate to content detail
+    navigation.navigate('ContentDetail', { contentSlug: item.slug });
   };
 
   const getTypeIcon = (type) => {

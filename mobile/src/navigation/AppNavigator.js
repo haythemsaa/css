@@ -17,6 +17,7 @@ import PartnersScreen from '../screens/partners/PartnersScreen';
 import PartnerDetailScreen from '../screens/partners/PartnerDetailScreen';
 import MapScreen from '../screens/partners/MapScreen';
 import ContentScreen from '../screens/content/ContentScreen';
+import ContentDetailScreen from '../screens/content/ContentDetailScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 
 // Codes Screens
@@ -138,6 +139,34 @@ const CodesStack = () => {
   );
 };
 
+// Content Stack Navigator
+const ContentStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: COLORS.black,
+        },
+        headerTintColor: COLORS.white,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="ContentList"
+        component={ContentScreen}
+        options={{ title: 'Actualités' }}
+      />
+      <Stack.Screen
+        name="ContentDetail"
+        component={ContentDetailScreen}
+        options={{ title: 'Détails' }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 // Main Tab Navigator
 const MainNavigator = () => {
   return (
@@ -186,18 +215,10 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="Content"
-        component={ContentScreen}
+        component={ContentStack}
         options={{
           title: 'Actualités',
           tabBarIcon: ({ color }) => <View>📰</View>,
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.black,
-          },
-          headerTintColor: COLORS.white,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
         }}
       />
       <Tab.Screen
