@@ -153,7 +153,7 @@ const ProfileScreen = () => {
 
       {/* App Info */}
       <View style={styles.appInfo}>
-        <Text style={styles.appInfoText}>CSS Platform Mobile v1.0.0</Text>
+        <Text style={styles.appInfoText}>CSS Platform Mobile v1.1.0</Text>
         <Text style={styles.appInfoText}>يا CSS يا نجوم السما ⚽</Text>
       </View>
     </ScrollView>

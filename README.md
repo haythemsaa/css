@@ -13,7 +13,10 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-v4-38B2AC?logo=tailwind-css)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](LICENSE)
 
-🎉 **Projet Complet à 100%** - Backend + Frontend + Documentation
+🎉 **Projet Complet à 98%** - Backend + Frontend Web + Mobile + Documentation
+
+[![React Native](https://img.shields.io/badge/React_Native-0.81-61DAFB?logo=react)](https://reactnative.dev)
+[![Expo](https://img.shields.io/badge/Expo-~54.0-000020?logo=expo)](https://expo.dev)
 
 </div>
 
@@ -139,39 +142,41 @@ Le cœur du modèle économique de la plateforme.
 ### Stack Full-Stack
 
 ```
-┌─────────────────────────────────────┐
-│       React 19 Frontend (Vite)      │
-│  ┌─────────────────────────────┐   │
-│  │  12 Pages (Public/Private)  │   │
-│  │  Zustand State Management   │   │
-│  │  Tailwind CSS v4 Design     │   │
-│  │  React Router DOM           │   │
-│  └─────────────────────────────┘   │
-└──────────────┬──────────────────────┘
-               │ REST API (Axios)
-┌──────────────▼──────────────────────┐
-│         Laravel 12 Backend          │
-│  ┌─────────────────────────────┐   │
-│  │   Laravel Sanctum (Auth)    │   │
-│  ├─────────────────────────────┤   │
-│  │   6 API Controllers         │   │
-│  │   17 API Resources          │   │
-│  │   60+ Endpoints REST        │   │
-│  ├─────────────────────────────┤   │
-│  │   Filament v4 Admin Panel   │   │
-│  │   6 Resources CRUD          │   │
-│  └─────────────────────────────┘   │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│      SQLite Database (Dev)          │
-│      MySQL/PostgreSQL (Prod)        │
-│                                     │
-│  • 30 tables                        │
-│  • 21 models Eloquent               │
-│  • 60+ relations                    │
-│  • Soft deletes activés             │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────┐  ┌─────────────────────────────────────┐
+│       React 19 Frontend (Vite)      │  │   React Native Mobile (Expo)        │
+│  ┌─────────────────────────────┐   │  │  ┌─────────────────────────────┐   │
+│  │  12 Pages (Public/Private)  │   │  │  │  9 Screens (Auth/Main)      │   │
+│  │  Zustand State Management   │   │  │  │  Zustand + AsyncStorage     │   │
+│  │  Tailwind CSS v4 Design     │   │  │  │  React Navigation (5 tabs)  │   │
+│  │  React Router DOM           │   │  │  │  QR Scanner (Expo Camera)   │   │
+│  └─────────────────────────────┘   │  │  └─────────────────────────────┘   │
+└──────────────┬──────────────────────┘  └──────────────┬──────────────────────┘
+               │ REST API (Axios)                       │ REST API (Axios)
+               └────────────────┬───────────────────────┘
+                                │
+               ┌────────────────▼──────────────────────┐
+               │         Laravel 12 Backend            │
+               │  ┌─────────────────────────────┐     │
+               │  │   Laravel Sanctum (Auth)    │     │
+               │  ├─────────────────────────────┤     │
+               │  │   6 API Controllers         │     │
+               │  │   17 API Resources          │     │
+               │  │   60+ Endpoints REST        │     │
+               │  ├─────────────────────────────┤     │
+               │  │   Filament v4 Admin Panel   │     │
+               │  │   6 Resources CRUD          │     │
+               │  └─────────────────────────────┘     │
+               └────────────────┬──────────────────────┘
+                                │
+               ┌────────────────▼──────────────────────┐
+               │      SQLite Database (Dev)            │
+               │      MySQL/PostgreSQL (Prod)          │
+               │                                       │
+               │  • 30 tables                          │
+               │  • 21 models Eloquent                 │
+               │  • 60+ relations                      │
+               │  • Soft deletes activés               │
+               └───────────────────────────────────────┘
 ```
 
 ### Technologies clés
@@ -202,6 +207,20 @@ Le cœur du modèle économique de la plateforme.
 | State | Zustand | 5.x | State management |
 | HTTP Client | Axios | 1.x | API requests |
 | Icons | Lucide React | - | Icon library |
+
+**Mobile:**
+
+| Composant | Technologie | Version | Rôle |
+|-----------|-------------|---------|------|
+| Framework | React Native | 0.81 | Mobile framework |
+| SDK | Expo | ~54.0 | Toolchain et SDK |
+| UI Library | React | 19.1 | UI library |
+| Navigation | React Navigation | 7.x | Navigation et routing |
+| State | Zustand | 5.x | State management |
+| HTTP Client | Axios | 1.x | API requests |
+| Storage | AsyncStorage | 2.x | Persistance locale |
+| Camera | Expo Camera | 17.x | QR Scanner |
+| Location | Expo Location | 19.x | Géolocalisation |
 
 ### Structure du projet
 
@@ -243,20 +262,21 @@ css/
 │   │   └── index.css                 # Tailwind v4 configuration
 │   ├── public/                       # Static assets
 │   └── README.md                     # Frontend docs
-├── mobile/                     # Application React Native
+├── mobile/                     # Application React Native (v1.1)
 │   ├── src/
 │   │   ├── components/
 │   │   │   └── common/               # Button, Card, Input
 │   │   ├── screens/
 │   │   │   ├── auth/                 # Login, Register
 │   │   │   ├── main/                 # Home
-│   │   │   ├── partners/             # CSS Privilèges partners
-│   │   │   ├── content/              # News & content
-│   │   │   └── profile/              # User profile
+│   │   │   ├── partners/             # PartnersScreen, PartnerDetailScreen
+│   │   │   ├── codes/                # MyCodesScreen, QRScannerScreen
+│   │   │   ├── content/              # ContentScreen
+│   │   │   └── profile/              # ProfileScreen
 │   │   ├── navigation/
-│   │   │   └── AppNavigator.js       # Navigation config
+│   │   │   └── AppNavigator.js       # 5 tabs + Stack navigation
 │   │   ├── services/
-│   │   │   └── api.js                # API client
+│   │   │   └── api.js                # API client (codes, offers)
 │   │   ├── stores/
 │   │   │   └── authStore.js          # Auth state (Zustand)
 │   │   └── constants/
@@ -690,7 +710,9 @@ free1@css.tn / password (Free)
 - [x] API integration complète (Axios + interceptors)
 - [x] Build optimisé (376 kB bundle)
 
-### ✅ Phase 3 - Application Mobile (EN COURS) **[NOUVEAU]**
+### ✅ Phase 3 - Application Mobile (95% COMPLET - v1.1) **[NOUVEAU]**
+
+#### v1.0.0 - Fonctionnalités de base ✓
 - [x] React Native setup (Expo + React Navigation)
 - [x] Design system mobile (couleurs CSS)
 - [x] Authentification (Login, Register, Logout)
@@ -701,11 +723,25 @@ free1@css.tn / password (Free)
 - [x] Profil utilisateur avec points de fidélité
 - [x] Intégration API backend complète
 - [x] State management (Zustand + AsyncStorage)
-- [ ] Scanner QR codes (à venir v1.1)
-- [ ] Génération codes CSS Privilèges (à venir v1.1)
-- [ ] Notifications push (à venir v1.1)
-- [ ] Géolocalisation partenaires (à venir v1.1)
-- [ ] Mode offline (à venir v1.2)
+
+#### v1.1.0 - CSS Privilèges avancé ✓ **[NOUVEAU]**
+- [x] **Écran de détail partenaire** avec liste d'offres
+- [x] **Génération codes CSS Privilèges** (QR/Promo/NFC)
+- [x] **Modal de sélection** du type de code
+- [x] **Validation en temps réel** (stock, expiration, Premium requis)
+- [x] **Écran "Mes Codes"** avec gestion complète
+- [x] **Filtrage par statut** (Actifs, Utilisés, Expirés, Tous)
+- [x] **Scanner QR Code** avec caméra (Expo Camera)
+- [x] **Zone de scan** avec coins animés et feedback visuel
+- [x] **Navigation à 5 onglets** (Home, Partners, Mes Codes, Content, Profile)
+- [x] **Stack navigation** pour Partners (détail) et Codes (scanner)
+
+#### v1.2+ - Fonctionnalités avancées (À venir)
+- [ ] Notifications push (matchs, nouvelles offres)
+- [ ] Géolocalisation partenaires (carte interactive)
+- [ ] Mode offline (cache et synchronisation)
+- [ ] Lecteur vidéo intégré
+- [ ] Player podcast/audio
 
 ### 🧪 Phase 4 - Tests & Qualité
 - [ ] Tests unitaires (Models, Controllers)
@@ -840,6 +876,6 @@ Développé avec ❤️ pour les supporters du CSS
 
 **⚽ يا CSS يا نجوم السما ⚽**
 
-*Plateforme CSS v1.0 - Novembre 2025*
+*Plateforme CSS v1.1 - Novembre 2025*
 
 </div>
