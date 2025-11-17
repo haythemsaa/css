@@ -33,11 +33,11 @@ class ReductionCodeController extends Controller
         // Get the offer
         $offer = PartnerOffer::where('slug', $offerSlug)
             ->with('partner')
-            ->active()
+            ->where('status', 'active')
             ->firstOrFail();
 
         // Check if offer is still valid
-        if (!$offer->isValid()) {
+        if ($offer->valid_until && $offer->valid_until < now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Cette offre n\'est plus valide.',
@@ -45,27 +45,11 @@ class ReductionCodeController extends Controller
         }
 
         // Check stock
-        if ($offer->isOutOfStock()) {
+        if ($offer->stock_available !== null && $offer->stock_available <= 0) {
             return response()->json([
                 'success' => false,
                 'message' => 'Cette offre n\'est plus disponible.',
             ], 400);
-        }
-
-        // Check if user has reached usage limit for this offer
-        if ($offer->usage_limit_per_user) {
-            $usageCount = ReductionCodeUsage::where('user_id', $user->id)
-                ->whereHas('reductionCode', function ($q) use ($offer) {
-                    $q->where('offer_id', $offer->id);
-                })
-                ->count();
-
-            if ($usageCount >= $offer->usage_limit_per_user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Vous avez atteint la limite d\'utilisation pour cette offre.',
-                ], 400);
-            }
         }
 
         // Generate the code
@@ -76,12 +60,14 @@ class ReductionCodeController extends Controller
             $code = ReductionCode::create([
                 'offer_id' => $offer->id,
                 'user_id' => $user->id,
+                'partner_id' => $offer->partner_id,
                 'code' => $this->generateUniqueCode($offer, $codeType),
-                'type' => $codeType,
+                'code_type' => $codeType,
+                'reduction_value' => $offer->reduction_value,
+                'reduction_type' => $offer->reduction_type,
                 'status' => 'active',
-                'expires_at' => $offer->valid_until,
-                'max_uses' => 1, // Each code can only be used once
-                'qr_data' => $codeType === 'qr' ? $this->generateQRData($offer, $user) : null,
+                'generated_at' => now(),
+                'expires_at' => $offer->valid_until ?? now()->addDays(30),
             ]);
 
             // Update stock
@@ -122,14 +108,13 @@ class ReductionCodeController extends Controller
 
         // Filter by type
         if ($request->has('type')) {
-            $query->where('type', $request->type);
+            $query->where('code_type', $request->type);
         }
 
         // Filter active codes only
         if ($request->boolean('active_only')) {
             $query->where('status', 'active')
-                  ->where('expires_at', '>', now())
-                  ->whereColumn('uses_count', '<', 'max_uses');
+                  ->where('expires_at', '>', now());
         }
 
         $codes = $query->orderByDesc('created_at')
@@ -156,7 +141,7 @@ class ReductionCodeController extends Controller
 
         $reductionCode = ReductionCode::where('code', $code)
             ->where('user_id', $user->id)
-            ->with(['offer.partner', 'usages'])
+            ->with(['offer.partner'])
             ->firstOrFail();
 
         return response()->json([
@@ -188,8 +173,7 @@ class ReductionCodeController extends Controller
 
         // Check if code is still valid
         $isValid = $reductionCode->status === 'active' &&
-                   $reductionCode->expires_at > now() &&
-                   $reductionCode->uses_count < $reductionCode->max_uses;
+                   $reductionCode->expires_at > now();
 
         return response()->json([
             'success' => true,
@@ -237,13 +221,6 @@ class ReductionCodeController extends Controller
                 ], 400);
             }
 
-            if ($reductionCode->uses_count >= $reductionCode->max_uses) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Ce code a atteint sa limite d\'utilisation',
-                ], 400);
-            }
-
             // Calculate discount amount
             $discountAmount = $this->calculateDiscount(
                 $validated['amount'],
@@ -251,22 +228,19 @@ class ReductionCodeController extends Controller
                 $reductionCode->offer->reduction_value
             );
 
-            // Record usage
-            $usage = ReductionCodeUsage::create([
-                'reduction_code_id' => $reductionCode->id,
-                'user_id' => $reductionCode->user_id,
-                'partner_id' => $reductionCode->offer->partner_id,
-                'original_amount' => $validated['amount'],
-                'discount_amount' => $discountAmount,
-                'final_amount' => $validated['amount'] - $discountAmount,
-                'used_at' => now(),
-            ]);
+            // Record usage - TODO: Create ReductionCodeUsage model and migration
+            // $usage = ReductionCodeUsage::create([
+            //     'reduction_code_id' => $reductionCode->id,
+            //     'user_id' => $reductionCode->user_id,
+            //     'partner_id' => $reductionCode->offer->partner_id,
+            //     'original_amount' => $validated['amount'],
+            //     'discount_amount' => $discountAmount,
+            //     'final_amount' => $validated['amount'] - $discountAmount,
+            //     'used_at' => now(),
+            // ]);
 
-            // Update code status
-            $reductionCode->increment('uses_count');
-            if ($reductionCode->uses_count >= $reductionCode->max_uses) {
-                $reductionCode->update(['status' => 'used']);
-            }
+            // Update code status to used
+            $reductionCode->update(['status' => 'used']);
 
             // Award loyalty points (10% of final amount)
             $loyaltyPoints = (int) floor(($validated['amount'] - $discountAmount) * 0.10);

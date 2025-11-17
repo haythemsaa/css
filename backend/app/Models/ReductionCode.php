@@ -16,6 +16,7 @@ class ReductionCode extends Model
         'partner_id',
         'offer_id',
         'code',
+        'code_type',
         'reduction_type',
         'reduction_value',
         'generated_at',

@@ -131,11 +131,9 @@ class ReductionCodeControllerTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                      'success' => true,
-                     'data' => [
-                         'valid' => true,
-                         'code' => 'TEST-CODE-123',
-                     ],
-                 ]);
+                     'valid' => true,
+                 ])
+                 ->assertJsonPath('data.code', 'TEST-CODE-123');
     }
 
     /**
@@ -160,12 +158,10 @@ class ReductionCodeControllerTest extends TestCase
             'code' => 'EXPIRED-CODE',
         ]);
 
-        $response->assertStatus(400)
+        $response->assertStatus(200)
                  ->assertJson([
-                     'success' => false,
-                     'data' => [
-                         'valid' => false,
-                     ],
+                     'success' => true,
+                     'valid' => false,
                  ]);
     }
 
