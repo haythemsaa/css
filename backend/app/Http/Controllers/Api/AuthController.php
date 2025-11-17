@@ -30,6 +30,8 @@ class AuthController extends Controller
             'governorate' => $validated['governorate'] ?? null,
             'birth_date' => $validated['birth_date'] ?? null,
             'user_type' => 'free', // New users start as free
+            'loyalty_points' => 0, // Start with 0 points
+            'loyalty_level' => 'bronze', // Start at bronze level
             'is_active' => true,
             'last_login_at' => now(),
         ]);

@@ -11,17 +11,18 @@ class ReductionCodeResource extends JsonResource
     {
         $now = now();
         $isExpired = $this->expires_at < $now;
-        $isUsedUp = $this->uses_count >= $this->max_uses;
-        $isActive = $this->status === 'active' && !$isExpired && !$isUsedUp;
+        $isUsed = $this->status === 'used';
+        $isActive = $this->status === 'active' && !$isExpired;
 
         return [
             'id' => $this->id,
             'code' => $this->code,
-            'type' => $this->type,
-            'type_label' => match($this->type) {
+            'type' => $this->code_type,
+            'type_label' => match($this->code_type) {
                 'qr' => 'QR Code',
                 'promo' => 'Code Promo',
                 'nfc' => 'NFC Code',
+                'wallet' => 'Wallet',
                 default => 'Code',
             },
 
@@ -29,44 +30,28 @@ class ReductionCodeResource extends JsonResource
             'status' => $this->status,
             'is_active' => $isActive,
             'is_expired' => $isExpired,
-            'is_used_up' => $isUsedUp,
-
-            // Usage
-            'uses_count' => $this->uses_count,
-            'max_uses' => $this->max_uses,
-            'remaining_uses' => max(0, $this->max_uses - $this->uses_count),
+            'is_used' => $isUsed,
 
             // Validity
+            'generated_at' => $this->generated_at?->format('Y-m-d H:i:s'),
             'expires_at' => $this->expires_at->format('Y-m-d H:i:s'),
             'days_until_expiry' => $isExpired ? 0 : $this->expires_at->diffInDays($now),
             'hours_until_expiry' => $isExpired ? 0 : $this->expires_at->diffInHours($now),
 
-            // QR Data (for QR codes)
-            'qr_data' => $this->when($this->type === 'qr', $this->qr_data),
+            // QR Code image URL (if available)
+            'qr_code_image_url' => $this->qr_code_image_url,
+
+            // Reduction details
+            'reduction_value' => $this->reduction_value,
+            'reduction_type' => $this->reduction_type,
 
             // Offer details
             'offer' => new PartnerOfferResource($this->whenLoaded('offer')),
 
-            // User (only show for admin/partner views, not for user's own codes)
+            // User (only show if loaded)
             'user' => $this->when(
-                $request->user()?->hasRole('admin') || $request->user()?->hasRole('partner'),
+                $this->relationLoaded('user'),
                 new UserResource($this->whenLoaded('user'))
-            ),
-
-            // Usages
-            'usages' => $this->when(
-                $this->relationLoaded('usages'),
-                function () {
-                    return $this->usages->map(function ($usage) {
-                        return [
-                            'id' => $usage->id,
-                            'original_amount' => $usage->original_amount,
-                            'discount_amount' => $usage->discount_amount,
-                            'final_amount' => $usage->final_amount,
-                            'used_at' => $usage->used_at->format('Y-m-d H:i:s'),
-                        ];
-                    });
-                }
             ),
 
             // Timestamps

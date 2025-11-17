@@ -87,6 +87,8 @@ class ReductionCodeController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Erreur lors de la génération du code',
+                'error' => $e->getMessage(),
+                'trace' => app()->environment('local') ? $e->getTraceAsString() : null,
             ], 500);
         }
     }
@@ -99,7 +101,7 @@ class ReductionCodeController extends Controller
         $user = $request->user();
 
         $query = ReductionCode::where('user_id', $user->id)
-            ->with(['offer.partner', 'usages']);
+            ->with(['offer.partner']);
 
         // Filter by status
         if ($request->has('status')) {

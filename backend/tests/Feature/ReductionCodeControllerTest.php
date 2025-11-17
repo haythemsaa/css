@@ -41,8 +41,9 @@ class ReductionCodeControllerTest extends TestCase
                      'data' => [
                          'code',
                          'type',
+                         'status',
+                         'expires_at',
                          'offer',
-                         'valid_until',
                      ],
                  ]);
 
@@ -203,9 +204,10 @@ class ReductionCodeControllerTest extends TestCase
             'status' => 'used',
         ]);
 
-        // Verify loyalty points were awarded (10% of amount)
+        // Verify loyalty points were awarded (10% of final amount after discount)
+        // 100 - 20 (20% discount) = 80, 10% of 80 = 8
         $user->refresh();
-        $this->assertEquals(10, $user->loyalty_points);
+        $this->assertEquals(8, $user->loyalty_points);
     }
 
     /**
