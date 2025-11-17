@@ -3,13 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
@@ -150,5 +152,13 @@ class User extends Authenticatable
     public function scopeSociosVerified($query)
     {
         return $query->whereNotNull('socios_verified_at');
+    }
+
+    // Filament
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Allow only verified Socios users or specific admin emails
+        return $this->email === 'admin@css.tn'
+            || ($this->user_type === 'socios' && $this->socios_verified);
     }
 }
