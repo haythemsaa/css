@@ -5,8 +5,13 @@ import useAuthStore from './stores/authStore';
 
 // Public Pages
 import Home from './pages/public/Home';
+import Partners from './pages/public/Partners';
+import PartnerDetail from './pages/public/PartnerDetail';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+
+// Dashboard Pages
+import Dashboard from './pages/dashboard/Dashboard';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -47,8 +52,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
+          {/* Partners Routes */}
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/partners/:slug" element={<PartnerDetail />} />
+
           {/* Placeholder routes - to be implemented */}
-          <Route path="/partners" element={<div className="container mx-auto px-4 py-8"><h1 className="text-3xl font-bold">Partenaires - À venir</h1></div>} />
           <Route path="/content" element={<div className="container mx-auto px-4 py-8"><h1 className="text-3xl font-bold">Actualités - À venir</h1></div>} />
           <Route path="/players" element={<div className="container mx-auto px-4 py-8"><h1 className="text-3xl font-bold">Équipe - À venir</h1></div>} />
           <Route path="/matches" element={<div className="container mx-auto px-4 py-8"><h1 className="text-3xl font-bold">Matchs - À venir</h1></div>} />
@@ -58,9 +66,7 @@ function App() {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <div className="container mx-auto px-4 py-8">
-                  <h1 className="text-3xl font-bold">Dashboard - À venir</h1>
-                </div>
+                <Dashboard />
               </ProtectedRoute>
             }
           />
