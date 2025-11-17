@@ -221,6 +221,9 @@ Le cœur du modèle économique de la plateforme.
 | Storage | AsyncStorage | 2.x | Persistance locale |
 | Camera | Expo Camera | 17.x | QR Scanner |
 | Location | Expo Location | 19.x | Géolocalisation |
+| Notifications | Expo Notifications | 0.31 | Push notifications |
+| Maps | React Native Maps | 1.22 | Carte interactive |
+| Network | NetInfo | 11.x | Détection connexion |
 
 ### Structure du projet
 
@@ -262,27 +265,30 @@ css/
 │   │   └── index.css                 # Tailwind v4 configuration
 │   ├── public/                       # Static assets
 │   └── README.md                     # Frontend docs
-├── mobile/                     # Application React Native (v1.1)
+├── mobile/                     # Application React Native (v1.2)
 │   ├── src/
 │   │   ├── components/
 │   │   │   └── common/               # Button, Card, Input
 │   │   ├── screens/
 │   │   │   ├── auth/                 # Login, Register
 │   │   │   ├── main/                 # Home
-│   │   │   ├── partners/             # PartnersScreen, PartnerDetailScreen
+│   │   │   ├── partners/             # Partners, PartnerDetail, MapScreen
 │   │   │   ├── codes/                # MyCodesScreen, QRScannerScreen
 │   │   │   ├── content/              # ContentScreen
 │   │   │   └── profile/              # ProfileScreen
 │   │   ├── navigation/
 │   │   │   └── AppNavigator.js       # 5 tabs + Stack navigation
 │   │   ├── services/
-│   │   │   └── api.js                # API client (codes, offers)
+│   │   │   ├── api.js                # API client (codes, offers)
+│   │   │   ├── notificationService.js # Push notifications
+│   │   │   ├── cacheService.js       # Offline cache & sync
+│   │   │   └── locationService.js    # Géolocalisation & maps
 │   │   ├── stores/
 │   │   │   └── authStore.js          # Auth state (Zustand)
 │   │   └── constants/
 │   │       ├── theme.js              # CSS colors & theme
 │   │       └── config.js             # App configuration
-│   ├── App.js                        # Entry point
+│   ├── App.js                        # Entry point + init services
 │   └── README.md                     # Mobile docs
 ├── docs/
 │   ├── API_DOCUMENTATION.md          # Documentation API complète
@@ -710,7 +716,7 @@ free1@css.tn / password (Free)
 - [x] API integration complète (Axios + interceptors)
 - [x] Build optimisé (376 kB bundle)
 
-### ✅ Phase 3 - Application Mobile (95% COMPLET - v1.1) **[NOUVEAU]**
+### ✅ Phase 3 - Application Mobile (98% COMPLET - v1.2) **[NOUVEAU]**
 
 #### v1.0.0 - Fonctionnalités de base ✓
 - [x] React Native setup (Expo + React Navigation)
@@ -724,7 +730,7 @@ free1@css.tn / password (Free)
 - [x] Intégration API backend complète
 - [x] State management (Zustand + AsyncStorage)
 
-#### v1.1.0 - CSS Privilèges avancé ✓ **[NOUVEAU]**
+#### v1.1.0 - CSS Privilèges avancé ✓
 - [x] **Écran de détail partenaire** avec liste d'offres
 - [x] **Génération codes CSS Privilèges** (QR/Promo/NFC)
 - [x] **Modal de sélection** du type de code
@@ -736,12 +742,33 @@ free1@css.tn / password (Free)
 - [x] **Navigation à 5 onglets** (Home, Partners, Mes Codes, Content, Profile)
 - [x] **Stack navigation** pour Partners (détail) et Codes (scanner)
 
-#### v1.2+ - Fonctionnalités avancées (À venir)
-- [ ] Notifications push (matchs, nouvelles offres)
-- [ ] Géolocalisation partenaires (carte interactive)
-- [ ] Mode offline (cache et synchronisation)
+#### v1.2.0 - Fonctionnalités avancées ✓ **[NOUVEAU]**
+- [x] **Notifications Push** (Expo Notifications)
+  - Notifications planifiées pour matchs (2h avant)
+  - Alertes nouvelles offres CSS Privilèges
+  - Rappels expiration de codes (24h avant)
+  - Notifications actualités en temps réel
+  - Badge count et gestion des permissions
+- [x] **Géolocalisation & Carte Interactive** (React Native Maps)
+  - Carte avec 29 partenaires et marqueurs colorés
+  - Position utilisateur en temps réel
+  - Calcul de distance (formule Haversine)
+  - Filtrage par proximité (5 km)
+  - Callouts interactifs avec détails
+  - Navigation vers partenaires (Google/Apple Maps)
+- [x] **Mode Offline** (NetInfo + Cache)
+  - Cache intelligent des données consultées
+  - Détection automatique de connexion
+  - Synchronisation auto au retour en ligne
+  - File d'attente pour actions offline
+  - Gestion des expirations par entité
+
+#### v1.3+ - Fonctionnalités futures (À venir)
 - [ ] Lecteur vidéo intégré
+- [ ] Galerie photos swipeable
 - [ ] Player podcast/audio
+- [ ] Chat support en temps réel
+- [ ] Partage social
 
 ### 🧪 Phase 4 - Tests & Qualité
 - [ ] Tests unitaires (Models, Controllers)
@@ -876,6 +903,6 @@ Développé avec ❤️ pour les supporters du CSS
 
 **⚽ يا CSS يا نجوم السما ⚽**
 
-*Plateforme CSS v1.1 - Novembre 2025*
+*Plateforme CSS v1.2 - Novembre 2025*
 
 </div>

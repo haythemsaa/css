@@ -1,8 +1,8 @@
-# 📦 RÉCAPITULATIF COMPLET - PLATEFORME CSS v1.1
+# 📦 RÉCAPITULATIF COMPLET - PLATEFORME CSS v1.2
 
 **Date de mise à jour :** 17 Novembre 2025
 **Projet :** Plateforme Digitale Complète du Club Sportif Sfaxien
-**Version :** 1.1.0
+**Version :** 1.2.0
 **Statut :** 98% Complet ✅
 
 ---
@@ -152,7 +152,7 @@ Créer une plateforme de fidélisation pour les supporters du CSS avec un systè
 
 ---
 
-### 📱 MOBILE REACT NATIVE (95% - v1.1)
+### 📱 MOBILE REACT NATIVE (98% - v1.2)
 
 #### v1.0.0 - Fonctionnalités de base ✓
 
@@ -175,7 +175,7 @@ Créer une plateforme de fidélisation pour les supporters du CSS avec un systè
 - ✅ Stack Navigation pour détails
 - ✅ Authentification flow
 
-#### v1.1.0 - CSS Privilèges avancé ✓ **[NOUVEAU]**
+#### v1.1.0 - CSS Privilèges avancé ✓
 
 **Nouvelles fonctionnalités**
 - ✅ **PartnerDetailScreen** : Détails partenaire + liste d'offres
@@ -210,12 +210,52 @@ Créer une plateforme de fidélisation pour les supporters du CSS avec un systè
 - ✅ Input (avec validation)
 - ✅ Modals (code type selection)
 
-#### v1.2+ - À venir (5%)
-- [ ] Notifications push (matchs, offres)
-- [ ] Géolocalisation avec carte interactive
-- [ ] Mode offline (cache & sync)
+#### v1.2.0 - Fonctionnalités avancées ✓ **[NOUVEAU]**
+
+**Notifications Push (Expo Notifications 0.31)**
+- ✅ **Service complet** de gestion des notifications (260 lignes)
+- ✅ **Notifications planifiées** pour matchs (2h avant)
+- ✅ **Alertes nouvelles offres** CSS Privilèges en temps réel
+- ✅ **Rappels expiration codes** (24h avant)
+- ✅ **Notifications actualités** du club
+- ✅ **Badge count** et gestion des permissions iOS/Android
+- ✅ **Listeners** pour notifications reçues et tapées
+
+**Géolocalisation & Carte (React Native Maps 1.22)**
+- ✅ **MapScreen** avec carte interactive (400 lignes)
+- ✅ **29 partenaires** affichés avec marqueurs colorés
+- ✅ **Position utilisateur** en temps réel
+- ✅ **Calcul de distance** avec formule Haversine
+- ✅ **Filtrage par proximité** (5 km)
+- ✅ **Callouts personnalisés** avec détails partenaire
+- ✅ **Navigation vers partenaires** (Google/Apple Maps)
+- ✅ **Bouton carte 🗺️** dans header Partners
+- ✅ **Légende** des catégories avec couleurs
+
+**Mode Offline (NetInfo 11.x)**
+- ✅ **CacheService** intelligent (280 lignes)
+- ✅ **Détection automatique** de la connexion
+- ✅ **Synchronisation auto** au retour en ligne
+- ✅ **File d'attente** pour actions offline
+- ✅ **Cache par entité** avec expirations (5 min à 24h)
+- ✅ **Méthodes spécifiques** : partners, offers, content, codes, matches, players
+
+**Services créés (3 fichiers, ~820 lignes)**
+- ✅ notificationService.js (260 lignes)
+- ✅ cacheService.js (280 lignes)
+- ✅ locationService.js (280 lignes)
+
+**Architecture**
+- ✅ Initialisation des services dans App.js
+- ✅ Gestion des permissions (caméra, localisation, notifications)
+- ✅ 3 niveaux de navigation : PartnersList → Map → PartnerDetail
+
+#### v1.3+ - À venir (2%)
 - [ ] Lecteur vidéo intégré
+- [ ] Galerie photos swipeable
 - [ ] Player podcast/audio
+- [ ] Chat support en temps réel
+- [ ] Partage social
 
 ---
 
@@ -355,6 +395,9 @@ Créer une plateforme de fidélisation pour les supporters du CSS avec un systè
 | AsyncStorage | 2.x | Persistence locale |
 | Expo Camera | 17.x | QR Scanner |
 | Expo Location | 19.x | Géolocalisation |
+| Expo Notifications | 0.31 | Push notifications |
+| React Native Maps | 1.22 | Carte interactive |
+| NetInfo | 11.x | Détection connexion |
 | Axios | 1.x | HTTP client |
 
 ---
@@ -375,10 +418,11 @@ Créer une plateforme de fidélisation pour les supporters du CSS avec un systè
 - API integration complète
 - Build optimisé (376 kB)
 
-### ✅ Phase 3 - Mobile (95%)
+### ✅ Phase 3 - Mobile (98%)
 - ✅ v1.0.0 : Base app (auth, home, partners, content, profile)
 - ✅ v1.1.0 : CSS Privilèges (codes, scanner, detail)
-- ⏳ v1.2.0 : Notifications, géolocalisation, offline
+- ✅ v1.2.0 : Notifications, géolocalisation, offline, carte interactive
+- ⏳ v1.3.0 : Lecteur vidéo, galerie, podcast player
 
 ### 🚧 Phase 4 - Tests & Qualité (0%)
 - [ ] Tests unitaires (Models, Controllers)
@@ -480,12 +524,14 @@ La plateforme CSS est **98% complète** avec :
 
 ✅ **Backend Laravel 12** complet et opérationnel
 ✅ **Frontend React 19** moderne et responsive
-✅ **Mobile React Native v1.1** avec CSS Privilèges avancé
+✅ **Mobile React Native v1.2** avec notifications, carte et mode offline
 ✅ **Documentation exhaustive** (12 fichiers)
 ✅ **29 partenaires** CSS Privilèges actifs
 ✅ **64+ offres** avec réductions différenciées
 ✅ **Système de codes QR/Promo/NFC** fonctionnel
-✅ **Géolocalisation** avec formule Haversine
+✅ **Géolocalisation & carte interactive** (React Native Maps)
+✅ **Notifications push** pour matchs, offres et codes
+✅ **Mode offline** avec cache intelligent
 ✅ **Programme de fidélité** (4 niveaux)
 
 **Le système CSS Privilèges est opérationnel et prêt à générer des revenus !** 🚀
@@ -496,6 +542,6 @@ La plateforme CSS est **98% complète** avec :
 
 **⚽ يا CSS يا نجوم السما ⚽**
 
-*Plateforme CSS v1.1.0 - Novembre 2025*
+*Plateforme CSS v1.2.0 - Novembre 2025*
 
 </div>
