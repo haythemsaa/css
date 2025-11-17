@@ -158,7 +158,7 @@ const QRScannerScreen = ({ navigation }) => {
           <View style={[styles.overlaySection, styles.bottomSection]}>
             <View style={styles.instructionsContainer}>
               <Text style={styles.instructionsTitle}>
-                Scanner un QR Code Freeoui
+                Scanner un QR Code CSS Privilèges
               </Text>
               <Text style={styles.instructionsText}>
                 Placez le QR code dans la zone de scan

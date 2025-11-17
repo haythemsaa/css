@@ -19,7 +19,7 @@ const Upgrade = () => {
         { text: 'Calendrier des matchs', included: true },
         { text: 'Informations de l\'équipe', included: true },
         { text: 'Contenu premium HD', included: false },
-        { text: 'Réductions Freeoui', included: false },
+        { text: 'Réductions CSS Privilèges', included: false },
         { text: 'Génération de codes', included: false },
         { text: 'Points de fidélité', included: false },
       ],
@@ -37,7 +37,7 @@ const Upgrade = () => {
       features: [
         { text: 'Tous les avantages Free', included: true },
         { text: 'Contenu premium HD/4K', included: true },
-        { text: 'Réductions Freeoui 10-15%', included: true },
+        { text: 'Réductions CSS Privilèges 10-15%', included: true },
         { text: 'Génération codes QR/Promo/NFC', included: true },
         { text: 'Points de fidélité', included: true },
         { text: 'Support prioritaire', included: true },
@@ -58,7 +58,7 @@ const Upgrade = () => {
       description: 'Le statut ultime du supporter CSS',
       features: [
         { text: 'Tous les avantages Premium', included: true },
-        { text: 'Réductions Freeoui jusqu\'à 25%', included: true },
+        { text: 'Réductions CSS Privilèges jusqu\'à 25%', included: true },
         { text: 'Accès VIP exclusif', included: true },
         { text: 'Tombola mensuelle', included: true },
         { text: 'Cadeaux personnalisés', included: true },
@@ -127,7 +127,7 @@ const Upgrade = () => {
             Choisissez votre <span className="text-gradient-gold">Abonnement</span>
           </h1>
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            Profitez de réductions exclusives chez nos partenaires Freeoui,
+            Profitez de réductions exclusives chez nos partenaires CSS Privilèges,
             accédez au contenu premium et soutenez le CSS
           </p>
         </div>
@@ -204,12 +204,12 @@ const Upgrade = () => {
         </div>
       </section>
 
-      {/* Freeoui Benefits */}
+      {/* CSS Privilèges Benefits */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">
-              Pourquoi <span className="text-gradient-gold">Freeoui</span> ?
+              Pourquoi <span className="text-gradient-gold">CSS Privilèges</span> ?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Le système de réductions exclusives pour les supporters du CSS
@@ -259,7 +259,7 @@ const Upgrade = () => {
                   <td className="text-center p-4">✓</td>
                 </tr>
                 <tr className="border-b border-gray-200">
-                  <td className="p-4">Réductions Freeoui</td>
+                  <td className="p-4">Réductions CSS Privilèges</td>
                   <td className="text-center p-4">×</td>
                   <td className="text-center p-4 bg-yellow-50">10-15%</td>
                   <td className="text-center p-4">Jusqu'à 25%</td>
@@ -323,9 +323,9 @@ const Upgrade = () => {
 
           <div className="max-w-3xl mx-auto space-y-4">
             <Card padding="lg">
-              <h4 className="font-bold text-lg mb-2">Comment fonctionne Freeoui ?</h4>
+              <h4 className="font-bold text-lg mb-2">Comment fonctionne CSS Privilèges ?</h4>
               <p className="text-gray-600">
-                Freeoui vous permet de générer des codes de réduction chez nos 29 partenaires à Sfax.
+                CSS Privilèges vous permet de générer des codes de réduction chez nos 29 partenaires à Sfax.
                 Il vous suffit de choisir une offre, générer votre code (QR, Promo ou NFC) et le présenter chez le partenaire.
               </p>
             </Card>
@@ -349,7 +349,7 @@ const Upgrade = () => {
             <Card padding="lg">
               <h4 className="font-bold text-lg mb-2">Les points de fidélité, comment ça marche ?</h4>
               <p className="text-gray-600">
-                Vous gagnez 10% de points sur chaque achat effectué avec un code Freeoui.
+                Vous gagnez 10% de points sur chaque achat effectué avec un code CSS Privilèges.
                 Ces points vous permettent de débloquer des niveaux (Bronze, Silver, Gold, Platinum) et des récompenses.
               </p>
             </Card>

@@ -221,7 +221,7 @@ const Register = () => {
           <div className="text-center">
             <p className="font-bold text-black mb-2">🎁 Compte Free - 100% Gratuit</p>
             <p className="text-sm text-black opacity-90">
-              Créez votre compte gratuit pour accéder au contenu public, suivre l'équipe, et découvrir nos partenaires Freeoui.
+              Créez votre compte gratuit pour accéder au contenu public, suivre l'équipe, et découvrir nos partenaires CSS Privilèges.
             </p>
           </div>
         </Card>

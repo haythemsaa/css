@@ -68,7 +68,7 @@ class PartnerForm
                     ])
                     ->columns(2),
 
-                Section::make('Réductions Freeoui')
+                Section::make('Réductions CSS Privilèges')
                     ->description('Configuration des réductions par type d\'utilisateur')
                     ->schema([
                         Select::make('reduction_type')

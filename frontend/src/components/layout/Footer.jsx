@@ -7,7 +7,7 @@ const Footer = () => {
   const footerLinks = {
     platform: [
       { name: 'Accueil', href: '/' },
-      { name: 'Partenaires Freeoui', href: '/partners' },
+      { name: 'Partenaires CSS Privilèges', href: '/partners' },
       { name: 'Devenir Premium', href: '/premium' },
       { name: 'Devenir Socios', href: '/socios' },
     ],
@@ -41,7 +41,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-gray-400 text-sm mb-4">
-              La plateforme officielle du Club Sportif Sfaxien. Accédez à des réductions exclusives avec Freeoui et suivez toute l'actualité de votre club.
+              La plateforme officielle du Club Sportif Sfaxien. Accédez à des réductions exclusives avec CSS Privilèges et suivez toute l'actualité de votre club.
             </p>
             <div className="text-css-gold font-bold text-sm">
               يا CSS يا نجوم السما ⚽

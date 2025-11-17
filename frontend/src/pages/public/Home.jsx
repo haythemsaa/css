@@ -5,7 +5,7 @@ import { Button, Card, Badge } from '../../components/common';
 const Home = () => {
   const features = [
     {
-      title: 'Freeoui - Réductions Exclusives',
+      title: 'CSS Privilèges - Réductions Exclusives',
       description: 'Accédez à plus de 60 offres chez 29 partenaires à Sfax. Bénéficiez de 10 à 25% de réduction selon votre abonnement.',
       icon: '🎁',
       color: 'bg-blue-50',
@@ -52,7 +52,7 @@ const Home = () => {
       features: [
         'Tous les avantages Free',
         'Contenu premium HD',
-        'Réductions Freeoui 10-15%',
+        'Réductions CSS Privilèges 10-15%',
         'Génération codes QR/Promo',
         'Points de fidélité',
         'Support prioritaire',
@@ -67,7 +67,7 @@ const Home = () => {
       period: 'Membre officiel',
       features: [
         'Tous les avantages Premium',
-        'Réductions Freeoui jusqu\'à 25%',
+        'Réductions CSS Privilèges jusqu\'à 25%',
         'Accès VIP exclusif',
         'Tombola mensuelle',
         'Cadeaux personnalisés',
@@ -96,7 +96,7 @@ const Home = () => {
             </h1>
 
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Accédez à des réductions exclusives chez nos partenaires avec Freeoui,
+              Accédez à des réductions exclusives chez nos partenaires avec CSS Privilèges,
               suivez toute l'actualité du club, et profitez d'avantages uniques.
             </p>
 
@@ -108,7 +108,7 @@ const Home = () => {
               </Link>
               <Link to="/partners">
                 <Button variant="outline" size="lg">
-                  Découvrir Freeoui
+                  Découvrir CSS Privilèges
                 </Button>
               </Link>
             </div>
@@ -212,7 +212,7 @@ const Home = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">Prêt à commencer ?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Rejoignez des milliers de supporters et profitez dès maintenant des avantages Freeoui
+            Rejoignez des milliers de supporters et profitez dès maintenant des avantages CSS Privilèges
           </p>
           <Link to="/register">
             <Button variant="primary" size="xl">

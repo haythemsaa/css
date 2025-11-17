@@ -50,7 +50,7 @@ const Dashboard = () => {
         icon: '⭐',
         benefits: [
           'Contenu premium HD',
-          'Réductions Freeoui 10-15%',
+          'Réductions CSS Privilèges 10-15%',
           'Génération codes QR/Promo',
           'Points de fidélité',
         ],
@@ -61,7 +61,7 @@ const Dashboard = () => {
         icon: '👑',
         benefits: [
           'Tous les avantages Premium',
-          'Réductions Freeoui jusqu\'à 25%',
+          'Réductions CSS Privilèges jusqu\'à 25%',
           'Accès VIP exclusif',
           'Tombola mensuelle',
           'Badge vérifié',
@@ -103,7 +103,7 @@ const Dashboard = () => {
             Bienvenue, {user?.name} {userTypeInfo.icon}
           </h1>
           <p className="text-gray-600">
-            Gérez votre compte et profitez de vos avantages Freeoui
+            Gérez votre compte et profitez de vos avantages CSS Privilèges
           </p>
         </div>
 

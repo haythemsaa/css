@@ -70,7 +70,7 @@ const PartnersStack = () => {
       <Stack.Screen
         name="PartnersList"
         component={PartnersScreen}
-        options={{ title: 'Freeoui Partners' }}
+        options={{ title: 'CSS Privilèges Partners' }}
       />
       <Stack.Screen
         name="PartnerDetail"
@@ -156,7 +156,7 @@ const MainNavigator = () => {
         name="Partners"
         component={PartnersStack}
         options={{
-          title: 'Freeoui',
+          title: 'CSS Privilèges',
           tabBarIcon: ({ color }) => <View>🏪</View>,
         }}
       />

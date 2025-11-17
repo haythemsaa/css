@@ -144,7 +144,7 @@ const Partners = () => {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                Partenaires <span className="text-gradient-gold">Freeoui</span>
+                Partenaires <span className="text-gradient-gold">CSS Privilèges</span>
               </h1>
               <p className="text-gray-600">
                 {pagination.total} partenaire{pagination.total > 1 ? 's' : ''} • Jusqu'à 25% de réduction

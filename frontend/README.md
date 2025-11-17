@@ -58,7 +58,7 @@ frontend/
 │   │   ├── common/           # Composants réutilisables
 │   │   ├── layout/           # Header, Footer, MainLayout
 │   │   ├── auth/             # Composants d'authentification
-│   │   ├── partners/         # Composants partenaires Freeoui
+│   │   ├── partners/         # Composants partenaires CSS Privilèges
 │   │   └── content/          # Composants contenu
 │   ├── pages/
 │   │   ├── public/           # Pages publiques (Home, etc.)
@@ -114,7 +114,7 @@ const { user, isAuthenticated, login, logout, isPremium, isSocios } = useAuthSto
 Tous les services API sont disponibles dans `src/services/api.js` :
 
 - `authService` - Authentification et profil
-- `partnersService` - Partenaires Freeoui
+- `partnersService` - Partenaires CSS Privilèges
 - `offersService` - Offres partenaires
 - `codesService` - Codes de réduction (QR/Promo/NFC)
 - `contentService` - Articles, vidéos, galeries
@@ -140,7 +140,7 @@ const nearby = await partnersService.getNearby(latitude, longitude, 10);
 - ✅ **Home** (`/`) - Page d'accueil avec présentation de la plateforme, tarifs, et CTA
 - ✅ **Login** (`/login`) - Connexion utilisateur avec comptes de test
 - ✅ **Register** (`/register`) - Inscription utilisateur avec validation
-- ✅ **Partners** (`/partners`) - Liste des 29 partenaires Freeoui avec filtres avancés
+- ✅ **Partners** (`/partners`) - Liste des 29 partenaires CSS Privilèges avec filtres avancés
 - ✅ **PartnerDetail** (`/partners/:slug`) - Détails d'un partenaire avec ses offres
 - ✅ **Content** (`/content`) - Liste des contenus (articles, vidéos, galeries, podcasts)
 - ✅ **ContentDetail** (`/content/:slug`) - Détails d'un contenu avec lecteur vidéo/galerie
@@ -155,7 +155,7 @@ const nearby = await partnersService.getNearby(latitude, longitude, 10);
 
 ### 🎯 Fonctionnalités Clés
 
-#### Système Freeoui
+#### Système CSS Privilèges
 - Génération de codes QR/Promo/NFC
 - Géolocalisation des partenaires à proximité
 - Filtres par catégorie, ville, featured

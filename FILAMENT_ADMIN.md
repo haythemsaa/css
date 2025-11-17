@@ -23,11 +23,11 @@ Le panel admin est accessible uniquement aux utilisateurs:
 
 ## Ressources disponibles
 
-### 1. **Partenaires** (Freeoui)
+### 1. **Partenaires** (CSS Privilèges)
 - **Catégories de Partenaires**: Gestion des 8 catégories (Restauration, Shopping, etc.)
 - **Partenaires**: CRUD complet avec:
   - Informations générales (nom, logo, description)
-  - Réductions Freeoui (Premium et Socios)
+  - Réductions CSS Privilèges (Premium et Socios)
   - Coordonnées et géolocalisation
   - Configuration avancée (contrats, capacités, statut)
 - **Offres Partenaires**: Gestion des offres spéciales
@@ -60,7 +60,7 @@ Le panel admin est accessible uniquement aux utilisateurs:
 
 ### Navigation organisée
 
-- **Freeoui**: Partenaires, Catégories, Offres, Codes de réduction
+- **CSS Privilèges**: Partenaires, Catégories, Offres, Codes de réduction
 - **Contenu**: Articles, Vidéos, Galeries
 - **Club**: Joueurs, Matchs, Saison
 - **Utilisateurs**: Gestion des membres
@@ -93,11 +93,11 @@ Le panel admin est accessible uniquement aux utilisateurs:
 
 ### Exemple: Ajouter un nouveau partenaire
 
-1. Naviguer vers **Freeoui > Partenaires**
+1. Naviguer vers **CSS Privilèges > Partenaires**
 2. Cliquer sur **Nouveau partenaire**
 3. Remplir les sections:
    - **Informations Générales**: Nom (slug généré auto), catégorie, logo, description
-   - **Réductions Freeoui**: Type (pourcentage/fixe), valeur Premium, valeur Socios
+   - **Réductions CSS Privilèges**: Type (pourcentage/fixe), valeur Premium, valeur Socios
    - **Coordonnées**: Téléphone, email, site web, adresse, géolocalisation
    - **Configuration Avancée**: Statut, contrat, capacités, mise en vedette
 4. Sauvegarder
@@ -115,7 +115,7 @@ Le formulaire s'adapte dynamiquement:
 Le dashboard affiche:
 - Nombre total de partenaires actifs
 - Codes de réduction générés aujourd'hui
-- Revenus Freeoui du mois
+- Revenus CSS Privilèges du mois
 - Nouveaux membres Socios
 - Utilisateurs actifs
 - Matchs à venir
@@ -149,7 +149,7 @@ app/Filament/Resources/
 Dans `PartnerResource.php`:
 ```php
 protected static ?string $navigationLabel = 'Partenaires';
-protected static ?string $navigationGroup = 'Freeoui';
+protected static ?string $navigationGroup = 'CSS Privilèges';
 protected static ?int $navigationSort = 1;
 protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
 ```

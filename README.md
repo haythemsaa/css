@@ -35,12 +35,12 @@
 
 ## 🎯 Vue d'ensemble
 
-La plateforme CSS est une solution digitale complète pour le Club Sportif Sfaxien, offrant trois niveaux d'adhésion (Free, Premium, Socios) avec un système de monétisation innovant basé sur **Freeoui** - un réseau de partenaires offrant des réductions exclusives.
+La plateforme CSS est une solution digitale complète pour le Club Sportif Sfaxien, offrant trois niveaux d'adhésion (Free, Premium, Socios) avec un système de monétisation innovant basé sur **CSS Privilèges** - un réseau de partenaires offrant des réductions exclusives.
 
 ### Objectifs financiers (Projections Année 3)
 
 - **Revenus totaux**: 7.18M TND
-- **Freeoui**: 3.63M TND (50.6% du CA)
+- **CSS Privilèges**: 3.63M TND (50.6% du CA)
 - **Abonnements Premium**: 2.16M TND (30.1%)
 - **Socios**: 1.08M TND (15.0%)
 - **Autres sources**: 310K TND (4.3%)
@@ -55,7 +55,7 @@ La plateforme CSS est une solution digitale complète pour le Club Sportif Sfaxi
 
 ## ✨ Fonctionnalités principales
 
-### 1. 💳 Système Freeoui (Monétisation)
+### 1. 💳 Système CSS Privilèges (Monétisation)
 
 Le cœur du modèle économique de la plateforme.
 
@@ -83,7 +83,7 @@ Le cœur du modèle économique de la plateforme.
 
 - **3 types d'utilisateurs** :
   - **Free** : Accès basique (contenu public, navigation partenaires)
-  - **Premium** : 15 TND/mois (contenu premium, génération codes Freeoui)
+  - **Premium** : 15 TND/mois (contenu premium, génération codes CSS Privilèges)
   - **Socios** : Membres officiels (réductions maximales, accès VIP)
 
 - **Programme de Fidélité** :
@@ -250,7 +250,7 @@ css/
 │   │   ├── screens/
 │   │   │   ├── auth/                 # Login, Register
 │   │   │   ├── main/                 # Home
-│   │   │   ├── partners/             # Freeoui partners
+│   │   │   ├── partners/             # CSS Privilèges partners
 │   │   │   ├── content/              # News & content
 │   │   │   └── profile/              # User profile
 │   │   ├── navigation/
@@ -339,7 +339,7 @@ php artisan migrate:fresh --seed
 Cela va créer :
 - 30 tables
 - 102 utilisateurs (dont admin@css.tn)
-- 29 partenaires Freeoui
+- 29 partenaires CSS Privilèges
 - 64 offres
 - 23 joueurs
 - 20 matchs
@@ -558,7 +558,7 @@ MAIL_HOST=smtp.example.com
 POST   /api/v1/auth/register          # Inscription
 POST   /api/v1/auth/login              # Connexion
 GET    /api/v1/partners                # Liste partenaires
-POST   /api/v1/codes/generate/{slug}   # Générer code Freeoui
+POST   /api/v1/codes/generate/{slug}   # Générer code CSS Privilèges
 GET    /api/v1/content                 # Contenus
 GET    /api/v1/players                 # Effectif
 GET    /api/v1/matches/upcoming        # Prochains matchs
@@ -588,7 +588,7 @@ curl -X POST http://localhost:8000/api/v1/auth/register \
 # Réponse: token + profil user_type=free
 ```
 
-#### 2. Utilisateur Premium génère un code Freeoui
+#### 2. Utilisateur Premium génère un code CSS Privilèges
 
 ```bash
 # Login
@@ -637,7 +637,7 @@ Email: admin@css.tn
 Password: password
 
 # Dans le panel:
-1. Aller dans "Freeoui > Partenaires"
+1. Aller dans "CSS Privilèges > Partenaires"
 2. Cliquer "Nouveau partenaire"
 3. Remplir le formulaire
 4. Sauvegarder
@@ -683,7 +683,7 @@ free1@css.tn / password (Free)
 - [x] Pages publiques (Home, Partners, Content, Players, Matches, Upgrade)
 - [x] Authentification utilisateur (Login, Register)
 - [x] Dashboard Premium/Socios avec stats et tabs
-- [x] Génération et gestion codes Freeoui (QR/Promo/NFC)
+- [x] Génération et gestion codes CSS Privilèges (QR/Promo/NFC)
 - [x] Profil utilisateur et préférences (3 tabs)
 - [x] Responsive design avec Tailwind
 - [x] State management (Zustand avec persistance)
@@ -696,13 +696,13 @@ free1@css.tn / password (Free)
 - [x] Authentification (Login, Register, Logout)
 - [x] Navigation (Bottom Tabs + Stack)
 - [x] Écran d'accueil avec stats utilisateur
-- [x] Liste partenaires Freeoui avec filtres
+- [x] Liste partenaires CSS Privilèges avec filtres
 - [x] Liste contenu avec filtres par type
 - [x] Profil utilisateur avec points de fidélité
 - [x] Intégration API backend complète
 - [x] State management (Zustand + AsyncStorage)
 - [ ] Scanner QR codes (à venir v1.1)
-- [ ] Génération codes Freeoui (à venir v1.1)
+- [ ] Génération codes CSS Privilèges (à venir v1.1)
 - [ ] Notifications push (à venir v1.1)
 - [ ] Géolocalisation partenaires (à venir v1.1)
 - [ ] Mode offline (à venir v1.2)
@@ -723,7 +723,7 @@ free1@css.tn / password (Free)
 - [ ] Documentation déploiement
 
 ### 📊 Phase 6 - Analytics & Business
-- [ ] Dashboard analytics (revenus Freeoui)
+- [ ] Dashboard analytics (revenus CSS Privilèges)
 - [ ] Rapports partenaires
 - [ ] KPIs et métriques
 - [ ] A/B testing

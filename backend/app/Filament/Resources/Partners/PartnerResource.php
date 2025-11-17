@@ -29,7 +29,7 @@ class PartnerResource extends Resource
 
     protected static ?string $pluralModelLabel = 'partenaires';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Freeoui';
+    protected static UnitEnum|string|null $navigationGroup = 'CSS Privilèges';
 
     protected static ?int $navigationSort = 2;
 

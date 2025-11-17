@@ -19,11 +19,11 @@ Plateforme digitale complète (Web + Mobile) pour le Club Sportif Sfaxien avec 3
 
 | Année | Revenus Total | Source Principale |
 |-------|--------------|-------------------|
-| An 1  | 1.13M TND    | Freeoui (340K)    |
-| An 2  | 3.73M TND    | Freeoui (1.81M)   |
-| An 3  | 7.18M TND    | Freeoui (3.63M)   |
+| An 1  | 1.13M TND    | CSS Privilèges (340K)    |
+| An 2  | 3.73M TND    | CSS Privilèges (1.81M)   |
+| An 3  | 7.18M TND    | CSS Privilèges (3.63M)   |
 
-**Le système Freeoui devient la source de revenus #1 dès l'année 2 !**
+**Le système CSS Privilèges devient la source de revenus #1 dès l'année 2 !**
 
 ---
 
@@ -52,7 +52,7 @@ Plateforme digitale complète (Web + Mobile) pour le Club Sportif Sfaxien avec 3
 - Profils utilisateurs enrichis
 - Programme de fidélité (Bronze → Platinum)
 
-### 2. Système Freeoui (Partenaires) ✅
+### 2. Système CSS Privilèges (Partenaires) ✅
 **Module phare du projet - Génération de 50% des revenus**
 
 #### Capacités:
@@ -140,7 +140,7 @@ Plateforme digitale complète (Web + Mobile) pour le Club Sportif Sfaxien avec 3
 - notifications
 - user_badges
 
-**Freeoui System (8 tables):**
+**CSS Privilèges System (8 tables):**
 - partner_categories
 - partners
 - partner_offers
@@ -253,14 +253,14 @@ php artisan serve
 ### Phase 3 - API Mobile
 - [ ] Endpoints authentification
 - [ ] Endpoints contenus
-- [ ] Endpoints Freeoui
+- [ ] Endpoints CSS Privilèges
 - [ ] Endpoints fidélité
 - [ ] Documentation API (Swagger)
 
 ### Phase 4 - Frontend Mobile
 - [ ] Setup Flutter/React Native
 - [ ] Authentification
-- [ ] Interface Freeoui
+- [ ] Interface CSS Privilèges
 - [ ] Lecteur de codes QR
 - [ ] Profil utilisateur
 - [ ] Programme fidélité
@@ -274,7 +274,7 @@ php artisan serve
 
 ---
 
-## 📈 Système Freeoui - Détails
+## 📈 Système CSS Privilèges - Détails
 
 ### Fonctionnalités Clés
 
@@ -336,7 +336,7 @@ php artisan serve
 **Documentation complète:** Voir `/cahier_charges_css_socios.md`
 **Récapitulatif:** Voir `/RECAPITULATIF_AJOUTS_CSS.md`
 **Planning:** Voir `/CSS_Planning_Gantt_Detaille.xlsx`
-**Pitch:** Voir `/CSS_Freeoui_Pitch_Partenaires.pptx`
+**Pitch:** Voir `/CSS_CSS Privilèges_Pitch_Partenaires.pptx`
 
 ---
 

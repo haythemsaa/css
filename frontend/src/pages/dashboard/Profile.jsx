@@ -409,7 +409,7 @@ const Profile = () => {
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" defaultChecked className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded" />
-                      <span className="ml-2 text-gray-700">Nouvelles offres Freeoui</span>
+                      <span className="ml-2 text-gray-700">Nouvelles offres CSS Privilèges</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" defaultChecked className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded" />

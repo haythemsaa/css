@@ -67,7 +67,7 @@ const PartnersScreen = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header Info */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Freeoui Partners</Text>
+        <Text style={styles.headerTitle}>CSS Privilèges Partners</Text>
         <Text style={styles.headerSubtitle}>
           {canGenerate
             ? `Profitez de réductions jusqu'à ${user?.user_type === 'socios' ? '25%' : '15%'}`

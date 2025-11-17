@@ -94,7 +94,7 @@ const RegisterScreen = ({ navigation }) => {
           <Text style={styles.logo}>⚽</Text>
           <Text style={styles.title}>Créer un compte</Text>
           <Text style={styles.subtitle}>
-            Rejoignez la communauté CSS et profitez des avantages Freeoui
+            Rejoignez la communauté CSS et profitez des avantages CSS Privilèges
           </Text>
         </View>
 
@@ -164,7 +164,7 @@ const RegisterScreen = ({ navigation }) => {
           <Text style={styles.infoTitle}>Compte Free (Gratuit)</Text>
           <Text style={styles.infoText}>
             ✓ Accès au contenu public{'\n'}
-            ✓ Navigation des 29 partenaires Freeoui{'\n'}
+            ✓ Navigation des 29 partenaires CSS Privilèges{'\n'}
             ✓ Calendrier des matchs et effectif{'\n'}
             ✓ Informations du club
           </Text>

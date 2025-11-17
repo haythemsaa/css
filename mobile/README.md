@@ -18,7 +18,7 @@
 
 L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien de:
 - Se connecter et gérer leur compte (Free/Premium/Socios)
-- Découvrir et utiliser les réductions **Freeoui** (29 partenaires)
+- Découvrir et utiliser les réductions **CSS Privilèges** (29 partenaires)
 - Consulter les actualités et contenus du club
 - Accumuler et gérer leurs points de fidélité
 - Accéder aux informations de l'équipe et des matchs
@@ -38,10 +38,10 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 #### Écran d'accueil
 - ✓ Carte de statut utilisateur (Type + Points)
 - ✓ Actions rapides (navigation)
-- ✓ Section Freeoui avec statistiques
+- ✓ Section CSS Privilèges avec statistiques
 - ✓ Invitation à upgrade pour utilisateurs Free
 
-#### Partenaires Freeoui
+#### Partenaires CSS Privilèges
 - ✓ Liste des 29 partenaires
 - ✓ Filtrage par catégorie (Restaurants, Shopping, Sport, Santé)
 - ✓ Affichage des réductions selon le type d'utilisateur
@@ -49,7 +49,7 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 - ✓ **Liste des offres par partenaire** ✨
 - ✓ **Validation des offres (stock, expiration)** ✨
 
-#### Génération de codes Freeoui ✨ **[NOUVEAU v1.1]**
+#### Génération de codes CSS Privilèges ✨ **[NOUVEAU v1.1]**
 - ✓ **Génération de codes QR/Promo/NFC** depuis les offres
 - ✓ **Modal de sélection du type de code**
 - ✓ **Validation Premium/Socios requise**
@@ -65,7 +65,7 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 
 #### Scanner QR Code ✨ **[NOUVEAU v1.1]**
 - ✓ **Scanner de QR codes avec caméra**
-- ✓ **Validation des codes Freeoui en temps réel**
+- ✓ **Validation des codes CSS Privilèges en temps réel**
 - ✓ **Demande de permission caméra**
 - ✓ **Zone de scan avec coins animés**
 - ✓ **Feedback visuel lors de la validation**
@@ -98,7 +98,7 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 
 #### Notifications Push
 - [ ] Notifications pour les matchs
-- [ ] Alertes pour les nouvelles offres Freeoui
+- [ ] Alertes pour les nouvelles offres CSS Privilèges
 - [ ] Actualités du club en temps réel
 - [ ] Rappels codes expiration
 
@@ -266,8 +266,8 @@ Une fois le backend démarré, vous pouvez vous connecter avec:
 | Type | Email | Mot de passe | Avantages |
 |------|-------|--------------|-----------|
 | **Free** | free1@css.tn | password | Contenu public uniquement |
-| **Premium** | premium1@css.tn | password | Contenu premium + Freeoui 10-15% |
-| **Socios** | admin@css.tn | password | Tous avantages + Freeoui 25% |
+| **Premium** | premium1@css.tn | password | Contenu premium + CSS Privilèges 10-15% |
+| **Socios** | admin@css.tn | password | Tous avantages + CSS Privilèges 25% |
 
 ---
 
@@ -422,9 +422,9 @@ Pour contribuer:
 
 ### v1.1.0 (Novembre 2025) **[NOUVEAU]**
 
-**Fonctionnalités Freeoui:**
+**Fonctionnalités CSS Privilèges:**
 - ✨ **Écran de détail partenaire** avec liste complète des offres
-- ✨ **Génération de codes Freeoui** (QR/Promo/NFC) depuis les offres
+- ✨ **Génération de codes CSS Privilèges** (QR/Promo/NFC) depuis les offres
 - ✨ **Modal de sélection** du type de code avec UI intuitive
 - ✨ **Validation en temps réel** (stock, expiration, Premium requis)
 - ✨ **Écran "Mes Codes"** avec gestion complète des codes générés
@@ -450,7 +450,7 @@ Pour contribuer:
 **Fonctionnalités:**
 - Authentification (Login, Register, Logout)
 - Écran d'accueil avec stats utilisateur
-- Liste des partenaires Freeoui avec filtres
+- Liste des partenaires CSS Privilèges avec filtres
 - Liste du contenu CSS avec filtres par type
 - Profil utilisateur avec stats et points
 - Navigation bottom tabs + stack

@@ -15,7 +15,7 @@ const HomeScreen = ({ navigation }) => {
   const userTypeInfo = getUserTypeInfo();
 
   const quickActions = [
-    { icon: '🏪', title: 'Partenaires', subtitle: '29 partenaires Freeoui', screen: 'Partners' },
+    { icon: '🏪', title: 'Partenaires', subtitle: '29 partenaires CSS Privilèges', screen: 'Partners' },
     { icon: '📰', title: 'Actualités', subtitle: 'Dernières news CSS', screen: 'Content' },
     { icon: '👥', title: 'Profil', subtitle: 'Mon compte', screen: 'Profile' },
   ];
@@ -66,30 +66,30 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Freeoui Section */}
-      <Card padding="lg" style={styles.freeoui}>
-        <Text style={styles.freeouiTitle}>
-          Système <Text style={styles.freeouiGold}>Freeoui</Text>
+      {/* CSS Privilèges Section */}
+      <Card padding="lg" style={styles.privileges}>
+        <Text style={styles.privilegesTitle}>
+          Système <Text style={styles.privilegesGold}>CSS Privilèges</Text>
         </Text>
-        <Text style={styles.freeouiText}>
+        <Text style={styles.privilegesText}>
           Profitez de réductions exclusives chez nos 29 partenaires à Sfax
         </Text>
 
-        <View style={styles.freeouiStats}>
-          <View style={styles.freeouiStat}>
-            <Text style={styles.freeouiStatValue}>29</Text>
-            <Text style={styles.freeouiStatLabel}>Partenaires</Text>
+        <View style={styles.privilegesStats}>
+          <View style={styles.privilegesStat}>
+            <Text style={styles.privilegesStatValue}>29</Text>
+            <Text style={styles.privilegesStatLabel}>Partenaires</Text>
           </View>
-          <View style={styles.freeouiStat}>
-            <Text style={styles.freeouiStatValue}>60+</Text>
-            <Text style={styles.freeouiStatLabel}>Offres</Text>
+          <View style={styles.privilegesStat}>
+            <Text style={styles.privilegesStatValue}>60+</Text>
+            <Text style={styles.privilegesStatLabel}>Offres</Text>
           </View>
-          <View style={styles.freeouiStat}>
-            <Text style={styles.freeouiStatValue}>
+          <View style={styles.privilegesStat}>
+            <Text style={styles.privilegesStatValue}>
               {user?.user_type === 'socios' ? '25%' :
                user?.user_type === 'premium' ? '15%' : '0%'}
             </Text>
-            <Text style={styles.freeouiStatLabel}>Réduction</Text>
+            <Text style={styles.privilegesStatLabel}>Réduction</Text>
           </View>
         </View>
 
@@ -98,7 +98,7 @@ const HomeScreen = ({ navigation }) => {
           variant="secondary"
           fullWidth
           onPress={() => navigation.navigate('Partners')}
-          style={styles.freeouiButton}
+          style={styles.privilegesButton}
         />
       </Card>
 
@@ -107,7 +107,7 @@ const HomeScreen = ({ navigation }) => {
         <Card padding="lg" style={styles.upgrade}>
           <Text style={styles.upgradeTitle}>Passer à Premium</Text>
           <Text style={styles.upgradeText}>
-            Débloquez le contenu premium HD, les codes Freeoui et les points de fidélité
+            Débloquez le contenu premium HD, les codes CSS Privilèges et les points de fidélité
           </Text>
           <Text style={styles.upgradePrice}>15 TND / mois</Text>
           <Button
@@ -224,41 +224,41 @@ const styles = StyleSheet.create({
     color: COLORS.gray600,
     textAlign: 'center',
   },
-  freeoui: {
+  privileges: {
     marginBottom: SPACING.xl,
   },
-  freeouiTitle: {
+  privilegesTitle: {
     fontSize: FONT_SIZES.xxl,
     fontWeight: FONT_WEIGHTS.bold,
     color: COLORS.black,
     marginBottom: SPACING.sm,
   },
-  freeouiGold: {
+  privilegesGold: {
     color: COLORS.gold,
   },
-  freeouiText: {
+  privilegesText: {
     fontSize: FONT_SIZES.sm,
     color: COLORS.gray600,
     marginBottom: SPACING.lg,
   },
-  freeouiStats: {
+  privilegesStats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: SPACING.lg,
   },
-  freeouiStat: {
+  privilegesStat: {
     alignItems: 'center',
   },
-  freeouiStatValue: {
+  privilegesStatValue: {
     fontSize: FONT_SIZES.xxxl,
     fontWeight: FONT_WEIGHTS.bold,
     color: COLORS.black,
   },
-  freeouiStatLabel: {
+  privilegesStatLabel: {
     fontSize: FONT_SIZES.xs,
     color: COLORS.gray600,
   },
-  freeouiButton: {
+  privilegesButton: {
     marginTop: SPACING.md,
   },
   upgrade: {

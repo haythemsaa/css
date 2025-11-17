@@ -165,7 +165,7 @@ Modifie le mot de passe de l'utilisateur.
 
 ---
 
-## Partners (Freeoui) Endpoints
+## Partners (CSS Privilèges) Endpoints
 
 ### 1. Get Partner Categories
 

@@ -291,10 +291,10 @@ Le Club Sportif Sfaxien souhaite développer une plateforme digitale complète (
 - **Or** (2500-4999 points) : +10% réduction + 1 billet VIP gratuit/an
 - **Platine** (5000+ points) : +15% réduction + 2 billets VIP + rencontre joueur
 
-#### 3.6.4 Système Freeoui - Avantages Intelligents pour Pro & Socios
+#### 3.6.4 Système CSS Privilèges - Avantages Intelligents pour Pro & Socios
 
-**Concept Freeoui:**
-Inspiré de modèles comme Freeoui (plateforme française d'avantages), le système permet aux membres Premium et Socios d'accéder à des réductions exclusives chez des partenaires commerciaux avec un suivi intelligent des données.
+**Concept CSS Privilèges:**
+Inspiré de modèles comme CSS Privilèges (plateforme française d'avantages), le système permet aux membres Premium et Socios d'accéder à des réductions exclusives chez des partenaires commerciaux avec un suivi intelligent des données.
 
 **Architecture du Système:**
 
@@ -418,7 +418,7 @@ class ReductionCodeService {
 - Géolocalisation des utilisations
 - Revenus de commission générés pour le club
 
-##### D. Interface Utilisateur Freeoui dans l'App
+##### D. Interface Utilisateur CSS Privilèges dans l'App
 
 **Page d'Accueil Avantages:**
 - Carte interactive des partenaires à proximité
@@ -505,7 +505,7 @@ Platine (500+ points/mois) :
 **Semestriel (chaque 6 mois) :**
 - **Socios Premium (>6 mois d'ancienneté)** :
   - Choix entre : Survêtement CSS, Sac à dos CSS, Montre CSS
-- **Top 50 utilisateurs Freeoui** :
+- **Top 50 utilisateurs CSS Privilèges** :
   - Bon d'achat 100 TND utilisable chez tous les partenaires
 
 **Annuel :**
@@ -689,9 +689,9 @@ Niveau 31+ (Icône CSS) : 40001+ pts
 
 ---
 
-#### 3.6.5 Interface de Gestion Admin - Cadeaux & Freeoui
+#### 3.6.5 Interface de Gestion Admin - Cadeaux & CSS Privilèges
 
-**Dashboard Freeoui (Backoffice) :**
+**Dashboard CSS Privilèges (Backoffice) :**
 
 **Vue d'ensemble :**
 - Nombre total de partenaires actifs
@@ -746,7 +746,7 @@ Niveau 31+ (Icône CSS) : 40001+ pts
 
 ---
 
-#### 3.6.6 Notifications Intelligentes Freeoui
+#### 3.6.6 Notifications Intelligentes CSS Privilèges
 
 **Notifications Contextuelles :**
 
@@ -763,7 +763,7 @@ Niveau 31+ (Icône CSS) : 40001+ pts
    - "⭐ Votre partenaire favori Nike a une nouvelle offre -40% !"
 
 4. **Milestones :**
-   - "🎉 Bravo ! Vous avez économisé 500 TND grâce à Freeoui CSS !"
+   - "🎉 Bravo ! Vous avez économisé 500 TND grâce à CSS Privilèges CSS !"
    - "🏆 Nouveau badge débloqué : Gourmet Level 5 - Cadeau surprise disponible !"
 
 5. **Cadeaux & Tirages :**
@@ -985,10 +985,10 @@ Niveau 31+ (Icône CSS) : 40001+ pts
 
 ---
 
-### 3.15 MODULE PARTENAIRES & AVANTAGES (Style Freeouii)
+### 3.15 MODULE PARTENAIRES & AVANTAGES (Style CSS Privilègesi)
 
 #### 3.15.1 Concept Général
-Création d'un **écosystème d'avantages** similaire à Freeouii, où les membres Premium et Socios bénéficient de **réductions exclusives** chez des centaines de partenaires en Tunisie. Chaque utilisation génère une **commission pour le club**.
+Création d'un **écosystème d'avantages** similaire à CSS Privilègesi, où les membres Premium et Socios bénéficient de **réductions exclusives** chez des centaines de partenaires en Tunisie. Chaque utilisation génère une **commission pour le club**.
 
 #### 3.15.2 Structure des Avantages par Niveau
 
@@ -1671,7 +1671,7 @@ Création d'une **rubrique cadeaux multifonctionnelle** permettant aux membres d
 - Commissions partenaires commerciaux : 50,000 TND/an
 - Sponsoring de sections de l'app : 100,000 TND/an
 
-#### 4.1.5 Système Freeoui - Commissions Partenaires
+#### 4.1.5 Système CSS Privilèges - Commissions Partenaires
 **Nouveau flux de revenus majeur :**
 
 **Modèle de Commission :**
@@ -1679,7 +1679,7 @@ Création d'une **rubrique cadeaux multifonctionnelle** permettant aux membres d
 - Commission fixe mensuelle des partenaires (frais de visibilité)
 - Frais d'adhésion annuels pour partenaires premium
 
-**Projections Freeoui :**
+**Projections CSS Privilèges :**
 
 **Année 1 :**
 - 50 partenaires actifs
@@ -1688,7 +1688,7 @@ Création d'une **rubrique cadeaux multifonctionnelle** permettant aux membres d
 - CA généré via app : 250,000 TND/mois = 3,000,000 TND/an
 - Commission moyenne 8% = **240,000 TND/an**
 - Frais d'adhésion partenaires (2,000 TND/an x 50) = **100,000 TND/an**
-- **Total Freeoui An 1 : 340,000 TND**
+- **Total CSS Privilèges An 1 : 340,000 TND**
 
 **Année 2 :**
 - 150 partenaires actifs
@@ -1696,14 +1696,14 @@ Création d'une **rubrique cadeaux multifonctionnelle** permettant aux membres d
 - CA : 18,000,000 TND/an
 - Commission 8% = **1,440,000 TND/an**
 - Frais adhésion (2,500 TND x 150) = **375,000 TND/an**
-- **Total Freeoui An 2 : 1,815,000 TND**
+- **Total CSS Privilèges An 2 : 1,815,000 TND**
 
 **Année 3 :**
 - 300 partenaires
 - 300 utilisations/partenaire/mois
 - Commission : **2,880,000 TND/an**
 - Frais adhésion : **750,000 TND/an**
-- **Total Freeoui An 3 : 3,630,000 TND**
+- **Total CSS Privilèges An 3 : 3,630,000 TND**
 
 #### 4.1.6 Loteries & Cartes à Collectionner
 **Revenus additionnels :**
@@ -1713,34 +1713,34 @@ Création d'une **rubrique cadeaux multifonctionnelle** permettant aux membres d
 
 #### 4.1.7 Projections Globales RÉVISÉES
 
-**Année 1 (avec Freeoui) :**
+**Année 1 (avec CSS Privilèges) :**
 - Abonnements : 300,000 TND
 - Dons : 100,000 TND
 - E-commerce : 50,000 TND
 - Partenariats classiques : 100,000 TND
-- **Freeoui : 340,000 TND** ⭐
+- **CSS Privilèges : 340,000 TND** ⭐
 - Loteries : 240,000 TND
 - **TOTAL : 1,130,000 TND** (↗ +105% vs version initiale)
 
-**Année 2 (avec Freeoui) :**
+**Année 2 (avec CSS Privilèges) :**
 - Abonnements : 900,000 TND
 - Dons : 300,000 TND
 - E-commerce : 150,000 TND
 - Partenariats classiques : 200,000 TND
-- **Freeoui : 1,815,000 TND** ⭐⭐
+- **CSS Privilèges : 1,815,000 TND** ⭐⭐
 - Loteries : 360,000 TND
 - **TOTAL : 3,725,000 TND** (↗ +140% vs version initiale)
 
-**Année 3 (avec Freeoui) :**
+**Année 3 (avec CSS Privilèges) :**
 - Abonnements : 2,000,000 TND
 - Dons : 500,000 TND
 - E-commerce : 250,000 TND
 - Partenariats classiques : 300,000 TND
-- **Freeoui : 3,630,000 TND** ⭐⭐⭐
+- **CSS Privilèges : 3,630,000 TND** ⭐⭐⭐
 - Loteries : 500,000 TND
 - **TOTAL : 7,180,000 TND**
 
-💡 **Le système Freeoui devient la source de revenus #1 dès l'année 2 !**
+💡 **Le système CSS Privilèges devient la source de revenus #1 dès l'année 2 !**
 
 ### 4.2 Stratégie de Lancement
 
@@ -1888,7 +1888,7 @@ Création d'une **rubrique cadeaux multifonctionnelle** permettant aux membres d
 - valid_from, valid_until
 - redemption_limit, times_used
 
-**Partners (Freeoui)**
+**Partners (CSS Privilèges)**
 - id, name, slug, logo, banner_image
 - category_id, subcategory_id
 - description, short_description
@@ -2162,7 +2162,7 @@ GET /api/subscription/status
 POST /api/subscription/renew
 ```
 
-#### 5.4.9 Freeoui - Partenaires & Réductions
+#### 5.4.9 CSS Privilèges - Partenaires & Réductions
 ```
 # Partenaires
 GET /api/partners?category={id}&city={city}&nearby={lat,lng,radius}
@@ -2697,8 +2697,8 @@ GET /api/notifications/nearby-offers
 - Intégration partenaires
 - Statistiques avancées matchs et joueurs
 
-### Phase 2.5 : Freeoui & Gamification (3-4 mois) 🆕
-**Fonctionnalités Freeoui:**
+### Phase 2.5 : CSS Privilèges & Gamification (3-4 mois) 🆕
+**Fonctionnalités CSS Privilèges:**
 - Base de données partenaires complète
 - Système de génération de codes QR/promo
 - Interface de recherche et filtres partenaires
@@ -2808,16 +2808,16 @@ GET /api/notifications/nearby-offers
 **Coûts Année 1 : 134,200 TND**  
 **INVESTISSEMENT TOTAL AN 1 : 286,375 TND**
 
-**Revenus prévisionnels Année 1 : 1,130,000 TND** (avec Freeoui)
+**Revenus prévisionnels Année 1 : 1,130,000 TND** (avec CSS Privilèges)
 
 **BÉNÉFICE NET AN 1 : 843,625 TND**  
-**ROI Année 1 : 294%** 🚀 (vs 92% sans Freeoui)
+**ROI Année 1 : 294%** 🚀 (vs 92% sans CSS Privilèges)
 
 **Revenus prévisionnels Année 2 : 3,725,000 TND**  
 **Coûts Année 2 (estimation) : 300,000 TND** (incluant gestion partenaires)  
 **BÉNÉFICE NET AN 2 : 3,425,000 TND**
 
-**Point mort (break-even) : Mois 3-4** (vs Mois 6-7 sans Freeoui)
+**Point mort (break-even) : Mois 3-4** (vs Mois 6-7 sans CSS Privilèges)
 
 ---
 
@@ -2910,9 +2910,9 @@ GET /api/notifications/nearby-offers
 - Uptime serveurs (>99.5%)
 - Taux de crash app (<1%)
 
-### 12.5 KPIs Freeoui & Cadeaux 🆕
+### 12.5 KPIs CSS Privilèges & Cadeaux 🆕
 
-#### 12.5.1 Performance Freeoui
+#### 12.5.1 Performance CSS Privilèges
 - Nombre de partenaires actifs
 - Réductions générées par jour/mois
 - Taux d'utilisation des codes (codes générés vs utilisés)
@@ -2932,7 +2932,7 @@ GET /api/notifications/nearby-offers
 - Nombre de trades effectués
 - Badges débloqués par utilisateur (moyenne)
 - Taux de conversion parrainage
-- Économies moyennes par utilisateur/mois (via Freeoui)
+- Économies moyennes par utilisateur/mois (via CSS Privilèges)
 
 #### 12.5.3 Notifications Géolocalisées
 - Taux d'ouverture notifications proximité

@@ -45,7 +45,7 @@ const ProfileScreen = () => {
   const menuItems = [
     { icon: '👤', title: 'Informations personnelles', subtitle: 'Modifier votre profil' },
     { icon: '🔐', title: 'Sécurité', subtitle: 'Mot de passe et sécurité' },
-    { icon: '🎫', title: 'Mes codes', subtitle: 'Codes Freeoui générés' },
+    { icon: '🎫', title: 'Mes codes', subtitle: 'Codes CSS Privilèges générés' },
     { icon: '⭐', title: 'Points de fidélité', subtitle: `${user?.loyalty_points || 0} points` },
     { icon: '⚙️', title: 'Paramètres', subtitle: 'Préférences et notifications' },
   ];
@@ -88,7 +88,7 @@ const ProfileScreen = () => {
           <Text style={styles.pointsValue}>{user?.loyalty_points || 0}</Text>
         </View>
         <Text style={styles.pointsSubtext}>
-          Gagnez 10% de points sur chaque achat avec un code Freeoui
+          Gagnez 10% de points sur chaque achat avec un code CSS Privilèges
         </Text>
       </Card>
 
@@ -120,7 +120,7 @@ const ProfileScreen = () => {
         <Card padding="lg" style={styles.upgradeCard}>
           <Text style={styles.upgradeTitle}>Passer à Premium</Text>
           <Text style={styles.upgradeText}>
-            Débloquez tout le contenu et profitez des réductions Freeoui
+            Débloquez tout le contenu et profitez des réductions CSS Privilèges
           </Text>
           <Button
             title="Découvrir Premium - 15 TND/mois"
@@ -131,7 +131,7 @@ const ProfileScreen = () => {
                 'Premium',
                 'Fonctionnalité de paiement à venir!\n\nAvantages Premium:\n' +
                   '• Contenu HD/4K\n' +
-                  '• Réductions Freeoui 10-15%\n' +
+                  '• Réductions CSS Privilèges 10-15%\n' +
                   '• Génération codes QR/Promo/NFC\n' +
                   '• Points de fidélité\n' +
                   '• Support prioritaire'

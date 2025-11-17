@@ -167,7 +167,7 @@ const MyCodesScreen = ({ navigation }) => {
             <Text style={styles.emptyIcon}>🎫</Text>
             <Text style={styles.emptyTitle}>Aucun code</Text>
             <Text style={styles.emptyText}>
-              Vous n'avez pas encore généré de code Freeoui
+              Vous n'avez pas encore généré de code CSS Privilèges
             </Text>
             <Button
               title="Découvrir les partenaires"
