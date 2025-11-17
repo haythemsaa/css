@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Partner;
-use App\Models\Offer;
+use App\Models\PartnerOffer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PartnerControllerTest extends TestCase
@@ -68,7 +68,7 @@ class PartnerControllerTest extends TestCase
             'slug' => 'test-restaurant',
         ]);
 
-        Offer::factory()->count(3)->create(['partner_id' => $partner->id]);
+        PartnerOffer::factory()->count(3)->create(['partner_id' => $partner->id]);
 
         $response = $this->getJson("/api/v1/partners/{$partner->slug}");
 
@@ -107,7 +107,7 @@ class PartnerControllerTest extends TestCase
     public function test_can_get_partner_offers(): void
     {
         $partner = Partner::factory()->create();
-        Offer::factory()->count(5)->create([
+        PartnerOffer::factory()->count(5)->create([
             'partner_id' => $partner->id,
             'is_active' => true,
         ]);
@@ -124,11 +124,11 @@ class PartnerControllerTest extends TestCase
     public function test_only_returns_active_offers(): void
     {
         $partner = Partner::factory()->create();
-        Offer::factory()->count(3)->create([
+        PartnerOffer::factory()->count(3)->create([
             'partner_id' => $partner->id,
             'is_active' => true,
         ]);
-        Offer::factory()->count(2)->create([
+        PartnerOffer::factory()->count(2)->create([
             'partner_id' => $partner->id,
             'is_active' => false,
         ]);

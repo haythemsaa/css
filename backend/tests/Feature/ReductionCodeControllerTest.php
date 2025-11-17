@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Partner;
-use App\Models\Offer;
+use App\Models\PartnerOffer;
 use App\Models\ReductionCode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,7 +20,7 @@ class ReductionCodeControllerTest extends TestCase
     {
         $premiumUser = User::factory()->create(['user_type' => 'premium']);
         $partner = Partner::factory()->create();
-        $offer = Offer::factory()->create([
+        $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
             'stock' => 10,
             'is_active' => true,
@@ -61,7 +61,7 @@ class ReductionCodeControllerTest extends TestCase
     {
         $freeUser = User::factory()->create(['user_type' => 'free']);
         $partner = Partner::factory()->create();
-        $offer = Offer::factory()->create([
+        $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
             'stock' => 10,
         ]);
@@ -87,7 +87,7 @@ class ReductionCodeControllerTest extends TestCase
     {
         $premiumUser = User::factory()->create(['user_type' => 'premium']);
         $partner = Partner::factory()->create();
-        $offer = Offer::factory()->create([
+        $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
             'stock' => 0,
         ]);
@@ -113,8 +113,8 @@ class ReductionCodeControllerTest extends TestCase
     {
         $user = User::factory()->create(['user_type' => 'premium']);
         $partner = Partner::factory()->create();
-        $offer = Offer::factory()->create(['partner_id' => $partner->id]);
-        
+        $offer = PartnerOffer::factory()->create(['partner_id' => $partner->id]);
+
         $code = ReductionCode::factory()->create([
             'user_id' => $user->id,
             'offer_id' => $offer->id,
@@ -144,8 +144,8 @@ class ReductionCodeControllerTest extends TestCase
     {
         $user = User::factory()->create(['user_type' => 'premium']);
         $partner = Partner::factory()->create();
-        $offer = Offer::factory()->create(['partner_id' => $partner->id]);
-        
+        $offer = PartnerOffer::factory()->create(['partner_id' => $partner->id]);
+
         $code = ReductionCode::factory()->create([
             'user_id' => $user->id,
             'offer_id' => $offer->id,
@@ -177,11 +177,11 @@ class ReductionCodeControllerTest extends TestCase
             'loyalty_points' => 0,
         ]);
         $partner = Partner::factory()->create();
-        $offer = Offer::factory()->create([
+        $offer = PartnerOffer::factory()->create([
             'partner_id' => $partner->id,
             'reduction_percentage' => 20,
         ]);
-        
+
         $code = ReductionCode::factory()->create([
             'user_id' => $user->id,
             'offer_id' => $offer->id,
@@ -216,8 +216,8 @@ class ReductionCodeControllerTest extends TestCase
     {
         $user = User::factory()->create(['user_type' => 'premium']);
         $partner = Partner::factory()->create();
-        $offer = Offer::factory()->create(['partner_id' => $partner->id]);
-        
+        $offer = PartnerOffer::factory()->create(['partner_id' => $partner->id]);
+
         ReductionCode::factory()->count(3)->create([
             'user_id' => $user->id,
             'offer_id' => $offer->id,

@@ -94,10 +94,8 @@ class AuthControllerTest extends TestCase
             'password' => 'wrongpassword',
         ]);
 
-        $response->assertStatus(401)
-                 ->assertJson([
-                     'success' => false,
-                 ]);
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['email']);
     }
 
     /**
