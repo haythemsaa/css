@@ -128,12 +128,43 @@ L'application mobile CSS Platform permet aux supporters du Club Sportif Sfaxien 
 - ✓ **Partage social** avec Expo Sharing
 - ✓ **Navigation ContentStack** (ContentList → ContentDetail)
 
-### 🚧 À venir (v1.4+)
+### ✅ Implémentées (v1.4.0) **[NOUVEAU]**
 
-#### Fonctionnalités avancées
-- [ ] Chat support en temps réel
-- [ ] Statistiques personnelles détaillées
-- [ ] Commentaires sur contenu
+#### Chat Support en temps réel ✨ **[NOUVEAU v1.4]**
+- ✓ **Service de chat** avec polling toutes les 5 secondes
+- ✓ **Interface de chat** complète (envoi/réception messages)
+- ✓ **Messages utilisateur et admin** avec affichage différencié
+- ✓ **Historique des conversations** avec cache local
+- ✓ **Simulation de réponses admin** pour démo
+- ✓ **Indicateur de chargement** et gestion des erreurs
+- ✓ **Accès depuis le profil** via bouton 💬
+
+#### Statistiques détaillées ✨ **[NOUVEAU v1.4]**
+- ✓ **Écran de statistiques complet** avec multiples sections
+- ✓ **Stats globales** (codes générés/utilisés, économies, points fidélité)
+- ✓ **Graphique d'économies** avec 3 périodes (semaine/mois/année)
+- ✓ **Répartition des codes** par type, statut et catégorie
+- ✓ **Top 5 partenaires** par utilisation et économies
+- ✓ **Activités récentes** (10 dernières actions)
+- ✓ **Programme de fidélité** avec niveau actuel
+- ✓ **Accès depuis le profil** via bouton 📊
+
+#### Système de commentaires ✨ **[NOUVEAU v1.4]**
+- ✓ **Commentaires sur contenu** (articles, vidéos, galeries, podcasts)
+- ✓ **Ajout de commentaires** avec validation (max 500 caractères)
+- ✓ **Liste des commentaires** avec pagination
+- ✓ **Likes sur commentaires** avec compteur temps réel
+- ✓ **Suppression** de ses propres commentaires
+- ✓ **Signalement** de commentaires inappropriés
+- ✓ **Affichage du temps** relatif (il y a Xh/Xj)
+- ✓ **Intégré dans ContentDetailScreen**
+
+### 🚧 À venir (v1.5+)
+
+#### Fonctionnalités futures
+- [ ] Messagerie entre supporters
+- [ ] Jeux et concours
+- [ ] Réalité augmentée (AR) pour merchandising
 
 ---
 
@@ -448,7 +479,65 @@ Pour contribuer:
 
 ## 📝 Changelog
 
-### v1.3.0 (Novembre 2025) **[NOUVEAU]**
+### v1.4.0 (Novembre 2025) **[NOUVEAU]**
+
+**Fonctionnalités Chat Support:**
+- ✨ **ChatScreen** complet avec interface de messagerie
+- ✨ **chatService** avec polling automatique (5s)
+- ✨ **Messages utilisateur/admin** avec affichage différencié
+- ✨ **Historique complet** des conversations
+- ✨ **Simulation réponses admin** pour mode démo
+- ✨ **Gestion des erreurs** et indicateurs de chargement
+- ✨ **Marquage messages lus** (mark as read)
+- ✨ **Input multiline** avec bouton d'envoi dynamique
+
+**Fonctionnalités Statistiques:**
+- ✨ **StatsScreen** avec dashboard complet
+- ✨ **statsService** avec données globales et détaillées
+- ✨ **Stats globales**: codes (total, utilisés, taux), économies, points fidélité
+- ✨ **Graphique d'économies** avec 3 périodes (semaine/mois/année)
+- ✨ **Répartition des codes** par type (QR/Barcode), statut (actif/utilisé/expiré), catégorie
+- ✨ **Top 5 partenaires** avec compteurs d'utilisation et économies
+- ✨ **10 dernières activités** avec icônes et descriptions
+- ✨ **Programme de fidélité** avec niveau actuel et progression
+- ✨ **Simple bar chart** personnalisé pour visualisation
+
+**Fonctionnalités Commentaires:**
+- ✨ **CommentsSection** composant réutilisable
+- ✨ **CommentItem** avec likes, suppression, signalement
+- ✨ **commentsService** avec CRUD complet
+- ✨ **Ajout de commentaires** avec validation (max 500 caractères)
+- ✨ **Like/Unlike** optimiste avec revert sur erreur
+- ✨ **Suppression** pour propriétaire uniquement
+- ✨ **Signalement** avec 3 raisons (spam, inapproprié, harcèlement)
+- ✨ **Affichage temps relatif** (À l'instant, Il y a Xm/Xh/Xj)
+- ✨ **Intégration dans ContentDetailScreen**
+
+**Navigation:**
+- Refonte ProfileStack avec 3 écrans (Profile, Stats, Chat)
+- Boutons header (📊 Stats, 💬 Chat) pour accès rapide
+- Navigation depuis profil vers statistiques et chat
+
+**Tests:**
+- 7 nouveaux fichiers de tests (Services: 3, Composants: 2, Écrans: 2)
+- Tests chatService (polling, subscribe, sendMessage, mock responses)
+- Tests statsService (global stats, savings history, top partners, activities)
+- Tests commentsService (CRUD, like/unlike, report)
+- Tests CommentItem (render, like, delete, report, time ago)
+- Tests CommentsSection (add comment, list, loading, empty state)
+- Tests ChatScreen (load messages, send, polling, subscribe)
+- Tests StatsScreen (display stats, chart, period selection)
+
+**Technique:**
+- 3 nouveaux services: chatService, statsService, commentsService
+- 4 nouveaux composants: ChatScreen, StatsScreen, CommentsSection, CommentItem
+- Navigation ProfileStack avec nested screens
+- Optimistic updates pour likes
+- Polling avec listeners pattern pour chat
+- Mock data generators pour mode offline/démo
+- Gestion des erreurs avec fallbacks
+
+### v1.3.0 (Novembre 2025)
 
 **Fonctionnalités Contenu Détaillé:**
 - ✨ **ContentDetailScreen** complet avec support multi-formats
@@ -593,6 +682,6 @@ Copyright © 2025 Club Sportif Sfaxien. Tous droits réservés.
 
 **⚽ يا CSS يا نجوم السما ⚽**
 
-*CSS Platform Mobile v1.3.0*
+*CSS Platform Mobile v1.4.0*
 
 </div>

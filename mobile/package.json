@@ -1,6 +1,6 @@
 {
   "name": "css-mobile",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "CSS Platform - Application mobile pour le Club Sportif Sfaxien",
   "main": "index.js",
   "scripts": {

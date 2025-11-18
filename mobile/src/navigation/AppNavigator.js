@@ -24,6 +24,10 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import MyCodesScreen from '../screens/codes/MyCodesScreen';
 import QRScannerScreen from '../screens/codes/QRScannerScreen';
 
+// v1.4 - New Screens
+import ChatScreen from '../screens/support/ChatScreen';
+import StatsScreen from '../screens/stats/StatsScreen';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -73,7 +77,7 @@ const PartnersStack = () => {
         name="PartnersList"
         component={PartnersScreen}
         options={({ navigation }) => ({
-          title: 'CSS Privilèges Partners',
+          title: 'CSS Privilèges',
           headerRight: () => (
             <TouchableOpacity
               onPress={() => navigation.navigate('Map')}
@@ -115,17 +119,7 @@ const CodesStack = () => {
       <Stack.Screen
         name="MyCodesList"
         component={MyCodesScreen}
-        options={({ navigation }) => ({
-          title: 'Mes Codes',
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('QRScanner')}
-              style={{ marginRight: 16 }}
-            >
-              <Text style={{ color: COLORS.gold, fontSize: 24 }}>📷</Text>
-            </TouchableOpacity>
-          ),
-        })}
+        options={{ title: 'Mes Codes' }}
       />
       <Stack.Screen
         name="QRScanner"
@@ -167,6 +161,56 @@ const ContentStack = () => {
   );
 };
 
+// Profile Stack Navigator (v1.4 - with Stats and Chat)
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: COLORS.black,
+        },
+        headerTintColor: COLORS.white,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="ProfileMain"
+        component={ProfileScreen}
+        options={({ navigation }) => ({
+          title: 'Profil',
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', marginRight: 15 }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Stats')}
+                style={{ marginRight: 15 }}
+              >
+                <Text style={{ color: COLORS.gold, fontSize: 24 }}>📊</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Chat')}
+              >
+                <Text style={{ color: COLORS.gold, fontSize: 24 }}>💬</Text>
+              </TouchableOpacity>
+            </View>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Stats"
+        component={StatsScreen}
+        options={{ title: 'Mes Statistiques' }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{ title: 'Support CSS' }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 // Main Tab Navigator
 const MainNavigator = () => {
   return (
@@ -186,7 +230,7 @@ const MainNavigator = () => {
         component={HomeScreen}
         options={{
           title: 'Accueil',
-          tabBarIcon: ({ color }) => <View>🏠</View>,
+          tabBarIcon: ({ color }) => <View><Text style={{ fontSize: 24 }}>🏠</Text></View>,
           headerShown: true,
           headerStyle: {
             backgroundColor: COLORS.black,
@@ -201,8 +245,8 @@ const MainNavigator = () => {
         name="Partners"
         component={PartnersStack}
         options={{
-          title: 'CSS Privilèges',
-          tabBarIcon: ({ color }) => <View>🏪</View>,
+          title: 'Partenaires',
+          tabBarIcon: ({ color }) => <View><Text style={{ fontSize: 24 }}>🏪</Text></View>,
         }}
       />
       <Tab.Screen
@@ -210,7 +254,7 @@ const MainNavigator = () => {
         component={CodesStack}
         options={{
           title: 'Mes Codes',
-          tabBarIcon: ({ color }) => <View>🎫</View>,
+          tabBarIcon: ({ color }) => <View><Text style={{ fontSize: 24 }}>🎫</Text></View>,
         }}
       />
       <Tab.Screen
@@ -218,23 +262,15 @@ const MainNavigator = () => {
         component={ContentStack}
         options={{
           title: 'Actualités',
-          tabBarIcon: ({ color }) => <View>📰</View>,
+          tabBarIcon: ({ color }) => <View><Text style={{ fontSize: 24 }}>📰</Text></View>,
         }}
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{
           title: 'Profil',
-          tabBarIcon: ({ color }) => <View>👤</View>,
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.black,
-          },
-          headerTintColor: COLORS.white,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
+          tabBarIcon: ({ color }) => <View><Text style={{ fontSize: 24 }}>👤</Text></View>,
         }}
       />
     </Tab.Navigator>
@@ -243,16 +279,12 @@ const MainNavigator = () => {
 
 // Root App Navigator
 const AppNavigator = () => {
-  const { isAuthenticated, isLoading, initialize } = useAuthStore();
-
-  useEffect(() => {
-    initialize();
-  }, []);
+  const { isAuthenticated, isLoading } = useAuthStore();
 
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color={COLORS.gold} />
+        <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }

@@ -729,7 +729,7 @@ free1@css.tn / password (Free)
 - [x] API integration complète (Axios + interceptors)
 - [x] Build optimisé (376 kB bundle)
 
-### ✅ Phase 3 - Application Mobile (100% COMPLET - v1.3) **[NOUVEAU]**
+### ✅ Phase 3 - Application Mobile (100% COMPLET - v1.4.0) **[NOUVEAU]**
 
 #### v1.0.0 - Fonctionnalités de base ✓
 - [x] React Native setup (Expo + React Navigation)
@@ -786,10 +786,36 @@ free1@css.tn / password (Free)
 - [x] **Support 4 types de contenu** (Article, Vidéo, Galerie, Podcast)
 - [x] **Navigation ContentStack** (ContentList → ContentDetail)
 
-#### v1.4+ - Fonctionnalités futures (À venir)
-- [ ] Chat support en temps réel
-- [ ] Statistiques personnelles détaillées
-- [ ] Commentaires sur contenu
+#### v1.4.0 - Chat, Stats & Commentaires ✓ **[NOUVEAU]**
+- [x] **Chat Support en temps réel** (ChatScreen)
+  - Service de chat avec polling automatique (5s)
+  - Interface complète avec messages utilisateur/admin différenciés
+  - Historique des conversations avec cache local
+  - Simulation de réponses admin pour mode démo
+  - Accès depuis profil via bouton 💬
+- [x] **Statistiques personnelles détaillées** (StatsScreen)
+  - Dashboard complet avec stats globales
+  - Graphique d'économies avec 3 périodes (semaine/mois/année)
+  - Répartition des codes par type, statut et catégorie
+  - Top 5 partenaires par utilisation et économies
+  - 10 dernières activités avec timeline
+  - Programme de fidélité avec niveau actuel
+  - Accès depuis profil via bouton 📊
+- [x] **Système de commentaires** (CommentsSection + CommentItem)
+  - Commentaires sur tout contenu (articles, vidéos, galeries, podcasts)
+  - Ajout de commentaires avec validation (max 500 caractères)
+  - Likes avec compteur en temps réel et optimistic updates
+  - Suppression de ses propres commentaires
+  - Signalement de commentaires (spam, inapproprié, harcèlement)
+  - Affichage temps relatif (À l'instant, Il y a Xm/Xh/Xj)
+  - Intégré dans ContentDetailScreen
+- [x] **Navigation ProfileStack** avec 3 écrans (Profile, Stats, Chat)
+- [x] **7 nouveaux fichiers de tests** (Services: 3, Composants: 2, Écrans: 2)
+
+#### v1.5+ - Fonctionnalités futures (À venir)
+- [ ] Messagerie entre supporters
+- [ ] Jeux et concours avec récompenses
+- [ ] Réalité augmentée (AR) pour merchandising
 
 ### ✅ Phase 4 - Tests & Qualité (100% COMPLET) **[NOUVEAU]**
 - [x] **Tests Backend Laravel** (47 tests)

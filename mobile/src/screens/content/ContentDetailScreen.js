@@ -16,6 +16,7 @@ import ImageView from 'react-native-image-viewing';
 import * as Sharing from 'expo-sharing';
 import { contentService } from '../../services/api';
 import { COLORS, SPACING, FONT_SIZES, FONT_WEIGHTS } from '../../constants/theme';
+import CommentsSection from "../../components/comments/CommentsSection";
 
 const ContentDetailScreen = ({ route, navigation }) => {
   const { contentSlug } = route.params;
@@ -331,6 +332,9 @@ const ContentDetailScreen = ({ route, navigation }) => {
             ))}
           </View>
         )}
+
+        {/* Comments Section */}
+        <CommentsSection contentSlug={contentSlug} />
       </View>
 
       {/* Image Viewer for Gallery */}
