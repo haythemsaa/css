@@ -1,0 +1,181 @@
+# ============================================
+# CSS Platform - Global .gitignore
+# ============================================
+
+# ----------------------
+# Environnement & Secrets
+# ----------------------
+.env
+.env.local
+.env.*.local
+.env.production
+backend/.env
+frontend/.env
+mobile/.env
+
+# Ne pas ignorer les exemples
+!.env.example
+!.env.production.example
+!backend/.env.example
+!frontend/.env.example
+
+# ----------------------
+# Fichiers de backup
+# ----------------------
+*.sql
+*.sqlite
+*.sqlite-journal
+backups/
+*.backup
+*.bak
+*.old
+
+# ----------------------
+# Logs
+# ----------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+backend/storage/logs/*
+!backend/storage/logs/.gitkeep
+
+# ----------------------
+# Cache & Temp
+# ----------------------
+*.cache
+.temp/
+tmp/
+temp/
+.cache/
+backend/bootstrap/cache/*
+!backend/bootstrap/cache/.gitkeep
+
+# ----------------------
+# Build & Dist
+# ----------------------
+dist/
+build/
+frontend/dist/
+frontend/build/
+mobile/.expo/
+mobile/.expo-shared/
+
+# ----------------------
+# Dépendances
+# ----------------------
+node_modules/
+vendor/
+backend/vendor/
+frontend/node_modules/
+mobile/node_modules/
+
+# ----------------------
+# IDE & Editors
+# ----------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# ----------------------
+# OS
+# ----------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ----------------------
+# Laravel Specific
+# ----------------------
+backend/.env
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/testing/*
+backend/storage/framework/views/*
+backend/storage/app/*
+!backend/storage/app/.gitkeep
+!backend/storage/app/public/
+backend/storage/app/public/*
+!backend/storage/app/public/.gitkeep
+
+# ----------------------
+# React/Vite Specific
+# ----------------------
+.vite/
+frontend/.vite/
+frontend/dist-ssr
+*.local
+
+# ----------------------
+# React Native / Expo Specific
+# ----------------------
+mobile/node_modules/**/*
+mobile/.expo/*
+mobile/.expo-shared/*
+mobile/npm-debug.*
+mobile/*.jks
+mobile/*.p8
+mobile/*.p12
+mobile/*.key
+mobile/*.mobileprovision
+mobile/*.orig.*
+mobile/web-build/
+mobile/dist/
+
+# ----------------------
+# Tests & Coverage
+# ----------------------
+coverage/
+.nyc_output/
+*.coverage
+.phpunit.result.cache
+backend/.phpunit.result.cache
+frontend/coverage/
+mobile/coverage/
+
+# ----------------------
+# Docker
+# ----------------------
+docker-compose.override.yml
+
+# ----------------------
+# Keys & Certificates
+# ----------------------
+*.pem
+*.key
+*.cert
+*.crt
+ssl/
+
+# ----------------------
+# Uploads & Media
+# ----------------------
+backend/public/storage/
+uploads/
+media/
+
+# ----------------------
+# Documentation générée
+# ----------------------
+docs/api-docs/
+docs/_build/
+
+# ----------------------
+# Autres
+# ----------------------
+.phpintel/
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
