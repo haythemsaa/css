@@ -20,6 +20,15 @@ use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\PollController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ReferralController;
+use App\Http\Controllers\Api\LeaderboardController;
+use App\Http\Controllers\Api\ChallengeController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\TicketController;
+use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\SociosBenefitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +78,30 @@ Route::prefix('v1')->group(function () {
     Route::get('partners/{id}', [PartnerController::class, 'show']);
     Route::get('partners/categories', [PartnerController::class, 'categories']);
     Route::get('partners/nearby', [PartnerController::class, 'nearby']);
+
+    // Public teams
+    Route::get('teams', [TeamController::class, 'index']);
+    Route::get('teams/{id}', [TeamController::class, 'show']);
+
+    // Public leaderboards
+    Route::get('leaderboards', [LeaderboardController::class, 'index']);
+    Route::get('leaderboards/stats', [LeaderboardController::class, 'stats']);
+
+    // Public challenges
+    Route::get('challenges', [ChallengeController::class, 'index']);
+    Route::get('challenges/{id}', [ChallengeController::class, 'show']);
+
+    // Public products (E-commerce)
+    Route::get('products', [ProductController::class, 'index']);
+    Route::get('products/{id}', [ProductController::class, 'show']);
+    Route::get('products/{id}/reviews', [ProductController::class, 'reviews']);
+
+    // Public tickets for matches
+    Route::get('matches/{matchId}/tickets', [TicketController::class, 'index']);
+
+    // Ticket verification (for gate staff)
+    Route::post('tickets/verify-qr', [TicketController::class, 'verifyQRCode']);
+    Route::post('tickets/mark-used', [TicketController::class, 'markAsUsed']);
 
     // ===================================
     // AUTHENTICATED ROUTES
@@ -195,6 +228,54 @@ Route::prefix('v1')->group(function () {
         Route::get('notifications/preferences', [NotificationController::class, 'preferences']);
         Route::put('notifications/preferences', [NotificationController::class, 'updatePreferences']);
         Route::post('notifications/device-token', [NotificationController::class, 'registerDeviceToken']);
+
+        // Leaderboards (User-specific)
+        Route::get('leaderboards/my-rank', [LeaderboardController::class, 'userRank']);
+        Route::get('leaderboards/compare/{userId}', [LeaderboardController::class, 'compare']);
+
+        // Challenges (User actions)
+        Route::post('challenges/{id}/enroll', [ChallengeController::class, 'enroll']);
+        Route::get('challenges/my-challenges', [ChallengeController::class, 'userChallenges']);
+        Route::patch('challenges/progress/{userChallengeId}', [ChallengeController::class, 'updateProgress']);
+        Route::post('challenges/claim/{userChallengeId}', [ChallengeController::class, 'claimReward']);
+
+        // E-commerce - Products (Reviews)
+        Route::post('products/{id}/reviews', [ProductController::class, 'addReview']);
+
+        // E-commerce - Cart
+        Route::prefix('cart')->group(function () {
+            Route::get('/', [CartController::class, 'show']);
+            Route::post('/items', [CartController::class, 'addItem']);
+            Route::patch('/items/{productId}', [CartController::class, 'updateItem']);
+            Route::delete('/items/{productId}', [CartController::class, 'removeItem']);
+            Route::delete('/', [CartController::class, 'clear']);
+        });
+
+        // E-commerce - Orders
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [OrderController::class, 'index']);
+            Route::post('/', [OrderController::class, 'store']);
+            Route::get('/{id}', [OrderController::class, 'show']);
+            Route::delete('/{id}/cancel', [OrderController::class, 'cancel']);
+        });
+
+        // Ticketing
+        Route::prefix('tickets')->group(function () {
+            Route::post('/purchase', [TicketController::class, 'purchase']);
+            Route::get('/my-tickets', [TicketController::class, 'myTickets']);
+            Route::get('/purchases/{id}', [TicketController::class, 'show']);
+            Route::delete('/purchases/{id}/cancel', [TicketController::class, 'cancel']);
+        });
+
+        // Socios Benefits & Subscriptions
+        Route::prefix('socios-benefits')->group(function () {
+            Route::post('/{id}/redeem', [SociosBenefitController::class, 'redeem']);
+        });
+
+        Route::prefix('subscriptions')->group(function () {
+            Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
+            Route::get('/my-subscription', [SubscriptionController::class, 'mySubscription']);
+        });
 
     });
 });
