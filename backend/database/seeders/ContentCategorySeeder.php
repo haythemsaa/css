@@ -16,6 +16,9 @@ class ContentCategorySeeder extends Seeder
             ['name' => 'Interviews', 'slug' => 'interviews', 'icon' => '🎤', 'color' => '#F7B731'],
             ['name' => 'Coulisses', 'slug' => 'coulisses', 'icon' => '🎭', 'color' => '#5F27CD'],
             ['name' => 'Analyses', 'slug' => 'analyses', 'icon' => '📊', 'color' => '#00D2D3'],
+            ['name' => 'Histoire', 'slug' => 'histoire', 'icon' => '📜', 'color' => '#8B4513'],
+            ['name' => 'Académie', 'slug' => 'academie', 'icon' => '🎓', 'color' => '#2ECC71'],
+            ['name' => 'Benchmarking', 'slug' => 'benchmarking', 'icon' => '📈', 'color' => '#3498DB'],
         ];
 
         foreach ($categories as $index => $category) {

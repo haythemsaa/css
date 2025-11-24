@@ -206,6 +206,32 @@ class User extends Authenticatable
         return $this->hasMany(ActivityLog::class);
     }
 
+    public function leaderboards(): HasMany
+    {
+        return $this->hasMany(Leaderboard::class);
+    }
+
+    public function challenges(): BelongsToMany
+    {
+        return $this->belongsToMany(Challenge::class, 'user_challenges')
+            ->withPivot([
+                'current_progress',
+                'target_value',
+                'progress_percentage',
+                'started_at',
+                'completed_at',
+                'is_completed',
+                'reward_claimed',
+                'progress_data',
+            ])
+            ->withTimestamps();
+    }
+
+    public function userChallenges(): HasMany
+    {
+        return $this->hasMany(UserChallenge::class);
+    }
+
     // Accessors
     public function getFullNameAttribute(): string
     {

@@ -1,0 +1,196 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Challenge;
+use Illuminate\Database\Seeder;
+
+class ChallengeSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $challenges = [
+            // Daily Challenges
+            [
+                'name' => 'Fan dévoué',
+                'slug' => 'fan-devoue-daily',
+                'description' => 'Consultez les actualités du CSS chaque jour',
+                'challenge_type' => 'daily',
+                'category' => 'engagement',
+                'difficulty' => 'easy',
+                'requirements' => ['action' => 'view_content', 'count' => 5],
+                'target_value' => 5,
+                'points_reward' => 10,
+                'additional_rewards' => ['badge' => 'daily_reader'],
+                'icon' => '📰',
+                'color' => '#4ECDC4',
+                'max_completions' => 365,
+                'starts_at' => now(),
+                'ends_at' => now()->addYear(),
+                'is_active' => true,
+                'is_featured' => true,
+            ],
+            [
+                'name' => 'Supporter actif',
+                'slug' => 'supporter-actif-daily',
+                'description' => 'Likez et commentez 3 publications',
+                'challenge_type' => 'daily',
+                'category' => 'social',
+                'difficulty' => 'easy',
+                'requirements' => ['action' => 'social_interaction', 'count' => 3],
+                'target_value' => 3,
+                'points_reward' => 15,
+                'icon' => '💬',
+                'color' => '#F7B731',
+                'max_completions' => 365,
+                'starts_at' => now(),
+                'ends_at' => now()->addYear(),
+                'is_active' => true,
+            ],
+
+            // Weekly Challenges
+            [
+                'name' => 'Ambassadeur CSS',
+                'slug' => 'ambassadeur-css-weekly',
+                'description' => 'Parrainez 2 nouveaux membres cette semaine',
+                'challenge_type' => 'weekly',
+                'category' => 'social',
+                'difficulty' => 'medium',
+                'requirements' => ['action' => 'referral', 'count' => 2],
+                'target_value' => 2,
+                'points_reward' => 100,
+                'additional_rewards' => ['badge' => 'ambassador', 'bonus_points' => 50],
+                'icon' => '🎯',
+                'color' => '#5F27CD',
+                'max_completions' => 52,
+                'starts_at' => now(),
+                'ends_at' => now()->addYear(),
+                'is_active' => true,
+                'is_featured' => true,
+            ],
+            [
+                'name' => 'Généreux supporter',
+                'slug' => 'genereux-supporter-weekly',
+                'description' => 'Faites un don à une campagne cette semaine',
+                'challenge_type' => 'weekly',
+                'category' => 'donation',
+                'difficulty' => 'easy',
+                'requirements' => ['action' => 'donation', 'count' => 1],
+                'target_value' => 1,
+                'points_reward' => 50,
+                'icon' => '💝',
+                'color' => '#FF6B6B',
+                'max_completions' => 52,
+                'starts_at' => now(),
+                'ends_at' => now()->addYear(),
+                'is_active' => true,
+            ],
+
+            // Monthly Challenges
+            [
+                'name' => 'Collectionneur passionné',
+                'slug' => 'collectionneur-passionne',
+                'description' => 'Collectez 10 cartes à collectionner ce mois-ci',
+                'challenge_type' => 'monthly',
+                'category' => 'engagement',
+                'difficulty' => 'hard',
+                'requirements' => ['action' => 'collect_cards', 'count' => 10],
+                'target_value' => 10,
+                'points_reward' => 500,
+                'additional_rewards' => ['badge' => 'collector', 'rare_card' => true],
+                'icon' => '🃏',
+                'color' => '#45B7D1',
+                'max_completions' => 12,
+                'starts_at' => now(),
+                'ends_at' => now()->addYear(),
+                'is_active' => true,
+                'is_featured' => true,
+            ],
+            [
+                'name' => 'Présence au stade',
+                'slug' => 'presence-au-stade',
+                'description' => 'Assistez à 3 matchs au stade ce mois-ci',
+                'challenge_type' => 'monthly',
+                'category' => 'match',
+                'difficulty' => 'medium',
+                'requirements' => ['action' => 'attend_match', 'count' => 3],
+                'target_value' => 3,
+                'points_reward' => 300,
+                'additional_rewards' => ['badge' => 'stadium_fan'],
+                'icon' => '🏟️',
+                'color' => '#2ECC71',
+                'max_completions' => 12,
+                'starts_at' => now(),
+                'ends_at' => now()->addYear(),
+                'is_active' => true,
+            ],
+
+            // Special/Seasonal Challenges
+            [
+                'name' => 'Marathon du centenaire',
+                'slug' => 'marathon-centenaire',
+                'description' => 'Participez à toutes les activités du centenaire',
+                'challenge_type' => 'special',
+                'category' => 'engagement',
+                'difficulty' => 'expert',
+                'requirements' => ['action' => 'centenary_activities', 'count' => 10],
+                'target_value' => 10,
+                'points_reward' => 1000,
+                'additional_rewards' => [
+                    'badge' => 'centenary_hero',
+                    'exclusive_jersey' => true,
+                    'vip_access' => true,
+                ],
+                'icon' => '🎊',
+                'color' => '#E74C3C',
+                'max_completions' => 1,
+                'starts_at' => now(),
+                'ends_at' => now()->addMonths(6),
+                'is_active' => true,
+                'is_featured' => true,
+            ],
+            [
+                'name' => 'Champion de la ligue',
+                'slug' => 'champion-de-la-ligue',
+                'description' => 'Prédisez correctement le résultat de 5 matchs',
+                'challenge_type' => 'seasonal',
+                'category' => 'match',
+                'difficulty' => 'hard',
+                'requirements' => ['action' => 'correct_predictions', 'count' => 5],
+                'target_value' => 5,
+                'points_reward' => 400,
+                'additional_rewards' => ['badge' => 'prophet', 'bonus_points' => 100],
+                'icon' => '🔮',
+                'color' => '#9B59B6',
+                'max_completions' => 4,
+                'starts_at' => now(),
+                'ends_at' => now()->addMonths(9),
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Contributeur expert',
+                'slug' => 'contributeur-expert',
+                'description' => 'Créez 20 posts sur le forum avec 100+ likes au total',
+                'challenge_type' => 'monthly',
+                'category' => 'content',
+                'difficulty' => 'hard',
+                'requirements' => ['action' => 'forum_posts', 'count' => 20, 'likes_required' => 100],
+                'target_value' => 20,
+                'points_reward' => 350,
+                'additional_rewards' => ['badge' => 'expert_contributor', 'moderator_badge' => true],
+                'icon' => '✍️',
+                'color' => '#F39C12',
+                'max_completions' => 12,
+                'starts_at' => now(),
+                'ends_at' => now()->addYear(),
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($challenges as $challenge) {
+            Challenge::create($challenge);
+        }
+
+        $this->command->info('Défis créés avec succès');
+    }
+}

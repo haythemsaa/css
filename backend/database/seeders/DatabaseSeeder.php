@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
             LotteryDrawSeeder::class,
             GiftCampaignSeeder::class,
             CollectibleCardSeeder::class,
+            ChallengeSeeder::class,
+            LeaderboardSeeder::class,
 
             // Socios
             SociosBenefitSeeder::class,
