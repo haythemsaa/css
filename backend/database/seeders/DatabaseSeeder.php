@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
 
             // Content
             ContentCategorySeeder::class,
+            ContentSeeder::class,
 
             // Partners
             PartnerCategorySeeder::class,
@@ -34,6 +35,10 @@ class DatabaseSeeder extends Seeder
             BadgeSeeder::class,
             LotteryDrawSeeder::class,
             GiftCampaignSeeder::class,
+            CollectibleCardSeeder::class,
+
+            // Socios
+            SociosBenefitSeeder::class,
 
             // Community
             ForumSeeder::class,

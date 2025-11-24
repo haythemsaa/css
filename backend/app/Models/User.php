@@ -131,6 +131,81 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'referred_by');
     }
 
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function pushTokens(): HasMany
+    {
+        return $this->hasMany(PushNotificationToken::class);
+    }
+
+    public function giftDistributions(): HasMany
+    {
+        return $this->hasMany(GiftDistribution::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function pollVotes(): HasMany
+    {
+        return $this->hasMany(PollVote::class);
+    }
+
+    public function userBadges(): HasMany
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+    public function cards(): HasMany
+    {
+        return $this->hasMany(UserCard::class);
+    }
+
+    public function cardTradesInitiated(): HasMany
+    {
+        return $this->hasMany(CardTrade::class, 'initiator_id');
+    }
+
+    public function cardTradesReceived(): HasMany
+    {
+        return $this->hasMany(CardTrade::class, 'recipient_id');
+    }
+
+    public function partnerReviews(): HasMany
+    {
+        return $this->hasMany(PartnerReview::class);
+    }
+
+    public function reductionUsages(): HasMany
+    {
+        return $this->hasMany(ReductionUsage::class);
+    }
+
+    public function referredUsers(): HasMany
+    {
+        return $this->hasMany(ReferralProgram::class, 'referrer_id');
+    }
+
+    public function referredBy()
+    {
+        return $this->hasOne(ReferralProgram::class, 'referred_id');
+    }
+
+    public function sociosBenefitRedemptions(): HasMany
+    {
+        return $this->hasMany(SociosBenefitRedemption::class);
+    }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
     // Accessors
     public function getFullNameAttribute(): string
     {
