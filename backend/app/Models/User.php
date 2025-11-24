@@ -232,6 +232,26 @@ class User extends Authenticatable
         return $this->hasMany(UserChallenge::class);
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    public function productReviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function ticketPurchases(): HasMany
+    {
+        return $this->hasMany(TicketPurchase::class);
+    }
+
     // Accessors
     public function getFullNameAttribute(): string
     {

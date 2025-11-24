@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             PlayerSeeder::class,
             MatchSeeder::class,
+            TicketSeeder::class,
 
             // Content
             ContentCategorySeeder::class,
@@ -41,6 +42,9 @@ class DatabaseSeeder extends Seeder
 
             // Socios
             SociosBenefitSeeder::class,
+
+            // E-commerce
+            ProductSeeder::class,
 
             // Community
             ForumSeeder::class,
