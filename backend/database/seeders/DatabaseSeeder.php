@@ -12,13 +12,32 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            // Users & Auth
             UserSeeder::class,
+
+            // Sports
             TeamSeeder::class,
             PlayerSeeder::class,
+            MatchSeeder::class,
+
+            // Content
             ContentCategorySeeder::class,
+
+            // Partners
             PartnerCategorySeeder::class,
             PartnerSeeder::class,
+
+            // Donations
             CampaignSeeder::class,
+
+            // Gamification
+            BadgeSeeder::class,
+            LotteryDrawSeeder::class,
+            GiftCampaignSeeder::class,
+
+            // Community
+            ForumSeeder::class,
+            PollSeeder::class,
         ]);
     }
 }
