@@ -374,9 +374,17 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
 
-        // Admin Dashboard Stats
+        // ===================================
+        // DASHBOARD & STATISTICS
+        // ===================================
         Route::get('dashboard/stats', function () {
             return response()->json([
+                'users' => [
+                    'total' => \App\Models\User::count(),
+                    'socios' => \App\Models\User::where('user_type', 'socios')->count(),
+                    'premium' => \App\Models\User::where('user_type', 'premium')->count(),
+                    'active_today' => \App\Models\User::whereDate('last_login_at', today())->count(),
+                ],
                 'auctions' => [
                     'total' => \App\Models\AuctionProduct::count(),
                     'active' => \App\Models\AuctionProduct::active()->count(),
@@ -392,10 +400,17 @@ Route::prefix('v1')->group(function () {
                     'active_methods' => \App\Models\PaymentMethod::active()->count(),
                     'total_transactions' => \App\Models\PaymentTransaction::count(),
                 ],
+                'commerce' => [
+                    'total_products' => \App\Models\Product::count(),
+                    'total_orders' => \App\Models\Order::count(),
+                    'revenue' => \App\Models\Order::where('status', 'completed')->sum('total_amount'),
+                ],
             ]);
         });
 
-        // Auctions Management
+        // ===================================
+        // AUCTIONS MANAGEMENT
+        // ===================================
         Route::prefix('auctions')->group(function () {
             Route::post('/', [AuctionController::class, 'store']);
             Route::put('/{id}', [AuctionController::class, 'update']);
@@ -403,7 +418,9 @@ Route::prefix('v1')->group(function () {
             Route::get('/statistics', [AuctionController::class, 'statistics']);
         });
 
-        // Donation Goals Management
+        // ===================================
+        // DONATION GOALS MANAGEMENT
+        // ===================================
         Route::prefix('donation-goals')->group(function () {
             Route::post('/', [DonationGoalController::class, 'store']);
             Route::put('/{id}', [DonationGoalController::class, 'update']);
@@ -411,12 +428,94 @@ Route::prefix('v1')->group(function () {
             Route::get('/statistics', [DonationGoalController::class, 'statistics']);
         });
 
-        // Payment Methods Management
+        // ===================================
+        // PAYMENT METHODS MANAGEMENT
+        // ===================================
         Route::prefix('payment-methods')->group(function () {
             Route::post('/', [PaymentMethodController::class, 'store']);
             Route::put('/{id}', [PaymentMethodController::class, 'update']);
             Route::delete('/{id}', [PaymentMethodController::class, 'destroy']);
             Route::get('/statistics', [PaymentMethodController::class, 'statistics']);
+        });
+
+        // ===================================
+        // CONTENT MANAGEMENT
+        // ===================================
+        Route::prefix('content')->group(function () {
+            Route::get('/', [ContentController::class, 'index']);
+            Route::post('/', [ContentController::class, 'index']); // AdminStore method to be added
+            Route::put('/{id}', [ContentController::class, 'index']); // AdminUpdate method to be added
+            Route::delete('/{id}', [ContentController::class, 'index']); // AdminDestroy method to be added
+        });
+
+        // ===================================
+        // MATCH MANAGEMENT
+        // ===================================
+        Route::prefix('matches')->group(function () {
+            Route::get('/', [MatchController::class, 'index']);
+            Route::post('/', [MatchController::class, 'index']); // AdminStore to be added
+            Route::put('/{id}', [MatchController::class, 'index']); // AdminUpdate to be added
+            Route::delete('/{id}', [MatchController::class, 'index']); // AdminDestroy to be added
+        });
+
+        // ===================================
+        // PLAYER MANAGEMENT
+        // ===================================
+        Route::prefix('players')->group(function () {
+            Route::get('/', [PlayerController::class, 'index']);
+            Route::post('/', [PlayerController::class, 'index']); // AdminStore to be added
+            Route::put('/{id}', [PlayerController::class, 'index']); // AdminUpdate to be added
+            Route::delete('/{id}', [PlayerController::class, 'index']); // AdminDestroy to be added
+        });
+
+        // ===================================
+        // PRODUCT MANAGEMENT
+        // ===================================
+        Route::prefix('products')->group(function () {
+            Route::get('/', [ProductController::class, 'index']);
+            Route::post('/', [ProductController::class, 'index']); // AdminStore to be added
+            Route::put('/{id}', [ProductController::class, 'index']); // AdminUpdate to be added
+            Route::delete('/{id}', [ProductController::class, 'index']); // AdminDestroy to be added
+        });
+
+        // ===================================
+        // EVENT MANAGEMENT
+        // ===================================
+        Route::prefix('events')->group(function () {
+            Route::get('/', [EventController::class, 'index']);
+            Route::post('/', [EventController::class, 'index']); // AdminStore to be added
+            Route::put('/{id}', [EventController::class, 'index']); // AdminUpdate to be added
+            Route::delete('/{id}', [EventController::class, 'index']); // AdminDestroy to be added
+        });
+
+        // ===================================
+        // PARTNER & OFFER MANAGEMENT
+        // ===================================
+        Route::prefix('partners')->group(function () {
+            Route::get('/', [PartnerController::class, 'index']);
+            Route::post('/', [PartnerController::class, 'index']); // AdminStore to be added
+            Route::put('/{id}', [PartnerController::class, 'index']); // AdminUpdate to be added
+            Route::delete('/{id}', [PartnerController::class, 'index']); // AdminDestroy to be added
+        });
+
+        // ===================================
+        // LOTTERY MANAGEMENT
+        // ===================================
+        Route::prefix('lottery')->group(function () {
+            Route::get('/', [LotteryController::class, 'index']);
+            Route::post('/', [LotteryController::class, 'index']); // AdminStore to be added
+            Route::put('/{id}', [LotteryController::class, 'index']); // AdminUpdate to be added
+            Route::delete('/{id}', [LotteryController::class, 'index']); // AdminDestroy to be added
+        });
+
+        // ===================================
+        // POLL MANAGEMENT
+        // ===================================
+        Route::prefix('polls')->group(function () {
+            Route::get('/', [PollController::class, 'index']);
+            Route::post('/', [PollController::class, 'index']); // AdminStore to be added
+            Route::put('/{id}', [PollController::class, 'index']); // AdminUpdate to be added
+            Route::delete('/{id}', [PollController::class, 'index']); // AdminDestroy to be added
         });
 
     });
