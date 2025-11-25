@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            // Admin Users (doit être en premier)
+            AdminUserSeeder::class,
+
             // Users & Auth
             UserSeeder::class,
 

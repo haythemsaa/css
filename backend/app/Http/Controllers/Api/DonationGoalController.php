@@ -160,4 +160,127 @@ class DonationGoalController extends Controller
 
         return response()->json(['categories' => $categories]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Create a new donation goal (Admin only)
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:donation_goals,slug',
+            'description' => 'required|string',
+            'full_details' => 'nullable|string',
+            'category' => 'required|in:litigation,player_transfer,stadium_renovation,youth_academy,equipment,debt_payment,other',
+            'target_amount' => 'required|numeric|min:100',
+            'min_donation' => 'required|numeric|min:1',
+            'priority' => 'required|in:low,medium,high,urgent',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'is_featured' => 'boolean',
+            'featured_image' => 'nullable|string',
+            'gallery_images' => 'nullable|array',
+            'impact_metrics' => 'nullable|string',
+            'thank_you_message' => 'nullable|string',
+            'show_donors' => 'boolean',
+            'allow_anonymous' => 'boolean',
+            'rewards' => 'nullable|array',
+        ]);
+
+        $goal = DonationGoal::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Objectif de don créé avec succès',
+            'data' => new DonationGoalResource($goal),
+        ], 201);
+    }
+
+    /**
+     * Update a donation goal (Admin only)
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $goal = DonationGoal::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'string|max:255',
+            'slug' => 'string|unique:donation_goals,slug,' . $id,
+            'description' => 'string',
+            'full_details' => 'nullable|string',
+            'category' => 'in:litigation,player_transfer,stadium_renovation,youth_academy,equipment,debt_payment,other',
+            'target_amount' => 'numeric|min:100',
+            'min_donation' => 'numeric|min:1',
+            'priority' => 'in:low,medium,high,urgent',
+            'start_date' => 'date',
+            'end_date' => 'nullable|date|after:start_date',
+            'status' => 'in:draft,active,paused,completed,cancelled',
+            'is_featured' => 'boolean',
+            'featured_image' => 'nullable|string',
+            'gallery_images' => 'nullable|array',
+            'impact_metrics' => 'nullable|string',
+            'thank_you_message' => 'nullable|string',
+            'show_donors' => 'boolean',
+            'allow_anonymous' => 'boolean',
+            'rewards' => 'nullable|array',
+        ]);
+
+        $goal->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Objectif de don mis à jour avec succès',
+            'data' => new DonationGoalResource($goal->fresh()),
+        ]);
+    }
+
+    /**
+     * Delete a donation goal (Admin only)
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $goal = DonationGoal::findOrFail($id);
+
+        // Check if goal has donations
+        if ($goal->current_amount > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossible de supprimer un objectif avec des dons actifs',
+            ], 422);
+        }
+
+        $goal->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Objectif de don supprimé avec succès',
+        ]);
+    }
+
+    /**
+     * Get donation goal statistics (Admin only)
+     */
+    public function statistics(): JsonResponse
+    {
+        $stats = [
+            'total_goals' => DonationGoal::count(),
+            'active_goals' => DonationGoal::active()->count(),
+            'completed_goals' => DonationGoal::where('status', 'completed')->count(),
+            'total_raised' => DonationGoal::sum('current_amount'),
+            'total_target' => DonationGoal::active()->sum('target_amount'),
+            'total_donors' => DonationGoal::sum('donors_count'),
+            'by_category' => DonationGoal::selectRaw('category, count(*) as count, sum(current_amount) as total_raised')
+                ->groupBy('category')
+                ->get(),
+            'by_priority' => DonationGoal::selectRaw('priority, count(*) as count')
+                ->groupBy('priority')
+                ->get(),
+        ];
+
+        return response()->json($stats);
+    }
 }

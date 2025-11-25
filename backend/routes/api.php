@@ -367,6 +367,59 @@ Route::prefix('v1')->group(function () {
         });
 
     });
+
+    // ===================================
+    // ADMIN ROUTES
+    // ===================================
+
+    Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
+
+        // Admin Dashboard Stats
+        Route::get('dashboard/stats', function () {
+            return response()->json([
+                'auctions' => [
+                    'total' => \App\Models\AuctionProduct::count(),
+                    'active' => \App\Models\AuctionProduct::active()->count(),
+                    'revenue' => \App\Models\AuctionProduct::where('status', 'sold')->sum('current_bid'),
+                ],
+                'donations' => [
+                    'total_goals' => \App\Models\DonationGoal::count(),
+                    'active_goals' => \App\Models\DonationGoal::active()->count(),
+                    'total_raised' => \App\Models\DonationGoal::sum('current_amount'),
+                ],
+                'payments' => [
+                    'total_methods' => \App\Models\PaymentMethod::count(),
+                    'active_methods' => \App\Models\PaymentMethod::active()->count(),
+                    'total_transactions' => \App\Models\PaymentTransaction::count(),
+                ],
+            ]);
+        });
+
+        // Auctions Management
+        Route::prefix('auctions')->group(function () {
+            Route::post('/', [AuctionController::class, 'store']);
+            Route::put('/{id}', [AuctionController::class, 'update']);
+            Route::delete('/{id}', [AuctionController::class, 'destroy']);
+            Route::get('/statistics', [AuctionController::class, 'statistics']);
+        });
+
+        // Donation Goals Management
+        Route::prefix('donation-goals')->group(function () {
+            Route::post('/', [DonationGoalController::class, 'store']);
+            Route::put('/{id}', [DonationGoalController::class, 'update']);
+            Route::delete('/{id}', [DonationGoalController::class, 'destroy']);
+            Route::get('/statistics', [DonationGoalController::class, 'statistics']);
+        });
+
+        // Payment Methods Management
+        Route::prefix('payment-methods')->group(function () {
+            Route::post('/', [PaymentMethodController::class, 'store']);
+            Route::put('/{id}', [PaymentMethodController::class, 'update']);
+            Route::delete('/{id}', [PaymentMethodController::class, 'destroy']);
+            Route::get('/statistics', [PaymentMethodController::class, 'statistics']);
+        });
+
+    });
 });
 
 // Health check

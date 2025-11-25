@@ -164,4 +164,122 @@ class AuctionController extends Controller
             'auction' => new AuctionProductResource($auction->fresh()),
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Create a new auction (Admin only)
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:auction_products,slug',
+            'description' => 'required|string',
+            'images' => 'required|array',
+            'images.*' => 'string',
+            'category' => 'required|in:collectibles,memorabilia,experiences,signed_items',
+            'starting_price' => 'required|numeric|min:0',
+            'reserve_price' => 'nullable|numeric|min:0',
+            'buy_now_price' => 'nullable|numeric|min:0',
+            'bid_increment' => 'required|numeric|min:1',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+            'is_featured' => 'boolean',
+            'auto_extend' => 'boolean',
+            'auto_extend_minutes' => 'nullable|integer|min:1',
+            'terms_conditions' => 'nullable|string',
+            'metadata' => 'nullable|array',
+        ]);
+
+        $auction = AuctionProduct::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Enchère créée avec succès',
+            'data' => new AuctionProductResource($auction),
+        ], 201);
+    }
+
+    /**
+     * Update an auction (Admin only)
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $auction = AuctionProduct::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'string|max:255',
+            'slug' => 'string|unique:auction_products,slug,' . $id,
+            'description' => 'string',
+            'images' => 'array',
+            'images.*' => 'string',
+            'category' => 'in:collectibles,memorabilia,experiences,signed_items',
+            'starting_price' => 'numeric|min:0',
+            'reserve_price' => 'nullable|numeric|min:0',
+            'buy_now_price' => 'nullable|numeric|min:0',
+            'bid_increment' => 'numeric|min:1',
+            'start_time' => 'date',
+            'end_time' => 'date|after:start_time',
+            'is_featured' => 'boolean',
+            'auto_extend' => 'boolean',
+            'auto_extend_minutes' => 'nullable|integer|min:1',
+            'status' => 'in:scheduled,active,ended,sold,cancelled',
+            'terms_conditions' => 'nullable|string',
+            'metadata' => 'nullable|array',
+        ]);
+
+        $auction->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Enchère mise à jour avec succès',
+            'data' => new AuctionProductResource($auction->fresh()),
+        ]);
+    }
+
+    /**
+     * Delete an auction (Admin only)
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $auction = AuctionProduct::findOrFail($id);
+
+        // Check if auction has bids
+        if ($auction->bids()->count() > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossible de supprimer une enchère avec des enchères actives',
+            ], 422);
+        }
+
+        $auction->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Enchère supprimée avec succès',
+        ]);
+    }
+
+    /**
+     * Get auction statistics (Admin only)
+     */
+    public function statistics(): JsonResponse
+    {
+        $stats = [
+            'total_auctions' => AuctionProduct::count(),
+            'active_auctions' => AuctionProduct::active()->count(),
+            'ended_auctions' => AuctionProduct::ended()->count(),
+            'total_bids' => AuctionBid::count(),
+            'total_revenue' => AuctionProduct::where('status', 'sold')->sum('current_bid'),
+            'featured_auctions' => AuctionProduct::featured()->count(),
+            'by_category' => AuctionProduct::selectRaw('category, count(*) as count')
+                ->groupBy('category')
+                ->get(),
+        ];
+
+        return response()->json($stats);
+    }
 }
