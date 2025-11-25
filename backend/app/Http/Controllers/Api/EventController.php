@@ -119,4 +119,77 @@ class EventController extends Controller
 
         return response()->json(['message' => 'Inscription annulée']);
     }
+
+    /**
+     * Admin: Create a new event
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:events,slug',
+            'description' => 'nullable|string',
+            'event_type' => 'required|in:match,meet_greet,training,conference,ceremony,other',
+            'start_datetime' => 'required|date',
+            'end_datetime' => 'nullable|date|after:start_datetime',
+            'location' => 'nullable|string|max:255',
+            'venue' => 'nullable|string|max:255',
+            'max_attendees' => 'nullable|integer|min:1',
+            'requires_registration' => 'boolean',
+            'is_featured' => 'boolean',
+            'status' => 'required|in:upcoming,ongoing,completed,cancelled',
+            'banner_image' => 'nullable|url',
+        ]);
+
+        $event = Event::create($validated);
+
+        return response()->json([
+            'message' => 'Événement créé avec succès',
+            'event' => $event,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update an event
+     */
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $event = Event::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'slug' => 'sometimes|string|unique:events,slug,' . $id,
+            'description' => 'nullable|string',
+            'event_type' => 'sometimes|in:match,meet_greet,training,conference,ceremony,other',
+            'start_datetime' => 'sometimes|date',
+            'end_datetime' => 'nullable|date|after:start_datetime',
+            'location' => 'nullable|string|max:255',
+            'venue' => 'nullable|string|max:255',
+            'max_attendees' => 'nullable|integer|min:1',
+            'requires_registration' => 'boolean',
+            'is_featured' => 'boolean',
+            'status' => 'sometimes|in:upcoming,ongoing,completed,cancelled',
+            'banner_image' => 'nullable|url',
+        ]);
+
+        $event->update($validated);
+
+        return response()->json([
+            'message' => 'Événement mis à jour avec succès',
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * Admin: Delete an event
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $event = Event::findOrFail($id);
+        $event->delete();
+
+        return response()->json([
+            'message' => 'Événement supprimé avec succès',
+        ]);
+    }
 }

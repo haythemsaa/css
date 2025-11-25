@@ -135,4 +135,76 @@ class PollController extends Controller
             'total_votes' => $poll->total_votes,
         ]);
     }
+
+    /**
+     * Admin: Create a new poll
+     */
+    public function adminStore(Request $request)
+    {
+        $validated = $request->validate([
+            'question' => 'required|string|max:500',
+            'options' => 'required|array|min:2',
+            'options.*' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'show_results_before_vote' => 'boolean',
+            'restricted_to_socios' => 'boolean',
+            'restricted_to_premium' => 'boolean',
+            'is_featured' => 'boolean',
+        ]);
+
+        $poll = Poll::create($validated);
+
+        return response()->json([
+            'message' => 'Sondage créé avec succès',
+            'poll' => $poll,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a poll
+     */
+    public function adminUpdate(Request $request, $id)
+    {
+        $poll = Poll::findOrFail($id);
+
+        $validated = $request->validate([
+            'question' => 'sometimes|string|max:500',
+            'options' => 'sometimes|array|min:2',
+            'options.*' => 'sometimes|string|max:255',
+            'start_date' => 'sometimes|date',
+            'end_date' => 'sometimes|date|after:start_date',
+            'show_results_before_vote' => 'boolean',
+            'restricted_to_socios' => 'boolean',
+            'restricted_to_premium' => 'boolean',
+            'is_featured' => 'boolean',
+        ]);
+
+        // Don't allow editing options if votes exist
+        if (isset($validated['options']) && $poll->total_votes > 0) {
+            return response()->json([
+                'message' => 'Impossible de modifier les options avec des votes existants',
+            ], 400);
+        }
+
+        $poll->update($validated);
+
+        return response()->json([
+            'message' => 'Sondage mis à jour avec succès',
+            'poll' => $poll,
+        ]);
+    }
+
+    /**
+     * Admin: Delete a poll
+     */
+    public function adminDestroy($id)
+    {
+        $poll = Poll::findOrFail($id);
+        $poll->delete();
+
+        return response()->json([
+            'message' => 'Sondage supprimé avec succès',
+        ]);
+    }
 }

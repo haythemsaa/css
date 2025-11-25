@@ -154,4 +154,95 @@ class MatchController extends Controller
             'season' => $season,
         ]);
     }
+
+    /**
+     * Admin: Create a new match
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'home_team' => 'required|string|max:255',
+            'away_team' => 'required|string|max:255',
+            'competition' => 'required|string|max:255',
+            'season' => 'required|string|max:50',
+            'match_date' => 'required|date',
+            'stadium' => 'nullable|string|max:255',
+            'status' => 'required|in:scheduled,live,halftime,finished,postponed,cancelled',
+            'home_score' => 'nullable|integer|min:0',
+            'away_score' => 'nullable|integer|min:0',
+            'home_possession' => 'nullable|integer|min:0|max:100',
+            'away_possession' => 'nullable|integer|min:0|max:100',
+            'home_shots' => 'nullable|integer|min:0',
+            'away_shots' => 'nullable|integer|min:0',
+            'home_shots_on_target' => 'nullable|integer|min:0',
+            'away_shots_on_target' => 'nullable|integer|min:0',
+            'home_corners' => 'nullable|integer|min:0',
+            'away_corners' => 'nullable|integer|min:0',
+            'home_yellow_cards' => 'nullable|integer|min:0',
+            'away_yellow_cards' => 'nullable|integer|min:0',
+            'home_red_cards' => 'nullable|integer|min:0',
+            'away_red_cards' => 'nullable|integer|min:0',
+            'match_events' => 'nullable|json',
+        ]);
+
+        $match = Match::create($validated);
+
+        return response()->json([
+            'message' => 'Match créé avec succès',
+            'match' => $match,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a match
+     */
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $match = Match::findOrFail($id);
+
+        $validated = $request->validate([
+            'home_team' => 'sometimes|string|max:255',
+            'away_team' => 'sometimes|string|max:255',
+            'competition' => 'sometimes|string|max:255',
+            'season' => 'sometimes|string|max:50',
+            'match_date' => 'sometimes|date',
+            'stadium' => 'nullable|string|max:255',
+            'status' => 'sometimes|in:scheduled,live,halftime,finished,postponed,cancelled',
+            'home_score' => 'nullable|integer|min:0',
+            'away_score' => 'nullable|integer|min:0',
+            'home_possession' => 'nullable|integer|min:0|max:100',
+            'away_possession' => 'nullable|integer|min:0|max:100',
+            'home_shots' => 'nullable|integer|min:0',
+            'away_shots' => 'nullable|integer|min:0',
+            'home_shots_on_target' => 'nullable|integer|min:0',
+            'away_shots_on_target' => 'nullable|integer|min:0',
+            'home_corners' => 'nullable|integer|min:0',
+            'away_corners' => 'nullable|integer|min:0',
+            'home_yellow_cards' => 'nullable|integer|min:0',
+            'away_yellow_cards' => 'nullable|integer|min:0',
+            'home_red_cards' => 'nullable|integer|min:0',
+            'away_red_cards' => 'nullable|integer|min:0',
+            'match_events' => 'nullable|json',
+        ]);
+
+        $match->update($validated);
+
+        return response()->json([
+            'message' => 'Match mis à jour avec succès',
+            'match' => $match,
+        ]);
+    }
+
+    /**
+     * Admin: Delete a match
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $match = Match::findOrFail($id);
+        $match->delete();
+
+        return response()->json([
+            'message' => 'Match supprimé avec succès',
+        ]);
+    }
 }

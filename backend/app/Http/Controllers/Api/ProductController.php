@@ -133,4 +133,77 @@ class ProductController extends Controller
 
         return response()->json($reviews);
     }
+
+    /**
+     * Admin: Create a new product
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:products,slug',
+            'description' => 'nullable|string',
+            'category' => 'required|in:jerseys,merchandise,accessories,collectibles',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0|lt:price',
+            'stock_quantity' => 'required|integer|min:0',
+            'sku' => 'nullable|string|unique:products,sku',
+            'images' => 'nullable|json',
+            'is_featured' => 'boolean',
+            'is_available' => 'boolean',
+            'sizes' => 'nullable|json',
+            'colors' => 'nullable|json',
+        ]);
+
+        $product = Product::create($validated);
+
+        return response()->json([
+            'message' => 'Produit créé avec succès',
+            'product' => $product,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a product
+     */
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $product = Product::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'slug' => 'sometimes|string|unique:products,slug,' . $id,
+            'description' => 'nullable|string',
+            'category' => 'sometimes|in:jerseys,merchandise,accessories,collectibles',
+            'price' => 'sometimes|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0',
+            'stock_quantity' => 'sometimes|integer|min:0',
+            'sku' => 'nullable|string|unique:products,sku,' . $id,
+            'images' => 'nullable|json',
+            'is_featured' => 'boolean',
+            'is_available' => 'boolean',
+            'sizes' => 'nullable|json',
+            'colors' => 'nullable|json',
+        ]);
+
+        $product->update($validated);
+
+        return response()->json([
+            'message' => 'Produit mis à jour avec succès',
+            'product' => $product,
+        ]);
+    }
+
+    /**
+     * Admin: Delete a product
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return response()->json([
+            'message' => 'Produit supprimé avec succès',
+        ]);
+    }
 }

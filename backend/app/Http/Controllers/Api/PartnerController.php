@@ -167,4 +167,83 @@ class PartnerController extends Controller
             'review' => $review,
         ], 201);
     }
+
+    /**
+     * Admin: Create a new partner
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:partner_categories,id',
+            'description' => 'nullable|string',
+            'discount_description' => 'nullable|string',
+            'discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email',
+            'website' => 'nullable|url',
+            'logo_url' => 'nullable|url',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'priority' => 'integer|min:0',
+        ]);
+
+        $partner = Partner::create($validated);
+
+        return response()->json([
+            'message' => 'Partenaire créé avec succès',
+            'partner' => $partner,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a partner
+     */
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $partner = Partner::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'category_id' => 'sometimes|exists:partner_categories,id',
+            'description' => 'nullable|string',
+            'discount_description' => 'nullable|string',
+            'discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email',
+            'website' => 'nullable|url',
+            'logo_url' => 'nullable|url',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'priority' => 'integer|min:0',
+        ]);
+
+        $partner->update($validated);
+
+        return response()->json([
+            'message' => 'Partenaire mis à jour avec succès',
+            'partner' => $partner,
+        ]);
+    }
+
+    /**
+     * Admin: Delete a partner
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $partner = Partner::findOrFail($id);
+        $partner->delete();
+
+        return response()->json([
+            'message' => 'Partenaire supprimé avec succès',
+        ]);
+    }
 }

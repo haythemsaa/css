@@ -135,4 +135,109 @@ class LotteryController extends Controller
             'winning_ticket' => $draw->tickets->first(),
         ]);
     }
+
+    /**
+     * Admin: Create a new lottery draw
+     */
+    public function adminStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'prize_description' => 'required|string',
+            'ticket_price' => 'required|numeric|min:0',
+            'max_tickets' => 'required|integer|min:1',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'draw_date' => 'nullable|date|after:end_date',
+            'is_active' => 'boolean',
+            'image_url' => 'nullable|url',
+        ]);
+
+        $draw = LotteryDraw::create($validated);
+
+        return response()->json([
+            'message' => 'Tirage au sort créé avec succès',
+            'draw' => $draw,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a lottery draw
+     */
+    public function adminUpdate(Request $request, $id)
+    {
+        $draw = LotteryDraw::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'prize_description' => 'sometimes|string',
+            'ticket_price' => 'sometimes|numeric|min:0',
+            'max_tickets' => 'sometimes|integer|min:1',
+            'start_date' => 'sometimes|date',
+            'end_date' => 'sometimes|date|after:start_date',
+            'draw_date' => 'nullable|date|after:end_date',
+            'is_active' => 'boolean',
+            'image_url' => 'nullable|url',
+        ]);
+
+        $draw->update($validated);
+
+        return response()->json([
+            'message' => 'Tirage au sort mis à jour avec succès',
+            'draw' => $draw,
+        ]);
+    }
+
+    /**
+     * Admin: Delete a lottery draw
+     */
+    public function adminDestroy($id)
+    {
+        $draw = LotteryDraw::findOrFail($id);
+
+        if ($draw->tickets_sold > 0) {
+            return response()->json([
+                'message' => 'Impossible de supprimer un tirage avec des tickets vendus',
+            ], 400);
+        }
+
+        $draw->delete();
+
+        return response()->json([
+            'message' => 'Tirage au sort supprimé avec succès',
+        ]);
+    }
+
+    /**
+     * Admin: Perform the lottery draw
+     */
+    public function adminPerformDraw($id)
+    {
+        $draw = LotteryDraw::findOrFail($id);
+
+        if ($draw->drawn_at) {
+            return response()->json(['message' => 'Draw already completed'], 400);
+        }
+
+        if ($draw->tickets_sold === 0) {
+            return response()->json(['message' => 'No tickets sold'], 400);
+        }
+
+        // Select random winning ticket
+        $winningTicket = $draw->tickets()->inRandomOrder()->first();
+        $winningTicket->update(['is_winner' => true]);
+
+        $draw->update([
+            'winner_user_id' => $winningTicket->user_id,
+            'drawn_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Tirage effectué avec succès',
+            'winner' => $winningTicket->user,
+            'winning_ticket' => $winningTicket,
+        ]);
+    }
 }
