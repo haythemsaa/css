@@ -45,6 +45,11 @@ class DatabaseSeeder extends Seeder
 
             // E-commerce
             ProductSeeder::class,
+            SubscriptionTierSeeder::class,
+            DiscountCodeSeeder::class,
+
+            // Events
+            EventSeeder::class,
 
             // Community
             ForumSeeder::class,

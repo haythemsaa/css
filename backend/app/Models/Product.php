@@ -60,6 +60,11 @@ class Product extends Model
         return $this->hasMany(ProductReview::class);
     }
 
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     // Scopes
     public function scopeAvailable($query)
     {

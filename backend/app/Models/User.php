@@ -253,6 +253,52 @@ class User extends Authenticatable
         return $this->hasMany(TicketPurchase::class);
     }
 
+    // Advanced Features Relations
+    public function activities(): HasMany
+    {
+        return $this->hasMany(UserActivity::class);
+    }
+
+    public function streak(): HasOne
+    {
+        return $this->hasOne(UserStreak::class);
+    }
+
+    public function followers(): HasMany
+    {
+        return $this->hasMany(UserFollow::class, 'following_id');
+    }
+
+    public function following(): HasMany
+    {
+        return $this->hasMany(UserFollow::class, 'follower_id');
+    }
+
+    public function timelinePosts(): HasMany
+    {
+        return $this->hasMany(TimelinePost::class);
+    }
+
+    public function wishlist(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function savedContent(): HasMany
+    {
+        return $this->hasMany(SavedContent::class);
+    }
+
+    public function eventRegistrations(): HasMany
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
+
+    public function supportTickets(): HasMany
+    {
+        return $this->hasMany(SupportTicket::class);
+    }
+
     // Accessors
     public function getFullNameAttribute(): string
     {

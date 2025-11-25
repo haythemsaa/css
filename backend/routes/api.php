@@ -29,6 +29,10 @@ use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\SociosBenefitController;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\SupportTicketController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +106,15 @@ Route::prefix('v1')->group(function () {
     // Ticket verification (for gate staff)
     Route::post('tickets/verify-qr', [TicketController::class, 'verifyQRCode']);
     Route::post('tickets/mark-used', [TicketController::class, 'markAsUsed']);
+
+    // Public events
+    Route::get('events', [EventController::class, 'index']);
+    Route::get('events/{id}', [EventController::class, 'show']);
+
+    // Public search
+    Route::get('search', [SearchController::class, 'search']);
+    Route::get('search/suggestions', [SearchController::class, 'suggestions']);
+    Route::get('search/trending', [SearchController::class, 'trending']);
 
     // ===================================
     // AUTHENTICATED ROUTES
@@ -275,6 +288,51 @@ Route::prefix('v1')->group(function () {
         Route::prefix('subscriptions')->group(function () {
             Route::post('/subscribe', [SubscriptionController::class, 'subscribe']);
             Route::get('/my-subscription', [SubscriptionController::class, 'mySubscription']);
+        });
+
+        // Events (Authenticated)
+        Route::prefix('events')->group(function () {
+            Route::post('/{id}/register', [EventController::class, 'register']);
+            Route::delete('/registrations/{id}', [EventController::class, 'cancelRegistration']);
+            Route::get('/my-registrations', [EventController::class, 'myRegistrations']);
+            Route::post('/verify-qr', [EventController::class, 'verifyQRCode']);
+        });
+
+        // Support Tickets
+        Route::prefix('support')->group(function () {
+            Route::get('/tickets', [SupportTicketController::class, 'index']);
+            Route::post('/tickets', [SupportTicketController::class, 'store']);
+            Route::get('/tickets/{id}', [SupportTicketController::class, 'show']);
+            Route::post('/tickets/{id}/messages', [SupportTicketController::class, 'addMessage']);
+            Route::patch('/tickets/{id}/rate', [SupportTicketController::class, 'rateSatisfaction']);
+        });
+
+        // Social Features
+        Route::prefix('social')->group(function () {
+            // Follow System
+            Route::post('/follow/{userId}', [SocialController::class, 'follow']);
+            Route::delete('/unfollow/{userId}', [SocialController::class, 'unfollow']);
+            Route::get('/followers', [SocialController::class, 'followers']);
+            Route::get('/following', [SocialController::class, 'following']);
+
+            // Timeline Posts
+            Route::get('/timeline', [SocialController::class, 'timeline']);
+            Route::post('/posts', [SocialController::class, 'createPost']);
+            Route::delete('/posts/{id}', [SocialController::class, 'deletePost']);
+            Route::post('/posts/{id}/like', [SocialController::class, 'likePost']);
+            Route::delete('/posts/{id}/unlike', [SocialController::class, 'unlikePost']);
+            Route::post('/posts/{id}/comments', [SocialController::class, 'addComment']);
+            Route::delete('/comments/{id}', [SocialController::class, 'deleteComment']);
+
+            // Wishlist
+            Route::get('/wishlist', [SocialController::class, 'wishlist']);
+            Route::post('/wishlist/{productId}', [SocialController::class, 'addToWishlist']);
+            Route::delete('/wishlist/{productId}', [SocialController::class, 'removeFromWishlist']);
+
+            // Saved Content
+            Route::get('/saved', [SocialController::class, 'savedContent']);
+            Route::post('/saved/{contentId}', [SocialController::class, 'saveContent']);
+            Route::delete('/saved/{contentId}', [SocialController::class, 'unsaveContent']);
         });
 
     });
