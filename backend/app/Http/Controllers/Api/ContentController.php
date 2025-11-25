@@ -181,4 +181,88 @@ class ContentController extends Controller
             'duration' => $content->video_duration,
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:contents,slug',
+            'type' => 'required|in:article,video,gallery,poll',
+            'category_id' => 'required|exists:content_categories,id',
+            'excerpt' => 'nullable|string',
+            'body' => 'required|string',
+            'featured_image' => 'nullable|string',
+            'video_url' => 'nullable|string',
+            'video_id' => 'nullable|string',
+            'video_duration' => 'nullable|integer',
+            'access_level' => 'required|in:free,premium,socios',
+            'is_featured' => 'boolean',
+            'published_at' => 'nullable|date',
+            'tags' => 'nullable|array',
+            'metadata' => 'nullable|array',
+        ]);
+
+        $validated['author_id'] = $request->user()->id;
+        $content = Content::create($validated);
+
+        if (isset($validated['tags'])) {
+            $content->tags()->sync($validated['tags']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Contenu créé avec succès',
+            'data' => $content->load(['category', 'author', 'tags']),
+        ], 201);
+    }
+
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $content = Content::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'string|max:255',
+            'slug' => 'string|unique:contents,slug,' . $id,
+            'type' => 'in:article,video,gallery,poll',
+            'category_id' => 'exists:content_categories,id',
+            'excerpt' => 'nullable|string',
+            'body' => 'string',
+            'featured_image' => 'nullable|string',
+            'video_url' => 'nullable|string',
+            'video_id' => 'nullable|string',
+            'video_duration' => 'nullable|integer',
+            'access_level' => 'in:free,premium,socios',
+            'is_featured' => 'boolean',
+            'published_at' => 'nullable|date',
+            'tags' => 'nullable|array',
+            'metadata' => 'nullable|array',
+        ]);
+
+        $content->update($validated);
+
+        if (isset($validated['tags'])) {
+            $content->tags()->sync($validated['tags']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Contenu mis à jour avec succès',
+            'data' => $content->fresh(['category', 'author', 'tags']),
+        ]);
+    }
+
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $content = Content::findOrFail($id);
+        $content->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Contenu supprimé avec succès',
+        ]);
+    }
 }
