@@ -48,8 +48,17 @@ class DatabaseSeeder extends Seeder
             SubscriptionTierSeeder::class,
             DiscountCodeSeeder::class,
 
+            // Payment Methods
+            PaymentMethodSeeder::class,
+
             // Events
             EventSeeder::class,
+
+            // Auctions
+            AuctionSeeder::class,
+
+            // Donation Goals
+            DonationGoalSeeder::class,
 
             // Community
             ForumSeeder::class,

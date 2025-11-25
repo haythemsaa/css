@@ -299,6 +299,22 @@ class User extends Authenticatable
         return $this->hasMany(SupportTicket::class);
     }
 
+    // Auction Relations
+    public function auctionBids(): HasMany
+    {
+        return $this->hasMany(AuctionBid::class);
+    }
+
+    public function auctionWins(): HasMany
+    {
+        return $this->hasMany(AuctionWinner::class);
+    }
+
+    public function paymentTransactions(): HasMany
+    {
+        return $this->hasMany(PaymentTransaction::class);
+    }
+
     // Accessors
     public function getFullNameAttribute(): string
     {

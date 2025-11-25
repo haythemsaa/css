@@ -33,6 +33,9 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\SupportTicketController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SocialController;
+use App\Http\Controllers\Api\AuctionController;
+use App\Http\Controllers\Api\DonationGoalController;
+use App\Http\Controllers\Api\PaymentMethodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +118,20 @@ Route::prefix('v1')->group(function () {
     Route::get('search', [SearchController::class, 'search']);
     Route::get('search/suggestions', [SearchController::class, 'suggestions']);
     Route::get('search/trending', [SearchController::class, 'trending']);
+
+    // Public auctions
+    Route::get('auctions', [AuctionController::class, 'index']);
+    Route::get('auctions/{id}', [AuctionController::class, 'show']);
+
+    // Public donation goals
+    Route::get('donation-goals', [DonationGoalController::class, 'index']);
+    Route::get('donation-goals/{slug}', [DonationGoalController::class, 'show']);
+    Route::get('donation-goals/categories', [DonationGoalController::class, 'categories']);
+
+    // Public payment methods
+    Route::get('payment-methods', [PaymentMethodController::class, 'index']);
+    Route::get('payment-methods/{id}', [PaymentMethodController::class, 'show']);
+    Route::post('payment-methods/{id}/calculate-fees', [PaymentMethodController::class, 'calculateFees']);
 
     // ===================================
     // AUTHENTICATED ROUTES
@@ -333,6 +350,20 @@ Route::prefix('v1')->group(function () {
             Route::get('/saved', [SocialController::class, 'savedContent']);
             Route::post('/saved/{contentId}', [SocialController::class, 'saveContent']);
             Route::delete('/saved/{contentId}', [SocialController::class, 'unsaveContent']);
+        });
+
+        // Auctions (Authenticated)
+        Route::prefix('auctions')->group(function () {
+            Route::post('/{id}/bid', [AuctionController::class, 'placeBid']);
+            Route::post('/{id}/buy-now', [AuctionController::class, 'buyNow']);
+            Route::get('/my-bids', [AuctionController::class, 'myBids']);
+            Route::get('/my-wins', [AuctionController::class, 'myWins']);
+        });
+
+        // Donation Goals (Authenticated)
+        Route::prefix('donation-goals')->group(function () {
+            Route::post('/{id}/donate', [DonationGoalController::class, 'donate']);
+            Route::get('/my-donations', [DonationGoalController::class, 'myDonations']);
         });
 
     });
