@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AuctionProductResource;
+use App\Http\Resources\AuctionBidResource;
+use App\Http\Resources\AuctionWinnerResource;
 use App\Models\AuctionProduct;
 use App\Models\AuctionBid;
 use Illuminate\Http\JsonResponse;
@@ -36,14 +39,22 @@ class AuctionController extends Controller
 
         $auctions = $query->orderBy('end_time', 'asc')->paginate(20);
 
-        return response()->json($auctions);
+        return response()->json([
+            'data' => AuctionProductResource::collection($auctions->items()),
+            'pagination' => [
+                'current_page' => $auctions->currentPage(),
+                'last_page' => $auctions->lastPage(),
+                'per_page' => $auctions->perPage(),
+                'total' => $auctions->total(),
+            ],
+        ]);
     }
 
     public function show(int $id): JsonResponse
     {
         $auction = AuctionProduct::with(['currentWinner', 'bids.user'])->findOrFail($id);
 
-        return response()->json($auction);
+        return response()->json(new AuctionProductResource($auction));
     }
 
     public function placeBid(Request $request, int $id): JsonResponse
@@ -76,8 +87,8 @@ class AuctionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Enchère placée avec succès',
-            'bid' => $bid,
-            'auction' => $auction->fresh(),
+            'bid' => new AuctionBidResource($bid),
+            'auction' => new AuctionProductResource($auction->fresh()),
         ], 201);
     }
 
@@ -90,7 +101,15 @@ class AuctionController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return response()->json($bids);
+        return response()->json([
+            'data' => AuctionBidResource::collection($bids->items()),
+            'pagination' => [
+                'current_page' => $bids->currentPage(),
+                'last_page' => $bids->lastPage(),
+                'per_page' => $bids->perPage(),
+                'total' => $bids->total(),
+            ],
+        ]);
     }
 
     public function myWins(Request $request): JsonResponse
@@ -102,7 +121,15 @@ class AuctionController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        return response()->json($wins);
+        return response()->json([
+            'data' => AuctionWinnerResource::collection($wins->items()),
+            'pagination' => [
+                'current_page' => $wins->currentPage(),
+                'last_page' => $wins->lastPage(),
+                'per_page' => $wins->perPage(),
+                'total' => $wins->total(),
+            ],
+        ]);
     }
 
     public function buyNow(Request $request, int $id): JsonResponse
@@ -134,7 +161,7 @@ class AuctionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Achat immédiat effectué avec succès',
-            'auction' => $auction->fresh(),
+            'auction' => new AuctionProductResource($auction->fresh()),
         ]);
     }
 }

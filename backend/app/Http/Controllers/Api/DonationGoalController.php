@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DonationGoalResource;
 use App\Models\DonationGoal;
 use App\Models\Donation;
 use App\Models\PaymentTransaction;
@@ -41,7 +42,15 @@ class DonationGoalController extends Controller
             ->orderBy('end_date', 'asc')
             ->paginate(20);
 
-        return response()->json($goals);
+        return response()->json([
+            'data' => DonationGoalResource::collection($goals->items()),
+            'pagination' => [
+                'current_page' => $goals->currentPage(),
+                'last_page' => $goals->lastPage(),
+                'per_page' => $goals->perPage(),
+                'total' => $goals->total(),
+            ],
+        ]);
     }
 
     public function show(string $slug): JsonResponse
@@ -50,7 +59,7 @@ class DonationGoalController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return response()->json($goal);
+        return response()->json(new DonationGoalResource($goal));
     }
 
     public function donate(Request $request, int $id): JsonResponse
