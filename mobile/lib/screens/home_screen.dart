@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../config/theme.dart';
+import '../theme/juventus_theme.dart';
+import '../services/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,131 +14,301 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const HomeTabScreen(),
-    const MatchesScreen(),
-    const FreeoiScreen(),
-    const ProfileScreen(),
+    const MatchesTabScreen(),
+    const EngagementTabScreen(),
+    const ProfileTabScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: JuventusTheme.primaryBlack.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          backgroundColor: JuventusTheme.primaryWhite,
+          selectedItemColor: JuventusTheme.primaryBlack,
+          unselectedItemColor: JuventusTheme.grey500,
+          selectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 12,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sports_soccer),
-            label: 'Matchs',
+          unselectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 11,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer),
-            label: 'Freeoui',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
+          type: BottomNavigationBarType.fixed,
+          elevation: 0,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: 'Accueil',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.sports_soccer_outlined),
+              activeIcon: Icon(Icons.sports_soccer),
+              label: 'Matchs',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_border),
+              activeIcon: Icon(Icons.favorite),
+              label: 'Soutien',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profil',
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class HomeTabScreen extends StatelessWidget {
+// =====================================================
+// HOME TAB - Juventus Style
+// =====================================================
+
+class HomeTabScreen extends StatefulWidget {
   const HomeTabScreen({super.key});
 
   @override
+  State<HomeTabScreen> createState() => _HomeTabScreenState();
+}
+
+class _HomeTabScreenState extends State<HomeTabScreen> {
+  final ApiService _apiService = ApiService();
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    // Simulate API call
+    await Future.delayed(const Duration(seconds: 1));
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          floating: true,
-          snap: true,
-          title: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryGold,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Text(
-                    'CSS',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
+    return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
+      body: CustomScrollView(
+        slivers: [
+          _buildAppBar(),
+          SliverToBoxAdapter(child: _buildHeroSection()),
+          SliverToBoxAdapter(child: _buildQuickActions()),
+          SliverToBoxAdapter(child: _buildFeaturedContent()),
+          SliverToBoxAdapter(child: _buildLatestNews()),
+          const SliverToBoxAdapter(child: SizedBox(height: 100)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return SliverAppBar(
+      floating: true,
+      snap: true,
+      backgroundColor: JuventusTheme.primaryBlack,
+      elevation: 0,
+      title: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: const BoxDecoration(
+              color: JuventusTheme.primaryWhite,
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: Text(
+                'CSS',
+                style: TextStyle(
+                  color: JuventusTheme.primaryBlack,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(width: 12),
-              const Text('CSS Official'),
-            ],
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              onPressed: () {},
             ),
-          ],
-        ),
-        SliverToBoxAdapter(
-          child: Column(
-            children: [
-              _buildFeaturedContent(),
-              _buildSectionTitle('Actualités'),
-              _buildNewsList(),
-              _buildSectionTitle('Prochains Matchs'),
-              _buildMatchesList(),
-            ],
           ),
+          const SizedBox(width: 12),
+          const Text(
+            'CSS SOCIOS',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.notifications_outlined),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {},
         ),
       ],
     );
   }
 
-  Widget _buildFeaturedContent() {
+  Widget _buildHeroSection() {
     return Container(
-      height: 200,
       margin: const EdgeInsets.all(16),
+      height: 200,
       decoration: BoxDecoration(
-        color: AppTheme.primaryBlack,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.primaryGold, width: 2),
+        gradient: JuventusTheme.blackGradient,
+        boxShadow: JuventusTheme.elevatedShadow,
       ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.play_circle, size: 64, color: AppTheme.primaryGold),
-            const SizedBox(height: 8),
-            const Text(
-              'Contenu Exclusif',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+      child: Stack(
+        children: [
+          // Background pattern
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: const NetworkImage('https://via.placeholder.com/800x400/000000/FFFFFF?text=CSS+SOCIOS'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    JuventusTheme.primaryBlack.withOpacity(0.7),
+                    BlendMode.darken,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 4),
+          ),
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: JuventusTheme.error,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text(
+                    'EN DIRECT',
+                    style: TextStyle(
+                      color: JuventusTheme.primaryWhite,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                const Text(
+                  'CSS vs EST',
+                  style: TextStyle(
+                    color: JuventusTheme.primaryWhite,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.stadium,
+                      size: 14,
+                      color: JuventusTheme.primaryWhite,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Stade olympique de Sousse • 20:00',
+                      style: TextStyle(
+                        color: JuventusTheme.primaryWhite.withOpacity(0.8),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickActions() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildActionCard(
+              'Boutique',
+              Icons.shopping_bag_outlined,
+              () {},
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _buildActionCard(
+              'Billets',
+              Icons.confirmation_number_outlined,
+              () {},
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _buildActionCard(
+              'Soutenir',
+              Icons.favorite_border,
+              () {},
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionCard(String label, IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: JuventusDecorations.whiteCard,
+        child: Column(
+          children: [
+            Icon(icon, size: 28, color: JuventusTheme.primaryBlack),
+            const SizedBox(height: 8),
             Text(
-              'Premium Seulement',
-              style: TextStyle(
-                color: Colors.grey[400],
-                fontSize: 14,
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -146,133 +317,269 @@ class HomeTabScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildFeaturedContent() {
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('À LA UNE', style: JuventusTheme.overline),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Voir tout',
+                  style: TextStyle(color: JuventusTheme.primaryBlack),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Voir tout'),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 220,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Container(
+                  width: 280,
+                  margin: const EdgeInsets.only(right: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: JuventusTheme.grey300,
+                  ),
+                  child: Stack(
+                    children: [
+                      // Image placeholder
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: const DecorationImage(
+                              image: NetworkImage('https://via.placeholder.com/280x220/212121/FFFFFF?text=CSS'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Gradient overlay
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                JuventusTheme.primaryBlack.withOpacity(0.8),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Content
+                      Positioned(
+                        left: 16,
+                        right: 16,
+                        bottom: 16,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: JuventusTheme.error,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Text(
+                                'NOUVEAU',
+                                style: TextStyle(
+                                  color: JuventusTheme.primaryWhite,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Titre de l\'article en vedette',
+                              style: TextStyle(
+                                color: JuventusTheme.primaryWhite,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildNewsList() {
-    return SizedBox(
-      height: 150,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return Container(
-            width: 250,
-            margin: const EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(12),
-                      ),
-                    ),
-                    child: const Center(child: Icon(Icons.image, size: 48)),
-                  ),
+  Widget _buildLatestNews() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('DERNIÈRES ACTUS', style: JuventusTheme.overline),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Voir tout',
+                  style: TextStyle(color: JuventusTheme.primaryBlack),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    'Article ${index + 1}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...List.generate(3, (index) => _buildNewsItem()),
+        ],
       ),
     );
   }
 
-  Widget _buildMatchesList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            leading: Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppTheme.primaryGold,
-                shape: BoxShape.circle,
+  Widget _buildNewsItem() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: JuventusDecorations.whiteCard,
+      child: Row(
+        children: [
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
               ),
-              child: const Center(
-                child: Text('CSS', style: TextStyle(fontWeight: FontWeight.bold)),
+              color: JuventusTheme.grey300,
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.image,
+                size: 32,
+                color: JuventusTheme.grey500,
               ),
             ),
-            title: const Text('CSS vs Équipe Adverse'),
-            subtitle: const Text('Samedi 20:00'),
-            trailing: const Icon(Icons.chevron_right),
           ),
-        );
-      },
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Titre de l\'article',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Il y a 2 heures',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: JuventusTheme.grey600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: JuventusTheme.grey500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class MatchesScreen extends StatelessWidget {
-  const MatchesScreen({super.key});
+// =====================================================
+// MATCHES TAB - Placeholder
+// =====================================================
+
+class MatchesTabScreen extends StatelessWidget {
+  const MatchesTabScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Matchs')),
+    return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
+      appBar: AppBar(
+        title: const Text('Matchs'),
+        backgroundColor: JuventusTheme.primaryBlack,
+      ),
+      body: const Center(
+        child: Text('Matchs Screen - Coming Soon'),
+      ),
     );
   }
 }
 
-class FreeoiScreen extends StatelessWidget {
-  const FreeoiScreen({super.key});
+// =====================================================
+// ENGAGEMENT TAB - Placeholder
+// =====================================================
+
+class EngagementTabScreen extends StatelessWidget {
+  const EngagementTabScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Freeoui')),
+    return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
+      appBar: AppBar(
+        title: const Text('Soutenir le Club'),
+        backgroundColor: JuventusTheme.primaryBlack,
+      ),
+      body: const Center(
+        child: Text('Engagement Screen - Coming Soon'),
+      ),
     );
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+// =====================================================
+// PROFILE TAB - Placeholder
+// =====================================================
+
+class ProfileTabScreen extends StatelessWidget {
+  const ProfileTabScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Profil')),
+    return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
+      appBar: AppBar(
+        title: const Text('Profil'),
+        backgroundColor: JuventusTheme.primaryBlack,
+      ),
+      body: const Center(
+        child: Text('Profile Screen - Coming Soon'),
+      ),
     );
   }
 }
