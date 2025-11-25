@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\LeaderboardController;
 use App\Http\Controllers\Api\ChallengeController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\TeamController;
@@ -279,6 +280,15 @@ Route::prefix('v1')->group(function () {
             Route::patch('/items/{productId}', [CartController::class, 'updateItem']);
             Route::delete('/items/{productId}', [CartController::class, 'removeItem']);
             Route::delete('/', [CartController::class, 'clear']);
+        });
+
+        // E-commerce - Wishlist
+        Route::prefix('wishlist')->group(function () {
+            Route::get('/', [WishlistController::class, 'index']);
+            Route::post('/', [WishlistController::class, 'store']);
+            Route::post('/toggle', [WishlistController::class, 'toggle']);
+            Route::delete('/{productId}', [WishlistController::class, 'destroy']);
+            Route::get('/check/{productId}', [WishlistController::class, 'check']);
         });
 
         // E-commerce - Orders

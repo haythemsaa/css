@@ -386,19 +386,66 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 
-  void _addToCart(dynamic product) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${product['name']} ajouté au panier'),
-        backgroundColor: Colors.green,
-        action: SnackBarAction(
-          label: 'Voir',
-          textColor: Colors.white,
-          onPressed: () {
-            // Navigate to cart
-          },
-        ),
-      ),
-    );
+  Future<void> _addToCart(dynamic product) async {
+    try {
+      await _apiService.addToCart(product['id'], 1);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${product['name']} ajouté au panier'),
+            backgroundColor: Colors.green,
+            action: SnackBarAction(
+              label: 'Voir',
+              textColor: Colors.white,
+              onPressed: () {
+                Navigator.pushNamed(context, '/cart');
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _toggleWishlist(dynamic product) async {
+    try {
+      final response = await _apiService.toggleWishlist(product['id']);
+
+      if (mounted) {
+        final inWishlist = response.data['in_wishlist'] ?? false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              inWishlist
+                  ? '${product['name']} ajouté aux favoris'
+                  : '${product['name']} retiré des favoris',
+            ),
+            backgroundColor: inWishlist ? Colors.pink : Colors.orange,
+          ),
+        );
+
+        // Reload products to update wishlist icons
+        _loadProducts();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

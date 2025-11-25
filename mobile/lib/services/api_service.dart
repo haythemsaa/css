@@ -217,6 +217,57 @@ class ApiService {
     });
   }
 
+  // =======================
+  // CART ENDPOINTS
+  // =======================
+  Future<Response> getCart() {
+    return _dio.get('/cart');
+  }
+
+  Future<Response> addToCart(int productId, int quantity) {
+    return _dio.post('/cart/items', data: {
+      'product_id': productId,
+      'quantity': quantity,
+    });
+  }
+
+  Future<Response> updateCartItem(int productId, int quantity) {
+    return _dio.put('/cart/items/$productId', data: {
+      'quantity': quantity,
+    });
+  }
+
+  Future<Response> removeCartItem(int productId) {
+    return _dio.delete('/cart/items/$productId');
+  }
+
+  Future<Response> clearCart() {
+    return _dio.post('/cart/clear');
+  }
+
+  // =======================
+  // WISHLIST ENDPOINTS
+  // =======================
+  Future<Response> getWishlist() {
+    return _dio.get('/wishlist');
+  }
+
+  Future<Response> addToWishlist(int productId) {
+    return _dio.post('/wishlist', data: {
+      'product_id': productId,
+    });
+  }
+
+  Future<Response> removeFromWishlist(int productId) {
+    return _dio.delete('/wishlist/$productId');
+  }
+
+  Future<Response> toggleWishlist(int productId) {
+    return _dio.post('/wishlist/toggle', data: {
+      'product_id': productId,
+    });
+  }
+
   // Generic GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);
