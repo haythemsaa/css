@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/donation_goal.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 import 'donation_goal_details_screen.dart';
 
 class DonationGoalsScreen extends StatefulWidget {
@@ -39,7 +40,10 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: JuventusTheme.error,
+          ),
         );
       }
     }
@@ -48,9 +52,11 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Objectifs de Dons'),
-        backgroundColor: Colors.black,
+        title: const Text('OBJECTIFS DE DONS'),
+        backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -59,11 +65,36 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: JuventusTheme.primaryBlack,
+              ),
+            )
           : RefreshIndicator(
               onRefresh: _loadGoals,
+              color: JuventusTheme.primaryBlack,
               child: _goals.isEmpty
-                  ? const Center(child: Text('Aucun objectif disponible'))
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.volunteer_activism_outlined,
+                            size: 80,
+                            color: JuventusTheme.grey400,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Aucun objectif disponible',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: JuventusTheme.grey700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   : ListView.builder(
                       itemCount: _goals.length,
                       padding: const EdgeInsets.all(16),
@@ -79,8 +110,9 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
     final currencyFormat = NumberFormat.currency(locale: 'fr_TN', symbol: 'TND');
     final progress = goal.progressPercentage / 100;
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
+      decoration: JuventusDecorations.whiteCard,
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -107,9 +139,10 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                     child: Text(
                       goal.priorityDisplay.toUpperCase(),
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: JuventusTheme.primaryWhite,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
@@ -117,17 +150,25 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: JuventusTheme.grey200,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       goal.categoryDisplay,
-                      style: TextStyle(fontSize: 10, color: Colors.grey[700]),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: JuventusTheme.grey700,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const Spacer(),
                   if (goal.isFeatured)
-                    Icon(Icons.star, color: Colors.yellow[700], size: 20),
+                    const Icon(
+                      Icons.star,
+                      color: JuventusTheme.accentGold,
+                      size: 20,
+                    ),
                 ],
               ),
 
@@ -139,6 +180,7 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: JuventusTheme.primaryBlack,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -149,7 +191,10 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
               // Description
               Text(
                 goal.description,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: JuventusTheme.grey600,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -168,20 +213,24 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                          color: JuventusTheme.primaryBlack,
                         ),
                       ),
                       Text(
                         '${goal.donorsCount} donateurs',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: JuventusTheme.grey600,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
                     value: progress,
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor: JuventusTheme.grey200,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      goal.isCompleted ? Colors.green : Colors.blue,
+                      goal.isCompleted ? JuventusTheme.success : JuventusTheme.info,
                     ),
                     minHeight: 8,
                   ),
@@ -192,15 +241,19 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Collecté',
-                            style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: JuventusTheme.grey600,
+                            ),
                           ),
                           Text(
                             currencyFormat.format(goal.currentAmount),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
+                              color: JuventusTheme.primaryBlack,
                             ),
                           ),
                         ],
@@ -208,15 +261,19 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
+                          const Text(
                             'Objectif',
-                            style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: JuventusTheme.grey600,
+                            ),
                           ),
                           Text(
                             currencyFormat.format(goal.targetAmount),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
+                              color: JuventusTheme.primaryBlack,
                             ),
                           ),
                         ],
@@ -230,11 +287,18 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
+                    const Icon(
+                      Icons.access_time,
+                      size: 16,
+                      color: JuventusTheme.grey600,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${goal.daysRemaining} jours restants',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: JuventusTheme.grey600,
+                      ),
                     ),
                   ],
                 ),
@@ -245,17 +309,26 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue[50],
+                    color: JuventusTheme.grey100,
                     borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: JuventusTheme.info, width: 1),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.trending_up, size: 16, color: Colors.blue),
+                      const Icon(
+                        Icons.trending_up,
+                        size: 16,
+                        color: JuventusTheme.info,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           goal.impactMetrics!,
-                          style: const TextStyle(fontSize: 12, color: Colors.blue),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: JuventusTheme.info,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],
@@ -272,15 +345,15 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case 'urgent':
-        return Colors.red;
+        return JuventusTheme.error;
       case 'high':
-        return Colors.orange;
+        return JuventusTheme.warning;
       case 'medium':
-        return Colors.blue;
+        return JuventusTheme.info;
       case 'low':
-        return Colors.grey;
+        return JuventusTheme.grey600;
       default:
-        return Colors.grey;
+        return JuventusTheme.grey600;
     }
   }
 
@@ -288,7 +361,14 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Filtrer par catégorie'),
+        backgroundColor: JuventusTheme.primaryWhite,
+        title: const Text(
+          'Filtrer par catégorie',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -307,9 +387,13 @@ class _DonationGoalsScreenState extends State<DonationGoalsScreen> {
 
   Widget _filterOption(String label, String? category) {
     return RadioListTile<String?>(
-      title: Text(label),
+      title: Text(
+        label,
+        style: const TextStyle(color: JuventusTheme.grey700),
+      ),
       value: category,
       groupValue: _selectedCategory,
+      activeColor: JuventusTheme.primaryBlack,
       onChanged: (value) {
         setState(() => _selectedCategory = value);
         Navigator.pop(context);
