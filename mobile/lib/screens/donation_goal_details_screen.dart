@@ -4,6 +4,7 @@ import '../models/donation_goal.dart';
 import '../models/payment_method.dart';
 import '../services/api_service.dart';
 import 'payment_methods_screen.dart';
+import '../theme/juventus_theme.dart';
 
 class DonationGoalDetailsScreen extends StatefulWidget {
   final String slug;
@@ -42,7 +43,7 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
+          SnackBar(content: Text('Erreur: $e'), backgroundColor: JuventusTheme.error),
         );
       }
     }
@@ -72,7 +73,7 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Le don minimum est de ${_goal!.minDonation} TND'),
-          backgroundColor: Colors.red,
+          backgroundColor: JuventusTheme.error,
         ),
       );
       return;
@@ -82,7 +83,7 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Veuillez sélectionner une méthode de paiement'),
-          backgroundColor: Colors.red,
+          backgroundColor: JuventusTheme.error,
         ),
       );
       return;
@@ -100,7 +101,7 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Merci pour votre don!'),
-            backgroundColor: Colors.green,
+            backgroundColor: JuventusTheme.success,
           ),
         );
         Navigator.pop(context);
@@ -108,7 +109,7 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text('Erreur: $e'), backgroundColor: JuventusTheme.error),
         );
       }
     }
@@ -118,8 +119,8 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
   Widget build(BuildContext context) {
     if (_isLoading || _goal == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Détails objectif')),
-        body: const Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('DÉTAILS OBJECTIF'), backgroundColor: JuventusTheme.primaryBlack, elevation: 0),
+        body: const Center(child: CircularProgressIndicator(color: JuventusTheme.primaryBlack)),
       );
     }
 
@@ -128,8 +129,8 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Objectif de don'),
-        backgroundColor: Colors.black,
+        title: const Text('OBJECTIF DE DON'),
+        backgroundColor: JuventusTheme.primaryBlack,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -384,7 +385,7 @@ class _DonationGoalDetailsScreenState extends State<DonationGoalDetailsScreen> {
                       child: ElevatedButton(
                         onPressed: _makeDonation,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: JuventusTheme.success,
                           padding: const EdgeInsets.all(16),
                         ),
                         child: const Text(
