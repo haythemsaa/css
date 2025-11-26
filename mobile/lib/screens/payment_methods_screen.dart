@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/payment_method.dart';
 import '../services/api_service.dart';
 
+import '../theme/juventus_theme.dart';
 class PaymentMethodsScreen extends StatefulWidget {
   final String context; // 'donations', 'products', 'tickets', 'auctions'
   final double amount;
@@ -89,29 +90,29 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choisir un moyen de paiement'),
-        backgroundColor: Colors.black,
+        title: const Text('MOYEN DE PAIEMENT'),
+        backgroundColor: JuventusTheme.primaryBlack,
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          indicatorColor: Colors.yellow[700],
+          indicatorColor: JuventusTheme.primaryWhite,
           tabs: _typeLabels.values.map((label) => Tab(text: label)).toList(),
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: JuventusTheme.primaryBlack))
           : Column(
               children: [
                 // Amount Display
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                  color: Colors.grey[100],
+                  color: JuventusTheme.grey100,
                   child: Column(
                     children: [
                       const Text(
                         'Montant à payer',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        style: TextStyle(fontSize: 14, color: JuventusTheme.grey600),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -133,7 +134,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                           itemCount: _filteredMethods.length,
                           padding: const EdgeInsets.all(16),
                           itemBuilder: (context, index) {
-                            return _buildPaymentMethodCard(_filteredMethods[index]);
+                            return _buildPaymentMethodContainer(decoration: JuventusDecorations.whiteCard,_filteredMethods[index]);
                           },
                         ),
                 ),
@@ -142,12 +143,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
     );
   }
 
-  Widget _buildPaymentMethodCard(PaymentMethod method) {
+  Widget _buildPaymentMethodContainer(decoration: JuventusDecorations.whiteCard,PaymentMethod method) {
     final canProcess = method.canProcessAmount(widget.amount);
     final fees = method.calculateFees(widget.amount);
     final currencyFormat = NumberFormat.currency(locale: 'fr_TN', symbol: 'TND');
 
-    return Card(
+    return Container(decoration: JuventusDecorations.whiteCard,
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: canProcess
@@ -168,7 +169,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: JuventusTheme.grey200,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: method.logoUrl != null
@@ -176,7 +177,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                         : Icon(
                             _getMethodIcon(method.type),
                             size: 30,
-                            color: Colors.grey[600],
+                            color: JuventusTheme.grey600,
                           ),
                   ),
                   const SizedBox(width: 12),
@@ -194,12 +195,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                         const SizedBox(height: 4),
                         Text(
                           method.typeDisplay,
-                          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          style: TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                         ),
                         if (method.provider != null)
                           Text(
                             method.provider!,
-                            style: TextStyle(fontSize: 10, color: Colors.grey[500]),
+                            style: TextStyle(fontSize: 10, color: JuventusTheme.grey500),
                           ),
                       ],
                     ),
@@ -208,13 +209,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: JuventusTheme.success,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Text(
                         'RECOMMANDÉ',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: JuventusTheme.primaryWhite,
                           fontSize: 8,
                           fontWeight: FontWeight.bold,
                         ),
@@ -228,18 +229,18 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.red[50],
+                    color: JuventusTheme.primaryWhite,
                     borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.red),
+                    border: Border.all(color: JuventusTheme.error, width: 2),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.error_outline, size: 16, color: Colors.red),
+                      const Icon(Icons.error_outline, size: 16, color: JuventusTheme.error),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           'Montant incompatible (min: ${method.minAmount ?? 0} TND, max: ${method.maxAmount ?? "illimité"} TND)',
-                          style: const TextStyle(fontSize: 12, color: Colors.red),
+                          style: const TextStyle(fontSize: 12, color: JuventusTheme.error),
                         ),
                       ),
                     ],
@@ -269,11 +270,11 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                   children: [
                     Text(
                       'Frais (${method.transactionFeePercentage}%):',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                     ),
                     Text(
                       '- ${currencyFormat.format(fees['total_fee'])}',
-                      style: TextStyle(fontSize: 12, color: Colors.red[700]),
+                      style: TextStyle(fontSize: 12, color: JuventusTheme.error[700]),
                     ),
                   ],
                 ),
@@ -290,7 +291,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: Colors.green,
+                        color: JuventusTheme.success,
                       ),
                     ),
                   ],
@@ -300,11 +301,11 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.access_time, size: 14, color: Colors.grey[600]),
+                      Icon(Icons.access_time, size: 14, color: JuventusTheme.grey600),
                       const SizedBox(width: 4),
                       Text(
                         'Traitement: ${method.processingTime}',
-                        style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                        style: TextStyle(fontSize: 11, color: JuventusTheme.grey600),
                       ),
                     ],
                   ),

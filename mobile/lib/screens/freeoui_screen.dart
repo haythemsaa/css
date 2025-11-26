@@ -3,6 +3,7 @@ import '../config/theme.dart';
 import '../services/api_service.dart';
 
 class FreeoiScreen extends StatefulWidget {
+import '../theme/juventus_theme.dart';
   const FreeoiScreen({super.key});
 
   @override
@@ -54,7 +55,7 @@ class _FreeoiScreenState extends State<FreeoiScreen> {
           // Filters
           Container(
             padding: const EdgeInsets.all(16),
-            color: Colors.white,
+            color: JuventusTheme.primaryWhite,
             child: Row(
               children: [
                 Expanded(
@@ -103,7 +104,7 @@ class _FreeoiScreenState extends State<FreeoiScreen> {
                       itemCount: partners.length,
                       itemBuilder: (context, index) {
                         final partner = partners[index];
-                        return _buildPartnerCard(partner);
+                        return _buildPartnerContainer(decoration: JuventusDecorations.whiteCard,partner);
                       },
                     ),
                   ),
@@ -113,10 +114,10 @@ class _FreeoiScreenState extends State<FreeoiScreen> {
     );
   }
 
-  Widget _buildPartnerCard(dynamic partner) {
+  Widget _buildPartnerContainer(decoration: JuventusDecorations.whiteCard,dynamic partner) {
     final isFeatured = partner['is_featured'] ?? false;
 
-    return Card(
+    return Container(decoration: JuventusDecorations.whiteCard,
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +155,7 @@ class _FreeoiScreenState extends State<FreeoiScreen> {
                 Text(
                   '📍 ${partner['city']} - ${partner['address']}',
                   style: TextStyle(
-                    color: Colors.grey[600],
+                    color: JuventusTheme.grey600[600],
                     fontSize: 14,
                   ),
                 ),
@@ -167,7 +168,7 @@ class _FreeoiScreenState extends State<FreeoiScreen> {
                       children: [
                         const Text(
                           'Premium:',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                         ),
                         Text(
                           '${partner['reduction_value_premium']}% réduction',
@@ -183,7 +184,7 @@ class _FreeoiScreenState extends State<FreeoiScreen> {
                       children: [
                         const Text(
                           'Socios:',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                         ),
                         Text(
                           '${partner['reduction_value_socios']}% réduction',

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/payment_method.dart';
 import '../services/api_service.dart';
 
+import '../theme/juventus_theme.dart';
 class CheckoutConfirmationScreen extends StatefulWidget {
   final String transactionType; // 'donation', 'auction', 'product', 'ticket'
   final int itemId;
@@ -101,7 +102,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.green, size: 32),
+            Icon(Icons.check_circle, color: JuventusTheme.success, size: 32),
             const SizedBox(width: 12),
             const Text('Paiement Réussi'),
           ],
@@ -116,7 +117,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
             const SizedBox(height: 16),
             Text(
               'Vous recevrez une confirmation par email.',
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 12, color: JuventusTheme.grey600[600]),
               textAlign: TextAlign.center,
             ),
           ],
@@ -139,7 +140,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Confirmation de paiement'),
-        backgroundColor: Colors.black,
+        backgroundColor: JuventusTheme.primaryBlack,
       ),
       body: _isProcessing
           ? const Center(
@@ -155,7 +156,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                   SizedBox(height: 8),
                   Text(
                     'Veuillez ne pas fermer cette page',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                   ),
                 ],
               ),
@@ -176,7 +177,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                       child: Text(
                         _getTransactionTypeLabel(widget.transactionType),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: JuventusTheme.primaryWhite,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -197,7 +198,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: JuventusTheme.grey600[100],
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
@@ -214,18 +215,18 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                             const SizedBox(height: 8),
                             Text(
                               'Message: ${widget.additionalData!['donor_message']}',
-                              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                              style: TextStyle(fontSize: 12, color: JuventusTheme.grey600[600]),
                             ),
                           ],
                           if (widget.additionalData?['is_anonymous'] == true) ...[
                             const SizedBox(height: 8),
                             Row(
                               children: [
-                                Icon(Icons.visibility_off, size: 14, color: Colors.grey[600]),
+                                Icon(Icons.visibility_off, size: 14, color: JuventusTheme.grey600[600]),
                                 const SizedBox(width: 4),
                                 Text(
                                   'Don anonyme',
-                                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                  style: TextStyle(fontSize: 12, color: JuventusTheme.grey600[600]),
                                 ),
                               ],
                             ),
@@ -248,7 +249,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[300]!),
+                        border: Border.all(color: JuventusTheme.grey600[300]!),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -257,7 +258,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.grey[200],
+                              color: JuventusTheme.grey600[200],
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: widget.paymentMethod.logoUrl != null
@@ -268,7 +269,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                                 : Icon(
                                     Icons.payment,
                                     size: 30,
-                                    color: Colors.grey[600],
+                                    color: JuventusTheme.grey600[600],
                                   ),
                           ),
                           const SizedBox(width: 12),
@@ -287,7 +288,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                                   widget.paymentMethod.typeDisplay,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[600],
+                                    color: JuventusTheme.grey600[600],
                                   ),
                                 ),
                               ],
@@ -325,14 +326,14 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                           _buildAmountRow(
                             'Frais de transaction (${widget.paymentMethod.transactionFeePercentage}%)',
                             '- ${currencyFormat.format(fees['total_fee'])}',
-                            color: Colors.red[700],
+                            color: JuventusTheme.error[700],
                           ),
                           const Divider(height: 24),
                           _buildAmountRow(
                             'Montant net reçu',
                             currencyFormat.format(fees['net_amount']),
                             isBold: true,
-                            color: Colors.green,
+                            color: JuventusTheme.success,
                             fontSize: 18,
                           ),
                         ],
@@ -374,20 +375,20 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: JuventusTheme.grey600[100],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.info_outline, size: 20, color: Colors.grey[700]),
+                            Icon(Icons.info_outline, size: 20, color: JuventusTheme.grey600[700]),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 widget.paymentMethod.instructions!,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey[700],
+                                  color: JuventusTheme.grey600[700],
                                 ),
                               ),
                             ),
@@ -426,7 +427,7 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: JuventusTheme.primaryWhite,
                           ),
                         ),
                       ),
@@ -439,13 +440,13 @@ class _CheckoutConfirmationScreenState extends State<CheckoutConfirmationScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.lock, size: 14, color: Colors.grey[600]),
+                          Icon(Icons.lock, size: 14, color: JuventusTheme.grey600[600]),
                           const SizedBox(width: 4),
                           Text(
                             'Paiement sécurisé',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: JuventusTheme.grey600[600],
                             ),
                           ),
                         ],
