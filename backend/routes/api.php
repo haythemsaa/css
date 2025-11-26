@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\SocialController;
 use App\Http\Controllers\Api\AuctionController;
 use App\Http\Controllers\Api\DonationGoalController;
 use App\Http\Controllers\Api\PaymentMethodController;
+use App\Http\Controllers\Api\TicketMarketplaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -251,6 +252,21 @@ Route::prefix('v1')->group(function () {
         Route::get('polls/{id}', [PollController::class, 'show']);
         Route::post('polls/{id}/vote', [PollController::class, 'vote']);
         Route::get('polls/{id}/results', [PollController::class, 'results']);
+
+        // Ticket Marketplace
+        Route::prefix('marketplace')->group(function () {
+            Route::get('listings', [TicketMarketplaceController::class, 'index']);
+            Route::get('listings/{id}', [TicketMarketplaceController::class, 'show']);
+            Route::post('listings', [TicketMarketplaceController::class, 'store']);
+            Route::put('listings/{id}', [TicketMarketplaceController::class, 'update']);
+            Route::post('listings/{id}/reserve', [TicketMarketplaceController::class, 'reserve']);
+            Route::post('listings/{id}/purchase', [TicketMarketplaceController::class, 'purchase']);
+            Route::delete('listings/{id}/cancel', [TicketMarketplaceController::class, 'cancel']);
+            Route::get('my-listings', [TicketMarketplaceController::class, 'myListings']);
+            Route::get('my-purchases', [TicketMarketplaceController::class, 'myPurchases']);
+            Route::post('transactions/{id}/review', [TicketMarketplaceController::class, 'submitReview']);
+            Route::get('users/{userId}/reviews', [TicketMarketplaceController::class, 'getUserReviews']);
+        });
 
         // Notifications
         Route::get('notifications', [NotificationController::class, 'index']);

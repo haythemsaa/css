@@ -7,6 +7,7 @@ import 'screens/polls_screen.dart';
 import 'screens/auctions_list_screen.dart';
 import 'screens/donation_goals_screen.dart';
 import 'screens/products_screen.dart';
+import 'screens/ticket_marketplace_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +43,7 @@ class CSSApp extends StatelessWidget {
         '/auctions': (context) => const AuctionsListScreen(),
         '/donation-goals': (context) => const DonationGoalsScreen(),
         '/products': (context) => const ProductsScreen(),
+        '/marketplace': (context) => const TicketMarketplaceScreen(),
       },
     );
   }

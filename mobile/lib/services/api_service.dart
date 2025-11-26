@@ -297,6 +297,71 @@ class ApiService {
     return _dio.get('/polls/$pollId/results');
   }
 
+  // =======================
+  // TICKET MARKETPLACE ENDPOINTS
+  // =======================
+  Future<Response> getMarketplaceListings({
+    int? matchId,
+    String? category,
+    double? minPrice,
+    double? maxPrice,
+    bool? featured,
+    String sortBy = 'listed_at',
+    String sortOrder = 'desc',
+    int page = 1,
+  }) {
+    return _dio.get('/marketplace/listings', queryParameters: {
+      if (matchId != null) 'match_id': matchId,
+      if (category != null) 'category': category,
+      if (minPrice != null) 'min_price': minPrice,
+      if (maxPrice != null) 'max_price': maxPrice,
+      if (featured != null) 'featured': featured,
+      'sort_by': sortBy,
+      'sort_order': sortOrder,
+      'page': page,
+    });
+  }
+
+  Future<Response> getListingDetails(int id) {
+    return _dio.get('/marketplace/listings/$id');
+  }
+
+  Future<Response> createListing(Map<String, dynamic> data) {
+    return _dio.post('/marketplace/listings', data: data);
+  }
+
+  Future<Response> updateListing(int id, Map<String, dynamic> data) {
+    return _dio.put('/marketplace/listings/$id', data: data);
+  }
+
+  Future<Response> reserveListing(int id) {
+    return _dio.post('/marketplace/listings/$id/reserve');
+  }
+
+  Future<Response> purchaseListing(int id, Map<String, dynamic> data) {
+    return _dio.post('/marketplace/listings/$id/purchase', data: data);
+  }
+
+  Future<Response> cancelListing(int id) {
+    return _dio.delete('/marketplace/listings/$id/cancel');
+  }
+
+  Future<Response> getMyListings({int page = 1}) {
+    return _dio.get('/marketplace/my-listings', queryParameters: {'page': page});
+  }
+
+  Future<Response> getMyPurchases({int page = 1}) {
+    return _dio.get('/marketplace/my-purchases', queryParameters: {'page': page});
+  }
+
+  Future<Response> submitMarketplaceReview(int transactionId, Map<String, dynamic> data) {
+    return _dio.post('/marketplace/transactions/$transactionId/review', data: data);
+  }
+
+  Future<Response> getUserReviews(int userId, {int page = 1}) {
+    return _dio.get('/marketplace/users/$userId/reviews', queryParameters: {'page': page});
+  }
+
   // Generic GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);

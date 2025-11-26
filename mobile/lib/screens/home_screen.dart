@@ -604,6 +604,17 @@ class EngagementTabScreen extends StatelessWidget {
             const SizedBox(height: 12),
             _buildEngagementCard(
               context,
+              title: 'Marketplace de Billets',
+              description: 'Achetez et vendez des billets entre supporters',
+              icon: Icons.confirmation_number_outlined,
+              color: JuventusTheme.primaryBlack,
+              onTap: () {
+                Navigator.pushNamed(context, '/marketplace');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
               title: 'Enchères',
               description: 'Participez aux enchères d\'articles exclusifs',
               icon: Icons.gavel_outlined,
