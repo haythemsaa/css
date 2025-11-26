@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/auction.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 import 'auction_details_screen.dart';
 
 class AuctionsListScreen extends StatefulWidget {
@@ -57,7 +58,10 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: JuventusTheme.error,
+          ),
         );
       }
     }
@@ -66,25 +70,59 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Enchères Exclusives'),
-        backgroundColor: Colors.black,
+        title: const Text('ENCHÈRES EXCLUSIVES'),
+        backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.yellow[700],
+          indicatorColor: JuventusTheme.primaryWhite,
+          indicatorWeight: 3,
+          labelColor: JuventusTheme.primaryWhite,
+          unselectedLabelColor: JuventusTheme.grey500,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+          ),
           tabs: const [
-            Tab(text: 'En Cours'),
-            Tab(text: 'À Venir'),
-            Tab(text: 'Terminées'),
+            Tab(text: 'EN COURS'),
+            Tab(text: 'À VENIR'),
+            Tab(text: 'TERMINÉES'),
           ],
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: JuventusTheme.primaryBlack,
+              ),
+            )
           : RefreshIndicator(
               onRefresh: _loadAuctions,
+              color: JuventusTheme.primaryBlack,
               child: _auctions.isEmpty
-                  ? const Center(child: Text('Aucune enchère disponible'))
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.gavel_outlined,
+                            size: 80,
+                            color: JuventusTheme.grey400,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Aucune enchère disponible',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: JuventusTheme.grey700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   : ListView.builder(
                       itemCount: _auctions.length,
                       padding: const EdgeInsets.all(16),
@@ -99,8 +137,9 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
   Widget _buildAuctionCard(AuctionProduct auction) {
     final currencyFormat = NumberFormat.currency(locale: 'fr_TN', symbol: 'TND');
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
+      decoration: JuventusDecorations.whiteCard,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
@@ -127,8 +166,12 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       height: 200,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.image, size: 50),
+                      color: JuventusTheme.grey200,
+                      child: const Icon(
+                        Icons.image_outlined,
+                        size: 50,
+                        color: JuventusTheme.grey400,
+                      ),
                     );
                   },
                 ),
@@ -139,15 +182,16 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.yellow[700],
+                        color: JuventusTheme.accentGold,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Text(
                         'VEDETTE',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: JuventusTheme.primaryWhite,
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
@@ -159,16 +203,24 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.black87,
+                        color: JuventusTheme.primaryBlack.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.timer, color: Colors.white, size: 16),
+                          const Icon(
+                            Icons.timer,
+                            color: JuventusTheme.primaryWhite,
+                            size: 16,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             _formatTimeRemaining(auction.timeRemaining!),
-                            style: const TextStyle(color: Colors.white, fontSize: 12),
+                            style: const TextStyle(
+                              color: JuventusTheme.primaryWhite,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -188,6 +240,7 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: JuventusTheme.primaryBlack,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -198,23 +251,24 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: JuventusTheme.grey200,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           auction.categoryDisplay,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[700],
+                            color: JuventusTheme.grey700,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       const Spacer(),
                       Text(
                         '${auction.totalBids} enchères',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
-                          color: Colors.grey[600],
+                          color: JuventusTheme.grey600,
                         ),
                       ),
                     ],
@@ -226,11 +280,11 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Enchère actuelle',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: JuventusTheme.grey600,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -239,7 +293,7 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                              color: JuventusTheme.success,
                             ),
                           ),
                         ],
@@ -248,20 +302,20 @@ class _AuctionsListScreenState extends State<AuctionsListScreen>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(
+                            const Text(
                               'Achat immédiat',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey[600],
+                                color: JuventusTheme.grey600,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               currencyFormat.format(auction.buyNowPrice!),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blue[700],
+                                color: JuventusTheme.info,
                               ),
                             ),
                           ],
