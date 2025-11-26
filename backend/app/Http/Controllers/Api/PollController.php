@@ -6,205 +6,232 @@ use App\Http\Controllers\Controller;
 use App\Models\Poll;
 use App\Models\PollVote;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class PollController extends Controller
 {
-    /**
-     * Get all polls
-     */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        $query = Poll::query();
+        $query = Poll::with(['options', 'statistics', 'creator'])
+            ->withCount('votes');
 
-        // Filter by status
-        $status = $request->get('status', 'active');
-        if ($status === 'active') {
-            $query->active();
-        } elseif ($status === 'upcoming') {
-            $query->upcoming();
-        } elseif ($status === 'ended') {
-            $query->ended();
+        if ($request->has('status')) {
+            if ($request->status === 'active') {
+                $query->active();
+            } else {
+                $query->where('status', $request->status);
+            }
         }
 
-        $polls = $query->latest()->paginate(20);
+        if ($request->has('category')) {
+            $query->byCategory($request->category);
+        }
 
-        // Add user vote status if authenticated
+        if ($request->boolean('featured')) {
+            $query->featured();
+        }
+
         $user = $request->user();
+        if (!$user || !$user->is_socios) {
+            $query->public();
+        }
+
+        $query->orderByDesc('is_featured')
+            ->orderByDesc('created_at');
+
+        $polls = $query->paginate($request->input('per_page', 15));
+
         if ($user) {
             $polls->getCollection()->transform(function ($poll) use ($user) {
-                $poll->has_voted = $poll->hasUserVoted($user);
-                $poll->can_vote = $poll->canUserVote($user);
+                $poll->user_has_voted = $poll->hasVoted($user);
+                $poll->user_can_vote = $poll->canVote($user);
                 return $poll;
             });
         }
 
-        return response()->json($polls);
+        return response()->json([
+            'polls' => $polls->items(),
+            'pagination' => [
+                'current_page' => $polls->currentPage(),
+                'last_page' => $polls->lastPage(),
+                'per_page' => $polls->perPage(),
+                'total' => $polls->total(),
+            ],
+        ]);
     }
 
-    /**
-     * Get a single poll
-     */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id): JsonResponse
     {
-        $poll = Poll::findOrFail($id);
+        $poll = Poll::with(['options.votes', 'statistics', 'creator'])
+            ->findOrFail($id);
+
         $user = $request->user();
 
-        $response = [
+        if ($poll->visibility === 'socios_only' && (!$user || !$user->is_socios)) {
+            return response()->json([
+                'message' => 'Ce sondage est réservé aux membres Socios'
+            ], 403);
+        }
+
+        $poll->user_has_voted = $user ? $poll->hasVoted($user) : false;
+        $poll->user_can_vote = $user ? $poll->canVote($user) : false;
+
+        if ($user && $poll->user_has_voted) {
+            $poll->user_vote = $poll->getUserVote($user);
+        }
+
+        if ($poll->show_results_before_vote || $poll->user_has_voted || $poll->is_closed) {
+            $poll->load(['options' => function ($query) {
+                $query->withCount('votes');
+            }]);
+
+            $totalVotes = $poll->total_votes;
+            $poll->options->each(function ($option) use ($totalVotes) {
+                $option->vote_count = $option->votes_count ?? 0;
+                $option->vote_percentage = $totalVotes > 0
+                    ? round(($option->vote_count / $totalVotes) * 100, 1)
+                    : 0;
+            });
+        }
+
+        return response()->json($poll);
+    }
+
+    public function vote(Request $request, int $id): JsonResponse
+    {
+        $poll = Poll::with('options')->findOrFail($id);
+        $user = $request->user();
+
+        if (!$poll->is_active) {
+            return response()->json(['message' => 'Ce sondage n\'est plus actif'], 400);
+        }
+
+        if (!$user && !$poll->allow_anonymous) {
+            return response()->json(['message' => 'Vous devez être connecté pour voter'], 401);
+        }
+
+        if ($user && $poll->hasVoted($user)) {
+            return response()->json(['message' => 'Vous avez déjà voté sur ce sondage'], 400);
+        }
+
+        if ($poll->visibility === 'socios_only' && (!$user || !$user->is_socios)) {
+            return response()->json(['message' => 'Ce sondage est réservé aux membres Socios'], 403);
+        }
+
+        $rules = [];
+        switch ($poll->type) {
+            case 'single':
+                $rules['option_id'] = 'required|exists:poll_options,id';
+                break;
+            case 'multiple':
+                $rules['option_ids'] = 'required|array|min:1';
+                $rules['option_ids.*'] = 'exists:poll_options,id';
+                break;
+            case 'rating':
+                $rules['rating'] = 'required|integer|min:1|max:10';
+                break;
+            case 'text':
+                $rules['text_response'] = 'required|string|max:1000';
+                break;
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation échouée', 'errors' => $validator->errors()], 422);
+        }
+
+        DB::beginTransaction();
+        try {
+            $votes = [];
+
+            switch ($poll->type) {
+                case 'single':
+                    $votes[] = PollVote::create([
+                        'poll_id' => $poll->id,
+                        'poll_option_id' => $request->option_id,
+                        'user_id' => $user?->id,
+                        'is_anonymous' => $request->boolean('is_anonymous', false),
+                        'ip_address' => $request->ip(),
+                    ]);
+                    break;
+
+                case 'multiple':
+                    foreach ($request->option_ids as $optionId) {
+                        $votes[] = PollVote::create([
+                            'poll_id' => $poll->id,
+                            'poll_option_id' => $optionId,
+                            'user_id' => $user?->id,
+                            'is_anonymous' => $request->boolean('is_anonymous', false),
+                            'ip_address' => $request->ip(),
+                        ]);
+                    }
+                    break;
+
+                case 'rating':
+                    $votes[] = PollVote::create([
+                        'poll_id' => $poll->id,
+                        'user_id' => $user?->id,
+                        'rating_value' => $request->rating,
+                        'is_anonymous' => $request->boolean('is_anonymous', false),
+                        'ip_address' => $request->ip(),
+                    ]);
+                    break;
+
+                case 'text':
+                    $votes[] = PollVote::create([
+                        'poll_id' => $poll->id,
+                        'user_id' => $user?->id,
+                        'text_response' => $request->text_response,
+                        'is_anonymous' => $request->boolean('is_anonymous', false),
+                        'ip_address' => $request->ip(),
+                    ]);
+                    break;
+            }
+
+            $poll->updateStatistics();
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Vote enregistré avec succès',
+                'poll' => $poll->load('options', 'statistics'),
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Erreur lors du vote', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function results(int $id): JsonResponse
+    {
+        $poll = Poll::with(['options', 'statistics'])->findOrFail($id);
+
+        if (!$poll->is_closed && !$poll->show_results_before_vote) {
+            return response()->json(['message' => 'Les résultats ne sont pas encore disponibles'], 403);
+        }
+
+        $results = [
             'poll' => $poll,
-            'is_active' => $poll->isActive(),
-            'has_ended' => $poll->hasEnded(),
             'total_votes' => $poll->total_votes,
+            'total_voters' => $poll->total_voters,
+            'options' => $poll->options->map(function ($option) use ($poll) {
+                return [
+                    'id' => $option->id,
+                    'text' => $option->text,
+                    'vote_count' => $option->vote_count,
+                    'vote_percentage' => $option->vote_percentage,
+                ];
+            }),
         ];
 
-        if ($user) {
-            $response['has_voted'] = $poll->hasUserVoted($user);
-            $response['can_vote'] = $poll->canUserVote($user);
-
-            // Show user's vote if they voted
-            if ($poll->hasUserVoted($user)) {
-                $userVote = PollVote::forPoll($poll->id)
-                    ->forUser($user->id)
-                    ->first();
-                $response['user_vote'] = $userVote;
-            }
+        if ($poll->type === 'rating') {
+            $results['average_rating'] = $poll->statistics->average_rating;
         }
 
-        // Show results if allowed
-        if ($poll->show_results_before_vote || ($user && $poll->hasUserVoted($user)) || $poll->hasEnded()) {
-            $response['results'] = $poll->getResults();
-        }
-
-        return response()->json($response);
-    }
-
-    /**
-     * Vote on a poll
-     */
-    public function vote(Request $request, $id)
-    {
-        $request->validate([
-            'option_index' => 'required|integer|min:0',
-        ]);
-
-        $user = $request->user();
-        $poll = Poll::findOrFail($id);
-
-        if (!$poll->canUserVote($user)) {
-            return response()->json(['message' => 'You cannot vote on this poll'], 403);
-        }
-
-        // Validate option index
-        if ($request->option_index >= count($poll->options)) {
-            return response()->json(['message' => 'Invalid option'], 400);
-        }
-
-        // Create vote
-        $vote = PollVote::create([
-            'poll_id' => $poll->id,
-            'user_id' => $user->id,
-            'option_index' => $request->option_index,
-        ]);
-
-        return response()->json([
-            'message' => 'Vote recorded successfully',
-            'vote' => $vote,
-            'results' => $poll->getResults(),
-        ], 201);
-    }
-
-    /**
-     * Get poll results
-     */
-    public function results(Request $request, $id)
-    {
-        $poll = Poll::findOrFail($id);
-        $user = $request->user();
-
-        // Check if user can see results
-        if (!$poll->show_results_before_vote && !$poll->hasEnded()) {
-            if (!$user || !$poll->hasUserVoted($user)) {
-                return response()->json(['message' => 'Results not available yet'], 403);
-            }
-        }
-
-        $results = $poll->getResults();
-
-        return response()->json([
-            'poll' => $poll,
-            'results' => $results,
-            'total_votes' => $poll->total_votes,
-        ]);
-    }
-
-    /**
-     * Admin: Create a new poll
-     */
-    public function adminStore(Request $request)
-    {
-        $validated = $request->validate([
-            'question' => 'required|string|max:500',
-            'options' => 'required|array|min:2',
-            'options.*' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'show_results_before_vote' => 'boolean',
-            'restricted_to_socios' => 'boolean',
-            'restricted_to_premium' => 'boolean',
-            'is_featured' => 'boolean',
-        ]);
-
-        $poll = Poll::create($validated);
-
-        return response()->json([
-            'message' => 'Sondage créé avec succès',
-            'poll' => $poll,
-        ], 201);
-    }
-
-    /**
-     * Admin: Update a poll
-     */
-    public function adminUpdate(Request $request, $id)
-    {
-        $poll = Poll::findOrFail($id);
-
-        $validated = $request->validate([
-            'question' => 'sometimes|string|max:500',
-            'options' => 'sometimes|array|min:2',
-            'options.*' => 'sometimes|string|max:255',
-            'start_date' => 'sometimes|date',
-            'end_date' => 'sometimes|date|after:start_date',
-            'show_results_before_vote' => 'boolean',
-            'restricted_to_socios' => 'boolean',
-            'restricted_to_premium' => 'boolean',
-            'is_featured' => 'boolean',
-        ]);
-
-        // Don't allow editing options if votes exist
-        if (isset($validated['options']) && $poll->total_votes > 0) {
-            return response()->json([
-                'message' => 'Impossible de modifier les options avec des votes existants',
-            ], 400);
-        }
-
-        $poll->update($validated);
-
-        return response()->json([
-            'message' => 'Sondage mis à jour avec succès',
-            'poll' => $poll,
-        ]);
-    }
-
-    /**
-     * Admin: Delete a poll
-     */
-    public function adminDestroy($id)
-    {
-        $poll = Poll::findOrFail($id);
-        $poll->delete();
-
-        return response()->json([
-            'message' => 'Sondage supprimé avec succès',
-        ]);
+        return response()->json($results);
     }
 }

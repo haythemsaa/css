@@ -541,7 +541,7 @@ class MatchesTabScreen extends StatelessWidget {
 }
 
 // =====================================================
-// ENGAGEMENT TAB - Placeholder
+// ENGAGEMENT TAB - Soutenir le Club
 // =====================================================
 
 class EngagementTabScreen extends StatelessWidget {
@@ -552,11 +552,156 @@ class EngagementTabScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Soutenir le Club'),
+        title: const Text('SOUTENIR LE CLUB'),
         backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
       ),
-      body: const Center(
-        child: Text('Engagement Screen - Coming Soon'),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: JuventusDecorations.blackCard,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Votre soutien compte',
+                    style: TextStyle(
+                      color: JuventusTheme.primaryWhite,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Engagez-vous avec le club et participez à son développement',
+                    style: TextStyle(
+                      color: JuventusTheme.grey300,
+                      fontSize: 14,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Engagement Options
+            _buildEngagementCard(
+              context,
+              title: 'Sondages',
+              description: 'Donnez votre avis sur les décisions du club',
+              icon: Icons.poll_outlined,
+              color: JuventusTheme.info,
+              onTap: () {
+                Navigator.pushNamed(context, '/polls');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
+              title: 'Enchères',
+              description: 'Participez aux enchères d\'articles exclusifs',
+              icon: Icons.gavel_outlined,
+              color: JuventusTheme.accentGold,
+              onTap: () {
+                Navigator.pushNamed(context, '/auctions');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
+              title: 'Objectifs de Don',
+              description: 'Soutenez les projets du club',
+              icon: Icons.favorite_border,
+              color: JuventusTheme.error,
+              onTap: () {
+                Navigator.pushNamed(context, '/donation-goals');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
+              title: 'Boutique',
+              description: 'Achetez les produits officiels',
+              icon: Icons.shopping_bag_outlined,
+              color: JuventusTheme.success,
+              onTap: () {
+                Navigator.pushNamed(context, '/products');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEngagementCard(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: JuventusDecorations.whiteCard,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: JuventusTheme.primaryBlack,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: JuventusTheme.grey600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: JuventusTheme.grey400,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -268,6 +268,35 @@ class ApiService {
     });
   }
 
+  // =======================
+  // POLL ENDPOINTS
+  // =======================
+  Future<Response> getPolls({
+    String? status,
+    String? category,
+    bool? featured,
+    int page = 1,
+  }) {
+    return _dio.get('/polls', queryParameters: {
+      if (status != null) 'status': status,
+      if (category != null) 'category': category,
+      if (featured != null) 'featured': featured,
+      'page': page,
+    });
+  }
+
+  Future<Response> getPollDetails(int id) {
+    return _dio.get('/polls/$id');
+  }
+
+  Future<Response> votePoll(int pollId, Map<String, dynamic> voteData) {
+    return _dio.post('/polls/$pollId/vote', data: voteData);
+  }
+
+  Future<Response> getPollResults(int pollId) {
+    return _dio.get('/polls/$pollId/results');
+  }
+
   // Generic GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);

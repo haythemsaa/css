@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'config/app_config.dart';
 import 'config/theme.dart';
+import 'screens/home_screen.dart';
+import 'screens/polls_screen.dart';
+import 'screens/auctions_list_screen.dart';
+import 'screens/donation_goals_screen.dart';
+import 'screens/products_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +36,13 @@ class CSSApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       home: const SplashScreen(),
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/polls': (context) => const PollsScreen(),
+        '/auctions': (context) => const AuctionsListScreen(),
+        '/donation-goals': (context) => const DonationGoalsScreen(),
+        '/products': (context) => const ProductsScreen(),
+      },
     );
   }
 }
