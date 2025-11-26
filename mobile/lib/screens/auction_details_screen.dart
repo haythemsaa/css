@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import '../models/auction.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 
 class AuctionDetailsScreen extends StatefulWidget {
   final int auctionId;
@@ -40,7 +41,10 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: JuventusTheme.error,
+          ),
         );
       }
     }
@@ -62,7 +66,7 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('L\'enchère minimum est de ${_auction!.minimumBid} TND'),
-          backgroundColor: Colors.red,
+          backgroundColor: JuventusTheme.error,
         ),
       );
       return;
@@ -74,7 +78,7 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Enchère placée avec succès!'),
-            backgroundColor: Colors.green,
+            backgroundColor: JuventusTheme.success,
           ),
         );
         _loadAuction(); // Reload to get updated bid
@@ -82,7 +86,10 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: JuventusTheme.error,
+          ),
         );
       }
     }
@@ -92,18 +99,39 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Achat immédiat'),
+        backgroundColor: JuventusTheme.primaryWhite,
+        title: const Text(
+          'Achat immédiat',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
         content: Text(
           'Confirmer l\'achat immédiat pour ${_auction!.buyNowPrice} TND?',
+          style: const TextStyle(color: JuventusTheme.grey700),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: const Text(
+              'Annuler',
+              style: TextStyle(color: JuventusTheme.grey600),
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Confirmer'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: JuventusTheme.info,
+              elevation: 0,
+            ),
+            child: const Text(
+              'Confirmer',
+              style: TextStyle(
+                color: JuventusTheme.primaryWhite,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -116,7 +144,7 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Achat réussi! Vous avez remporté cet article.'),
-              backgroundColor: Colors.green,
+              backgroundColor: JuventusTheme.success,
             ),
           );
           Navigator.pop(context);
@@ -124,7 +152,10 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erreur: $e'), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text('Erreur: $e'),
+              backgroundColor: JuventusTheme.error,
+            ),
           );
         }
       }
@@ -137,15 +168,26 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
 
     if (_isLoading || _auction == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Détails enchère')),
-        body: const Center(child: CircularProgressIndicator()),
+        backgroundColor: JuventusTheme.grey100,
+        appBar: AppBar(
+          title: const Text('DÉTAILS ENCHÈRE'),
+          backgroundColor: JuventusTheme.primaryBlack,
+          elevation: 0,
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
       );
     }
 
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Détails enchère'),
-        backgroundColor: Colors.black,
+        title: const Text('DÉTAILS ENCHÈRE'),
+        backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -162,8 +204,12 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.image, size: 100),
+                        color: JuventusTheme.grey200,
+                        child: const Icon(
+                          Icons.image_outlined,
+                          size: 100,
+                          color: JuventusTheme.grey400,
+                        ),
                       );
                     },
                   );
@@ -182,12 +228,19 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: JuventusTheme.primaryBlack,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Chip(
-                    label: Text(_auction!.categoryDisplay),
-                    backgroundColor: Colors.grey[200],
+                    label: Text(
+                      _auction!.categoryDisplay,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: JuventusTheme.grey700,
+                      ),
+                    ),
+                    backgroundColor: JuventusTheme.grey200,
                   ),
 
                   const SizedBox(height: 16),
@@ -197,19 +250,20 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.red[50],
+                        color: JuventusTheme.primaryWhite,
                         borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: JuventusTheme.error, width: 2),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.timer, color: Colors.red),
+                          const Icon(Icons.timer, color: JuventusTheme.error),
                           const SizedBox(width: 8),
                           Text(
                             'Temps restant: ${_formatTimeRemaining(_auction!.timeRemaining!)}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.red,
+                              color: JuventusTheme.error,
                             ),
                           ),
                         ],
@@ -222,16 +276,19 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.green[50],
+                      color: JuventusTheme.primaryWhite,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.green),
+                      border: Border.all(color: JuventusTheme.success, width: 2),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           'Enchère actuelle',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: JuventusTheme.grey600,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -239,12 +296,15 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                           style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: JuventusTheme.success,
                           ),
                         ),
                         Text(
                           '${_auction!.totalBids} enchères',
-                          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: JuventusTheme.grey600,
+                          ),
                         ),
                       ],
                     ),
@@ -255,19 +315,31 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                   // Description
                   const Text(
                     'Description',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: JuventusTheme.primaryBlack,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     _auction!.description,
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: JuventusTheme.grey700,
+                      height: 1.5,
+                    ),
                   ),
 
                   if (_auction!.metadata != null) ...[
                     const SizedBox(height: 16),
                     const Text(
                       'Informations supplémentaires',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: JuventusTheme.primaryBlack,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     ..._auction!.metadata!.entries.map((e) => Padding(
@@ -276,9 +348,17 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                         children: [
                           Text(
                             '${e.key}: ',
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: JuventusTheme.primaryBlack,
+                            ),
                           ),
-                          Text(e.value.toString()),
+                          Text(
+                            e.value.toString(),
+                            style: const TextStyle(
+                              color: JuventusTheme.grey700,
+                            ),
+                          ),
                         ],
                       ),
                     )),
@@ -290,7 +370,11 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                   if (_auction!.isActive) ...[
                     const Text(
                       'Placer une enchère',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: JuventusTheme.primaryBlack,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextField(
@@ -299,8 +383,23 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                       decoration: InputDecoration(
                         labelText: 'Montant (TND)',
                         hintText: 'Minimum: ${_auction!.minimumBid} TND',
-                        border: const OutlineInputBorder(),
-                        prefixIcon: const Icon(Icons.attach_money),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: JuventusTheme.grey300,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: JuventusTheme.primaryBlack,
+                            width: 2,
+                          ),
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.attach_money,
+                          color: JuventusTheme.grey600,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -309,12 +408,18 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                       child: ElevatedButton(
                         onPressed: _placeBid,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: JuventusTheme.success,
                           padding: const EdgeInsets.all(16),
+                          elevation: 0,
                         ),
                         child: const Text(
-                          'Enchérir',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                          'ENCHÉRIR',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: JuventusTheme.primaryWhite,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
                         ),
                       ),
                     ),
@@ -328,11 +433,19 @@ class _AuctionDetailsScreenState extends State<AuctionDetailsScreen> {
                         onPressed: _buyNow,
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.all(16),
-                          side: const BorderSide(color: Colors.blue, width: 2),
+                          side: const BorderSide(
+                            color: JuventusTheme.info,
+                            width: 2,
+                          ),
                         ),
                         child: Text(
-                          'Acheter maintenant - ${currencyFormat.format(_auction!.buyNowPrice!)}',
-                          style: const TextStyle(fontSize: 16),
+                          'ACHETER MAINTENANT - ${currencyFormat.format(_auction!.buyNowPrice!)}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: JuventusTheme.info,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
                         ),
                       ),
                     ),
