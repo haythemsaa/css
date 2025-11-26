@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({super.key});
@@ -56,17 +57,24 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Actualités CSS'),
-        backgroundColor: Colors.black,
+        title: const Text('ACTUALITÉS CSS'),
+        backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.yellow[700],
-          labelColor: Colors.yellow[700],
-          unselectedLabelColor: Colors.white70,
+          indicatorColor: JuventusTheme.primaryWhite,
+          indicatorWeight: 3,
+          labelColor: JuventusTheme.primaryWhite,
+          unselectedLabelColor: JuventusTheme.grey500,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+          ),
           tabs: const [
-            Tab(icon: Icon(Icons.article), text: 'Articles'),
-            Tab(icon: Icon(Icons.video_library), text: 'Vidéos'),
+            Tab(icon: Icon(Icons.article_outlined), text: 'Articles'),
+            Tab(icon: Icon(Icons.video_library_outlined), text: 'Vidéos'),
           ],
         ),
         actions: [
@@ -79,9 +87,14 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: JuventusTheme.primaryBlack,
+              ),
+            )
           : RefreshIndicator(
               onRefresh: _loadContent,
+              color: JuventusTheme.primaryBlack,
               child: TabBarView(
                 controller: _tabController,
                 children: [
@@ -95,13 +108,24 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
 
   Widget _buildArticlesList() {
     if (_articles.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.article, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('Aucun article disponible'),
+            Icon(
+              Icons.article_outlined,
+              size: 80,
+              color: JuventusTheme.grey400,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Aucun article disponible',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: JuventusTheme.grey700,
+              ),
+            ),
           ],
         ),
       );
@@ -121,8 +145,9 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
     final dateFormat = DateFormat('dd MMM yyyy', 'fr_FR');
     final publishedAt = DateTime.parse(article['published_at'] ?? DateTime.now().toString());
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
+      decoration: JuventusDecorations.whiteCard,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
@@ -139,8 +164,12 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                   article['featured_image'],
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.image, size: 48),
+                    color: JuventusTheme.grey200,
+                    child: const Icon(
+                      Icons.image_outlined,
+                      size: 48,
+                      color: JuventusTheme.grey400,
+                    ),
                   ),
                 ),
               ),
@@ -160,15 +189,16 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: JuventusTheme.primaryBlack,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
                             article['category']['name'] ?? 'Actualités',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: JuventusTheme.primaryWhite,
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5,
                             ),
                           ),
                         ),
@@ -181,8 +211,8 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                           ),
                           decoration: BoxDecoration(
                             color: article['access_level'] == 'socios'
-                                ? Colors.yellow[700]
-                                : Colors.blue,
+                                ? JuventusTheme.accentGold
+                                : JuventusTheme.grey400,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Row(
@@ -193,15 +223,16 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                                     ? Icons.verified
                                     : Icons.star,
                                 size: 12,
-                                color: Colors.white,
+                                color: JuventusTheme.primaryWhite,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 article['access_level'].toUpperCase(),
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: JuventusTheme.primaryWhite,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ],
@@ -218,6 +249,8 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: JuventusTheme.primaryBlack,
+                      height: 1.3,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -229,9 +262,10 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                   if (article['excerpt'] != null)
                     Text(
                       article['excerpt'],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[600],
+                        color: JuventusTheme.grey600,
+                        height: 1.4,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -242,18 +276,18 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                   // Meta Info
                   Row(
                     children: [
-                      Icon(Icons.calendar_today, size: 14, color: Colors.grey[600]),
+                      const Icon(Icons.calendar_today, size: 14, color: JuventusTheme.grey500),
                       const SizedBox(width: 4),
                       Text(
                         dateFormat.format(publishedAt),
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: const TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                       ),
                       const SizedBox(width: 16),
-                      Icon(Icons.visibility, size: 14, color: Colors.grey[600]),
+                      const Icon(Icons.visibility, size: 14, color: JuventusTheme.grey500),
                       const SizedBox(width: 4),
                       Text(
                         '${article['views_count'] ?? 0} vues',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: const TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                       ),
                     ],
                   ),
@@ -268,13 +302,24 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
 
   Widget _buildVideosList() {
     if (_videos.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.video_library, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('Aucune vidéo disponible'),
+            Icon(
+              Icons.video_library_outlined,
+              size: 80,
+              color: JuventusTheme.grey400,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Aucune vidéo disponible',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: JuventusTheme.grey700,
+              ),
+            ),
           ],
         ),
       );
@@ -299,7 +344,8 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
   Widget _buildVideoCard(dynamic video) {
     final duration = video['video_duration']; // in seconds
 
-    return Card(
+    return Container(
+      decoration: JuventusDecorations.whiteCard,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
@@ -319,21 +365,21 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                       width: double.infinity,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[800],
+                        color: JuventusTheme.grey900,
                         child: const Icon(
                           Icons.play_circle_outline,
                           size: 48,
-                          color: Colors.white,
+                          color: JuventusTheme.primaryWhite,
                         ),
                       ),
                     )
                   else
                     Container(
-                      color: Colors.grey[800],
+                      color: JuventusTheme.grey900,
                       child: const Icon(
                         Icons.play_circle_outline,
                         size: 48,
-                        color: Colors.white,
+                        color: JuventusTheme.primaryWhite,
                       ),
                     ),
 
@@ -342,7 +388,7 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                     child: Icon(
                       Icons.play_circle_filled,
                       size: 48,
-                      color: Colors.white,
+                      color: JuventusTheme.primaryWhite,
                     ),
                   ),
 
@@ -357,13 +403,13 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.8),
+                          color: JuventusTheme.primaryBlack.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           _formatDuration(duration),
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: JuventusTheme.primaryWhite,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -380,8 +426,8 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: video['access_level'] == 'socios'
-                              ? Colors.yellow[700]
-                              : Colors.blue,
+                              ? JuventusTheme.accentGold
+                              : JuventusTheme.grey400,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -389,7 +435,7 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                               ? Icons.verified
                               : Icons.star,
                           size: 12,
-                          color: Colors.white,
+                          color: JuventusTheme.primaryWhite,
                         ),
                       ),
                     ),
@@ -409,6 +455,8 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
+                        color: JuventusTheme.primaryBlack,
+                        height: 1.3,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -416,13 +464,13 @@ class _ContentScreenState extends State<ContentScreen> with SingleTickerProvider
                     const Spacer(),
                     Row(
                       children: [
-                        Icon(Icons.visibility, size: 12, color: Colors.grey[600]),
+                        const Icon(Icons.visibility, size: 12, color: JuventusTheme.grey500),
                         const SizedBox(width: 4),
                         Text(
                           '${video['views_count'] ?? 0}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 10,
-                            color: Colors.grey[600],
+                            color: JuventusTheme.grey600,
                           ),
                         ),
                       ],
