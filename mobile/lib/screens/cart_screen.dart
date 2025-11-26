@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -49,7 +50,7 @@ class _CartScreenState extends State<CartScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Panier mis à jour'),
-            backgroundColor: Colors.green,
+            backgroundColor: JuventusTheme.success,
           ),
         );
       }
@@ -58,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Erreur: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: JuventusTheme.error,
           ),
         );
       }
@@ -69,16 +70,32 @@ class _CartScreenState extends State<CartScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Retirer du panier'),
-        content: const Text('Voulez-vous retirer ce produit du panier?'),
+        backgroundColor: JuventusTheme.primaryWhite,
+        title: const Text(
+          'Retirer du panier',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
+        content: Text(
+          'Voulez-vous retirer ce produit du panier?',
+          style: TextStyle(color: JuventusTheme.grey700),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: const Text(
+              'Annuler',
+              style: TextStyle(color: JuventusTheme.primaryBlack),
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: JuventusTheme.error,
+              foregroundColor: JuventusTheme.primaryWhite,
+            ),
             child: const Text('Retirer'),
           ),
         ],
@@ -94,7 +111,7 @@ class _CartScreenState extends State<CartScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Produit retiré du panier'),
-              backgroundColor: Colors.orange,
+              backgroundColor: JuventusTheme.primaryBlack,
             ),
           );
         }
@@ -103,10 +120,10 @@ class _CartScreenState extends State<CartScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Erreur: $e'),
-              backgroundColor: Colors.red,
+              backgroundColor: JuventusTheme.error,
             ),
-          ),
-        );
+          );
+        }
       }
     }
   }
@@ -115,16 +132,32 @@ class _CartScreenState extends State<CartScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Vider le panier'),
-        content: const Text('Voulez-vous vider complètement votre panier?'),
+        backgroundColor: JuventusTheme.primaryWhite,
+        title: const Text(
+          'Vider le panier',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
+        content: Text(
+          'Voulez-vous vider complètement votre panier?',
+          style: TextStyle(color: JuventusTheme.grey700),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: const Text(
+              'Annuler',
+              style: TextStyle(color: JuventusTheme.primaryBlack),
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: JuventusTheme.error,
+              foregroundColor: JuventusTheme.primaryWhite,
+            ),
             child: const Text('Vider'),
           ),
         ],
@@ -140,7 +173,7 @@ class _CartScreenState extends State<CartScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Panier vidé'),
-              backgroundColor: Colors.orange,
+              backgroundColor: JuventusTheme.primaryBlack,
             ),
           );
         }
@@ -149,7 +182,7 @@ class _CartScreenState extends State<CartScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Erreur: $e'),
-              backgroundColor: Colors.red,
+              backgroundColor: JuventusTheme.error,
             ),
           );
         }
@@ -160,9 +193,11 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Mon Panier'),
-        backgroundColor: Colors.black,
+        title: const Text('MON PANIER'),
+        backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
         actions: [
           if (_cart != null && (_cart!['items'] as List).isNotEmpty)
             IconButton(
@@ -173,7 +208,11 @@ class _CartScreenState extends State<CartScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: JuventusTheme.primaryBlack,
+              ),
+            )
           : _buildCartContent(),
     );
   }
@@ -184,11 +223,19 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey[400]),
+            Icon(
+              Icons.shopping_cart_outlined,
+              size: 80,
+              color: JuventusTheme.grey400,
+            ),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Votre panier est vide',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: JuventusTheme.grey700,
+              ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -196,7 +243,8 @@ class _CartScreenState extends State<CartScreen> {
               icon: const Icon(Icons.shopping_bag),
               label: const Text('Continuer vos achats'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: JuventusTheme.primaryBlack,
+                foregroundColor: JuventusTheme.primaryWhite,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),
             ),
@@ -234,8 +282,9 @@ class _CartScreenState extends State<CartScreen> {
     final quantity = item['quantity'];
     final subtotal = item['subtotal'];
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
+      decoration: JuventusDecorations.whiteCard,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(
@@ -247,7 +296,7 @@ class _CartScreenState extends State<CartScreen> {
               height: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Colors.grey[200],
+                color: JuventusTheme.grey200,
               ),
               child: product['images'] != null && (product['images'] as List).isNotEmpty
                   ? ClipRRect(
@@ -255,10 +304,14 @@ class _CartScreenState extends State<CartScreen> {
                       child: Image.network(
                         product['images'][0],
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.image, size: 32),
+                        errorBuilder: (context, error, stackTrace) => const Icon(
+                          Icons.image,
+                          size: 32,
+                          color: JuventusTheme.grey400,
+                        ),
                       ),
                     )
-                  : const Icon(Icons.image, size: 32),
+                  : const Icon(Icons.image, size: 32, color: JuventusTheme.grey400),
             ),
 
             const SizedBox(width: 12),
@@ -319,7 +372,7 @@ class _CartScreenState extends State<CartScreen> {
                       const Spacer(),
 
                       IconButton(
-                        icon: const Icon(Icons.delete_outline, color: Colors.red),
+                        icon: const Icon(Icons.delete_outline, color: JuventusTheme.error),
                         onPressed: () => _removeItem(product['id']),
                         tooltip: 'Retirer',
                       ),
@@ -337,11 +390,17 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildQuantityButton({required IconData icon, VoidCallback? onPressed}) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(
+          color: onPressed != null ? JuventusTheme.grey300 : JuventusTheme.grey200,
+        ),
         borderRadius: BorderRadius.circular(4),
       ),
       child: IconButton(
-        icon: Icon(icon, size: 18),
+        icon: Icon(
+          icon,
+          size: 18,
+          color: onPressed != null ? JuventusTheme.primaryBlack : JuventusTheme.grey400,
+        ),
         onPressed: onPressed,
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
@@ -358,10 +417,10 @@ class _CartScreenState extends State<CartScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: JuventusTheme.primaryWhite,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: JuventusTheme.primaryBlack.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -386,7 +445,7 @@ class _CartScreenState extends State<CartScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Livraison gratuite dès ${currencyFormat.format(200)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: const TextStyle(fontSize: 12, color: JuventusTheme.grey600),
                   ),
                 ],
                 const Divider(height: 24),
@@ -407,15 +466,19 @@ class _CartScreenState extends State<CartScreen> {
               child: ElevatedButton(
                 onPressed: () => _proceedToCheckout(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: JuventusTheme.primaryBlack,
+                  foregroundColor: JuventusTheme.primaryWhite,
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: Text(
                   'COMMANDER ($itemsCount article${itemsCount > 1 ? "s" : ""})',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    letterSpacing: 1,
                   ),
                 ),
               ),
@@ -435,7 +498,7 @@ class _CartScreenState extends State<CartScreen> {
           style: TextStyle(
             fontSize: isTotal ? 18 : 14,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: highlight ? Colors.green : Colors.black,
+            color: highlight ? JuventusTheme.success : JuventusTheme.primaryBlack,
           ),
         ),
         Text(
@@ -443,7 +506,7 @@ class _CartScreenState extends State<CartScreen> {
           style: TextStyle(
             fontSize: isTotal ? 18 : 14,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-            color: highlight ? Colors.green : Colors.black,
+            color: highlight ? JuventusTheme.success : JuventusTheme.primaryBlack,
           ),
         ),
       ],
@@ -455,7 +518,7 @@ class _CartScreenState extends State<CartScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Passage à la commande - À implémenter'),
-        backgroundColor: Colors.orange,
+        backgroundColor: JuventusTheme.warning,
       ),
     );
   }
