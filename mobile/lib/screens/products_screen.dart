@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -22,8 +23,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
     {'key': null, 'name': 'Tous', 'icon': Icons.apps},
     {'key': 'jerseys', 'name': 'Maillots', 'icon': Icons.checkroom},
     {'key': 'accessories', 'name': 'Accessoires', 'icon': Icons.watch},
-    {'key': 'souvenirs', 'name': 'Souvenirs', 'icon': Icons.card_giftcard},
-    {'key': 'equipment', 'name': 'Équipement', 'icon': Icons.sports},
+    {'key': 'merchandise', 'name': 'Souvenirs', 'icon': Icons.card_giftcard},
+    {'key': 'collectibles', 'name': 'Collection', 'icon': Icons.sports},
   ];
 
   @override
@@ -42,8 +43,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
     try {
       setState(() => _isLoading = true);
 
-      final response = await _apiService.getProducts();
-      final products = response.data as List;
+      final response = await _apiService.get('/products');
+      final products = response.data['data'] as List;
 
       if (mounted) {
         setState(() {
@@ -83,41 +84,47 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Boutique CSS'),
-        backgroundColor: Colors.black,
+        title: const Text('BOUTIQUE'),
+        backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              // Navigate to cart
-            },
+            icon: const Icon(Icons.shopping_cart_outlined),
+            onPressed: () => Navigator.pushNamed(context, '/cart'),
           ),
         ],
       ),
       body: Column(
         children: [
           // Search Bar
-          Padding(
-            padding: const EdgeInsets.all(16),
+          Container(
+            color: JuventusTheme.primaryBlack,
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: TextField(
               controller: _searchController,
               onChanged: _filterProducts,
+              style: const TextStyle(color: JuventusTheme.primaryWhite),
               decoration: InputDecoration(
-                hintText: 'Rechercher des produits...',
-                prefixIcon: const Icon(Icons.search),
+                hintText: 'Rechercher un produit...',
+                hintStyle: TextStyle(color: JuventusTheme.grey500),
+                prefixIcon: const Icon(Icons.search, color: JuventusTheme.grey500),
+                filled: true,
+                fillColor: JuventusTheme.grey900,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
                 ),
-                filled: true,
-                fillColor: Colors.grey[100],
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),
           ),
 
-          // Category Filter
-          SizedBox(
-            height: 50,
+          // Categories
+          Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -125,65 +132,81 @@ class _ProductsScreenState extends State<ProductsScreen> {
               itemBuilder: (context, index) {
                 final category = _categories[index];
                 final isSelected = _selectedCategory == category['key'];
-
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: FilterChip(
                     selected: isSelected,
                     label: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           category['icon'],
                           size: 16,
-                          color: isSelected ? Colors.white : Colors.black,
+                          color: isSelected ? JuventusTheme.primaryWhite : JuventusTheme.primaryBlack,
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 6),
                         Text(category['name']),
                       ],
                     ),
                     onSelected: (_) => _selectCategory(category['key']),
-                    selectedColor: Colors.black,
+                    backgroundColor: JuventusTheme.primaryWhite,
+                    selectedColor: JuventusTheme.primaryBlack,
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
+                      color: isSelected ? JuventusTheme.primaryWhite : JuventusTheme.primaryBlack,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
                     ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                   ),
                 );
               },
             ),
           ),
 
-          const SizedBox(height: 16),
-
           // Products Grid
           Expanded(
             child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: JuventusTheme.primaryBlack,
+                    ),
+                  )
                 : _filteredProducts.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.shopping_bag, size: 64, color: Colors.grey),
-                            SizedBox(height: 16),
-                            Text('Aucun produit trouvé'),
+                            Icon(
+                              Icons.shopping_bag_outlined,
+                              size: 80,
+                              color: JuventusTheme.grey400,
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Aucun produit trouvé',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: JuventusTheme.grey700,
+                              ),
+                            ),
                           ],
                         ),
                       )
                     : RefreshIndicator(
                         onRefresh: _loadProducts,
+                        color: JuventusTheme.primaryBlack,
                         child: GridView.builder(
                           padding: const EdgeInsets.all(16),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             childAspectRatio: 0.7,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
                           ),
                           itemCount: _filteredProducts.length,
                           itemBuilder: (context, index) {
-                            final product = _filteredProducts[index];
-                            return _buildProductCard(product);
+                            return _buildProductCard(_filteredProducts[index]);
                           },
                         ),
                       ),
@@ -194,189 +217,204 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Widget _buildProductCard(dynamic product) {
-    final currencyFormat =
-        NumberFormat.currency(locale: 'fr_TN', symbol: 'TND');
+    final currencyFormat = NumberFormat.currency(locale: 'fr_TN', symbol: 'TND');
     final price = product['price'] ?? 0.0;
-    final hasDiscount = product['discount_percentage'] != null &&
-        product['discount_percentage'] > 0;
-    final discountedPrice = hasDiscount
-        ? price * (1 - product['discount_percentage'] / 100)
-        : price;
+    final salePrice = product['sale_price'];
+    final hasDiscount = salePrice != null && salePrice < price;
+    final stock = product['stock_quantity'] ?? 0;
+    final isOutOfStock = stock <= 0;
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          // Navigate to product details
-        },
+    return GestureDetector(
+      onTap: () {
+        // Navigate to product detail
+      },
+      child: Container(
+        decoration: JuventusDecorations.whiteCard,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
-            AspectRatio(
-              aspectRatio: 1,
+            // Image
+            Expanded(
               child: Stack(
                 children: [
-                  if (product['images'] != null &&
-                      (product['images'] as List).isNotEmpty)
-                    Image.network(
-                      product['images'][0],
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.image, size: 48),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: JuventusTheme.grey200,
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(12),
                       ),
-                    )
-                  else
-                    Container(
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.image, size: 48),
                     ),
-
-                  // Badges
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (hasDiscount)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
+                    child: product['images'] != null && (product['images'] as List).isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12),
                             ),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              '-${product['discount_percentage']}%',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                            child: Image.network(
+                              product['images'][0],
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => const Center(
+                                child: Icon(
+                                  Icons.image_outlined,
+                                  size: 48,
+                                  color: JuventusTheme.grey400,
+                                ),
                               ),
                             ),
-                          ),
-                        if (product['is_new'] == true) ...[
-                          const SizedBox(height: 4),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: const Text(
-                              'NOUVEAU',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          )
+                        : const Center(
+                            child: Icon(
+                              Icons.image_outlined,
+                              size: 48,
+                              color: JuventusTheme.grey400,
                             ),
                           ),
-                        ],
-                      ],
-                    ),
                   ),
 
-                  // Stock Status
-                  if (product['stock_quantity'] != null &&
-                      product['stock_quantity'] < 10)
+                  // Discount Badge
+                  if (hasDiscount)
                     Positioned(
-                      bottom: 8,
+                      top: 8,
                       right: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: product['stock_quantity'] == 0
-                              ? Colors.red
-                              : Colors.orange,
+                          color: JuventusTheme.error,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          product['stock_quantity'] == 0
-                              ? 'Épuisé'
-                              : '${product['stock_quantity']} restants',
+                          '-${((1 - salePrice / price) * 100).toInt()}%',
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
+                            color: JuventusTheme.primaryWhite,
+                            fontSize: 11,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
+
+                  // Out of Stock Overlay
+                  if (isOutOfStock)
+                    Positioned.fill(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: JuventusTheme.primaryBlack.withOpacity(0.7),
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'ÉPUISÉ',
+                            style: TextStyle(
+                              color: JuventusTheme.primaryWhite,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  // Wishlist Button
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: GestureDetector(
+                      onTap: () => _toggleWishlist(product),
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: JuventusTheme.primaryWhite,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: JuventusTheme.primaryBlack.withOpacity(0.2),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.favorite_border,
+                          size: 18,
+                          color: JuventusTheme.primaryBlack,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
 
             // Product Info
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product['name'] ?? 'Produit',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product['name'] ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      height: 1.2,
                     ),
-                    const Spacer(),
-                    if (hasDiscount)
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      if (hasDiscount) ...[
+                        Text(
+                          currencyFormat.format(price),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: JuventusTheme.grey500,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                      ],
                       Text(
-                        currencyFormat.format(price),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.grey,
+                        currencyFormat.format(hasDiscount ? salePrice : price),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: hasDiscount ? JuventusTheme.error : JuventusTheme.primaryBlack,
                         ),
                       ),
-                    Text(
-                      currencyFormat.format(discountedPrice),
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: hasDiscount ? Colors.red : Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             ),
 
             // Add to Cart Button
-            if (product['stock_quantity'] == null ||
-                product['stock_quantity'] > 0)
+            if (!isOutOfStock)
               Container(
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(4),
+                decoration: const BoxDecoration(
+                  color: JuventusTheme.primaryBlack,
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(12),
                   ),
                 ),
                 child: TextButton.icon(
-                  onPressed: () {
-                    _addToCart(product);
-                  },
-                  icon: const Icon(Icons.add_shopping_cart,
-                      size: 16, color: Colors.white),
+                  onPressed: () => _addToCart(product),
+                  icon: const Icon(Icons.add_shopping_cart, size: 16, color: JuventusTheme.primaryWhite),
                   label: const Text(
                     'Ajouter',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    style: TextStyle(
+                      color: JuventusTheme.primaryWhite,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                 ),
               ),
@@ -394,13 +432,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${product['name']} ajouté au panier'),
-            backgroundColor: Colors.green,
+            backgroundColor: JuventusTheme.success,
             action: SnackBarAction(
               label: 'Voir',
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.pushNamed(context, '/cart');
-              },
+              textColor: JuventusTheme.primaryWhite,
+              onPressed: () => Navigator.pushNamed(context, '/cart'),
             ),
           ),
         );
@@ -410,7 +446,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Erreur: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: JuventusTheme.error,
           ),
         );
       }
@@ -419,33 +455,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   Future<void> _toggleWishlist(dynamic product) async {
     try {
-      final response = await _apiService.toggleWishlist(product['id']);
+      await _apiService.toggleWishlist(product['id']);
 
       if (mounted) {
-        final inWishlist = response.data['in_wishlist'] ?? false;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              inWishlist
-                  ? '${product['name']} ajouté aux favoris'
-                  : '${product['name']} retiré des favoris',
-            ),
-            backgroundColor: inWishlist ? Colors.pink : Colors.orange,
+          const SnackBar(
+            content: Text('Favoris mis à jour'),
+            backgroundColor: JuventusTheme.primaryBlack,
+            duration: Duration(seconds: 1),
           ),
         );
-
-        // Reload products to update wishlist icons
-        _loadProducts();
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Erreur: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      // Silently fail
     }
   }
 }
