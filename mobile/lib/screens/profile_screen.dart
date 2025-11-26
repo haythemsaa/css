@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -51,8 +52,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: JuventusTheme.primaryBlack,
+              ),
+            )
           : CustomScrollView(
               slivers: [
                 // Profile Header
@@ -67,9 +73,18 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   delegate: _SliverTabBarDelegate(
                     TabBar(
                       controller: _tabController,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorColor: Colors.yellow[700],
+                      labelColor: JuventusTheme.primaryBlack,
+                      unselectedLabelColor: JuventusTheme.grey500,
+                      indicatorColor: JuventusTheme.primaryBlack,
+                      indicatorWeight: 3,
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                      unselectedLabelStyle: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                      ),
                       tabs: const [
                         Tab(text: 'Activité'),
                         Tab(text: 'Achats'),
@@ -106,12 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.black, Colors.grey[900]!],
-          ),
+        decoration: const BoxDecoration(
+          gradient: JuventusTheme.blackGradient,
         ),
         child: Column(
           children: [
@@ -124,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.yellow[700]!,
+                      color: JuventusTheme.accentGold,
                       width: 3,
                     ),
                   ),
@@ -147,11 +158,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     decoration: BoxDecoration(
                       color: _getUserTypeColor(userType),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: JuventusTheme.primaryWhite, width: 2),
                     ),
                     child: Icon(
                       _getUserTypeIcon(userType),
-                      color: Colors.white,
+                      color: JuventusTheme.primaryWhite,
                       size: 16,
                     ),
                   ),
@@ -167,7 +178,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: JuventusTheme.primaryWhite,
+                letterSpacing: 0.5,
               ),
             ),
 
@@ -176,9 +188,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             // Email
             Text(
               email,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
-                color: Colors.grey[400],
+                color: JuventusTheme.grey400,
               ),
             ),
 
@@ -196,15 +208,17 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 children: [
                   Icon(
                     _getUserTypeIcon(userType),
-                    color: Colors.white,
+                    color: JuventusTheme.primaryWhite,
                     size: 16,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     _getUserTypeLabel(userType),
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: JuventusTheme.primaryWhite,
                       fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ],
@@ -215,10 +229,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               const SizedBox(height: 8),
               Text(
                 'Carte N° $sociosNumber',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.yellow[700],
+                  color: JuventusTheme.accentGold,
                   fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
                 ),
               ),
             ],
@@ -258,14 +273,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   Widget _buildDefaultAvatar(String name) {
     return Container(
-      color: Colors.grey[300],
+      color: JuventusTheme.grey200,
       child: Center(
         child: Text(
           name.isNotEmpty ? name[0].toUpperCase() : '?',
           style: const TextStyle(
             fontSize: 40,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: JuventusTheme.primaryBlack,
           ),
         ),
       ),
@@ -279,22 +294,24 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: JuventusTheme.primaryWhite.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: Colors.white),
+            child: Icon(icon, color: JuventusTheme.primaryWhite),
           ),
           const SizedBox(height: 4),
           Text(
             label,
             style: const TextStyle(
               fontSize: 12,
-              color: Colors.white,
+              color: JuventusTheme.primaryWhite,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -326,7 +343,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: JuventusTheme.primaryWhite,
+              letterSpacing: 1,
             ),
           ),
           const SizedBox(height: 16),
@@ -341,7 +359,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.3),
+                color: JuventusTheme.primaryWhite.withOpacity(0.3),
               ),
               _buildStatItem(
                 icon: Icons.people,
@@ -353,15 +371,18 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           const SizedBox(height: 16),
           LinearProgressIndicator(
             value: _getLevelProgress(loyaltyLevel, loyaltyPoints),
-            backgroundColor: Colors.white.withOpacity(0.3),
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+            backgroundColor: JuventusTheme.primaryWhite.withOpacity(0.3),
+            valueColor: const AlwaysStoppedAnimation<Color>(JuventusTheme.primaryWhite),
+            minHeight: 6,
+            borderRadius: BorderRadius.circular(3),
           ),
           const SizedBox(height: 8),
           Text(
             _getNextLevelText(loyaltyLevel, loyaltyPoints),
             style: const TextStyle(
               fontSize: 12,
-              color: Colors.white,
+              color: JuventusTheme.primaryWhite,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -376,21 +397,22 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }) {
     return Column(
       children: [
-        Icon(icon, color: Colors.white, size: 32),
+        Icon(icon, color: JuventusTheme.primaryWhite, size: 32),
         const SizedBox(height: 8),
         Text(
           value,
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: JuventusTheme.primaryWhite,
           ),
         ),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
-            color: Colors.white70,
+            color: JuventusTheme.primaryWhite.withOpacity(0.7),
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],
@@ -439,29 +461,45 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }) {
     final dateFormat = DateFormat('dd MMM yyyy', 'fr_FR');
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
+      decoration: JuventusDecorations.whiteCard,
       child: ListTile(
+        contentPadding: const EdgeInsets.all(12),
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: color),
+          child: Icon(icon, color: color, size: 24),
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+            color: JuventusTheme.primaryBlack,
+          ),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(subtitle),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: const TextStyle(
+                fontSize: 13,
+                color: JuventusTheme.grey700,
+              ),
+            ),
             const SizedBox(height: 4),
             Text(
               dateFormat.format(date),
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              style: const TextStyle(
+                fontSize: 12,
+                color: JuventusTheme.grey500,
+              ),
             ),
           ],
         ),
@@ -469,6 +507,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           amount,
           style: TextStyle(
             fontWeight: FontWeight.bold,
+            fontSize: 15,
             color: color,
           ),
         ),
@@ -477,26 +516,48 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }
 
   Widget _buildPurchasesTab() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.shopping_bag, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
-          Text('Aucun achat récent'),
+          Icon(
+            Icons.shopping_bag_outlined,
+            size: 80,
+            color: JuventusTheme.grey400,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Aucun achat récent',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: JuventusTheme.grey700,
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildRewardsTab() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.card_giftcard, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
-          Text('Aucune récompense disponible'),
+          Icon(
+            Icons.card_giftcard_outlined,
+            size: 80,
+            color: JuventusTheme.grey400,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Aucune récompense disponible',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: JuventusTheme.grey700,
+            ),
+          ),
         ],
       ),
     );
@@ -505,11 +566,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   Color _getUserTypeColor(String userType) {
     switch (userType) {
       case 'socios':
-        return Colors.yellow[700]!;
+        return JuventusTheme.accentGold;
       case 'premium':
-        return Colors.blue;
+        return JuventusTheme.grey400;
       default:
-        return Colors.grey;
+        return JuventusTheme.grey600;
     }
   }
 
@@ -538,13 +599,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   Color _getLoyaltyColor(String level) {
     switch (level) {
       case 'platinum':
-        return Colors.purple;
+        return JuventusTheme.primaryBlack;
       case 'gold':
-        return Colors.amber[700]!;
+        return JuventusTheme.accentGold;
       case 'silver':
-        return Colors.grey[400]!;
+        return JuventusTheme.grey400;
       default:
-        return Colors.brown;
+        return JuventusTheme.grey600; // bronze
     }
   }
 
@@ -597,15 +658,32 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Déconnexion'),
-        content: const Text('Voulez-vous vraiment vous déconnecter?'),
+        backgroundColor: JuventusTheme.primaryWhite,
+        title: const Text(
+          'Déconnexion',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
+        content: Text(
+          'Voulez-vous vraiment vous déconnecter?',
+          style: TextStyle(color: JuventusTheme.grey700),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: const Text(
+              'Annuler',
+              style: TextStyle(color: JuventusTheme.primaryBlack),
+            ),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: JuventusTheme.error,
+              foregroundColor: JuventusTheme.primaryWhite,
+            ),
             child: const Text('Déconnexion'),
           ),
         ],
@@ -634,7 +712,7 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Colors.white,
+      color: JuventusTheme.primaryWhite,
       child: tabBar,
     );
   }
