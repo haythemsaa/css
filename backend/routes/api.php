@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\AuctionController;
 use App\Http\Controllers\Api\DonationGoalController;
 use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\TicketMarketplaceController;
+use App\Http\Controllers\Api\FanTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -266,6 +267,26 @@ Route::prefix('v1')->group(function () {
             Route::get('my-purchases', [TicketMarketplaceController::class, 'myPurchases']);
             Route::post('transactions/{id}/review', [TicketMarketplaceController::class, 'submitReview']);
             Route::get('users/{userId}/reviews', [TicketMarketplaceController::class, 'getUserReviews']);
+        });
+
+        // Fan Tokens & Rewards
+        Route::prefix('tokens')->group(function () {
+            Route::get('wallet', [FanTokenController::class, 'getWallet']);
+            Route::get('transactions', [FanTokenController::class, 'getTransactions']);
+            Route::post('daily-bonus', [FanTokenController::class, 'claimDailyBonus']);
+            Route::get('leaderboard', [FanTokenController::class, 'getLeaderboard']);
+        });
+
+        Route::prefix('rewards')->group(function () {
+            Route::get('/', [FanTokenController::class, 'getRewards']);
+            Route::get('/{id}', [FanTokenController::class, 'getRewardDetails']);
+            Route::post('/{id}/redeem', [FanTokenController::class, 'redeemReward']);
+        });
+
+        Route::prefix('redemptions')->group(function () {
+            Route::get('/', [FanTokenController::class, 'getMyRedemptions']);
+            Route::get('/{id}', [FanTokenController::class, 'getRedemptionDetails']);
+            Route::delete('/{id}', [FanTokenController::class, 'cancelRedemption']);
         });
 
         // Notifications
