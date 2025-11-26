@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
+import '../theme/juventus_theme.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
@@ -66,25 +67,37 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: JuventusTheme.grey100,
       appBar: AppBar(
-        title: const Text('Événements CSS'),
-        backgroundColor: Colors.black,
+        title: const Text('ÉVÉNEMENTS CSS'),
+        backgroundColor: JuventusTheme.primaryBlack,
+        elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.yellow[700],
-          labelColor: Colors.yellow[700],
-          unselectedLabelColor: Colors.white70,
+          indicatorColor: JuventusTheme.primaryWhite,
+          indicatorWeight: 3,
+          labelColor: JuventusTheme.primaryWhite,
+          unselectedLabelColor: JuventusTheme.grey500,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+          ),
           tabs: const [
-            Tab(text: 'À Venir'),
-            Tab(text: 'Mes Événements'),
-            Tab(text: 'Passés'),
+            Tab(text: 'À VENIR'),
+            Tab(text: 'MES ÉVÉNEMENTS'),
+            Tab(text: 'PASSÉS'),
           ],
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: JuventusTheme.primaryBlack,
+              ),
+            )
           : RefreshIndicator(
               onRefresh: _loadEvents,
+              color: JuventusTheme.primaryBlack,
               child: TabBarView(
                 controller: _tabController,
                 children: [
@@ -99,13 +112,24 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
 
   Widget _buildUpcomingEvents() {
     if (_upcomingEvents.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.event, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('Aucun événement à venir'),
+            Icon(
+              Icons.event_outlined,
+              size: 80,
+              color: JuventusTheme.grey400,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Aucun événement à venir',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: JuventusTheme.grey700,
+              ),
+            ),
           ],
         ),
       );
@@ -123,13 +147,24 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
 
   Widget _buildMyEvents() {
     if (_myEvents.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.event_available, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('Vous n\'êtes inscrit à aucun événement'),
+            Icon(
+              Icons.event_available_outlined,
+              size: 80,
+              color: JuventusTheme.grey400,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Vous n\'êtes inscrit à aucun événement',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: JuventusTheme.grey700,
+              ),
+            ),
           ],
         ),
       );
@@ -147,13 +182,24 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
 
   Widget _buildPastEvents() {
     if (_pastEvents.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.history, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('Aucun événement passé'),
+            Icon(
+              Icons.history,
+              size: 80,
+              color: JuventusTheme.grey400,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Aucun événement passé',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: JuventusTheme.grey700,
+              ),
+            ),
           ],
         ),
       );
@@ -180,8 +226,10 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
     final registeredCount = event['registered_count'] ?? 0;
     final isFull = capacity != null && registeredCount >= capacity;
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
+      decoration: JuventusDecorations.whiteCard,
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
           // Navigate to event details
@@ -200,8 +248,12 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                       width: double.infinity,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.event, size: 48),
+                        color: JuventusTheme.grey200,
+                        child: const Icon(
+                          Icons.event_outlined,
+                          size: 48,
+                          color: JuventusTheme.grey400,
+                        ),
                       ),
                     ),
 
@@ -221,9 +273,10 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                         child: Text(
                           _getEventTypeLabel(event['type']),
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: JuventusTheme.primaryWhite,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
                           ),
                         ),
                       ),
@@ -240,20 +293,21 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.green,
+                            color: JuventusTheme.success,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.check_circle, size: 14, color: Colors.white),
+                              Icon(Icons.check_circle, size: 14, color: JuventusTheme.primaryWhite),
                               SizedBox(width: 4),
                               Text(
                                 'INSCRIT',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: JuventusTheme.primaryWhite,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ],
@@ -275,6 +329,7 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: JuventusTheme.primaryBlack,
                     ),
                   ),
 
@@ -283,14 +338,14 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                   // Date & Time
                   Row(
                     children: [
-                      Icon(Icons.calendar_today, size: 16, color: Colors.grey[600]),
+                      const Icon(Icons.calendar_today, size: 16, color: JuventusTheme.grey600),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           dateFormat.format(eventDate),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[700],
+                            color: JuventusTheme.grey700,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -304,14 +359,14 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                   if (event['location'] != null)
                     Row(
                       children: [
-                        Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
+                        const Icon(Icons.location_on, size: 16, color: JuventusTheme.grey600),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             event['location'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[700],
+                              color: JuventusTheme.grey700,
                             ),
                           ),
                         ),
@@ -327,16 +382,16 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                         Expanded(
                           child: LinearProgressIndicator(
                             value: registeredCount / capacity,
-                            backgroundColor: Colors.grey[200],
-                            color: isFull ? Colors.red : Colors.green,
+                            backgroundColor: JuventusTheme.grey200,
+                            color: isFull ? JuventusTheme.error : JuventusTheme.success,
                           ),
                         ),
                         const SizedBox(width: 12),
                         Text(
                           '$registeredCount/$capacity',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[600],
+                            color: JuventusTheme.grey600,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -353,18 +408,20 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                         onPressed: isFull ? null : () => _registerForEvent(event),
                         icon: Icon(
                           isFull ? Icons.block : Icons.check_circle,
-                          color: Colors.white,
+                          color: JuventusTheme.primaryWhite,
                         ),
                         label: Text(
                           isFull ? 'COMPLET' : 'S\'INSCRIRE',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: JuventusTheme.primaryWhite,
                             fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: isFull ? Colors.grey : Colors.black,
+                          backgroundColor: isFull ? JuventusTheme.grey400 : JuventusTheme.primaryBlack,
                           padding: const EdgeInsets.symmetric(vertical: 12),
+                          elevation: 0,
                         ),
                       ),
                     ),
@@ -374,10 +431,18 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         onPressed: () => _showQRCode(event),
-                        icon: const Icon(Icons.qr_code),
-                        label: const Text('VOIR QR CODE'),
+                        icon: const Icon(Icons.qr_code, color: JuventusTheme.primaryBlack),
+                        label: const Text(
+                          'VOIR QR CODE',
+                          style: TextStyle(
+                            color: JuventusTheme.primaryBlack,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12),
+                          side: const BorderSide(color: JuventusTheme.primaryBlack, width: 2),
                         ),
                       ),
                     ),
@@ -393,15 +458,15 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
   Color _getEventTypeColor(String? type) {
     switch (type) {
       case 'match':
-        return Colors.green;
+        return JuventusTheme.success;
       case 'meet_greet':
-        return Colors.purple;
+        return JuventusTheme.accentGold;
       case 'training':
-        return Colors.blue;
+        return JuventusTheme.info;
       case 'conference':
-        return Colors.orange;
+        return JuventusTheme.warning;
       default:
-        return Colors.grey;
+        return JuventusTheme.grey600;
     }
   }
 
@@ -424,16 +489,39 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Inscription'),
-        content: Text('Voulez-vous vous inscrire à "${event['title']}"?'),
+        backgroundColor: JuventusTheme.primaryWhite,
+        title: const Text(
+          'Inscription',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
+        content: Text(
+          'Voulez-vous vous inscrire à "${event['title']}"?',
+          style: const TextStyle(color: JuventusTheme.grey700),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: const Text(
+              'Annuler',
+              style: TextStyle(color: JuventusTheme.grey600),
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Confirmer'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: JuventusTheme.primaryBlack,
+              elevation: 0,
+            ),
+            child: const Text(
+              'Confirmer',
+              style: TextStyle(
+                color: JuventusTheme.primaryWhite,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -447,7 +535,7 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Inscription réussie!'),
-              backgroundColor: Colors.green,
+              backgroundColor: JuventusTheme.success,
             ),
           );
           _loadEvents();
@@ -457,7 +545,7 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Erreur: $e'),
-              backgroundColor: Colors.red,
+              backgroundColor: JuventusTheme.error,
             ),
           );
         }
@@ -469,28 +557,49 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Code QR'),
+        backgroundColor: JuventusTheme.primaryWhite,
+        title: const Text(
+          'Code QR',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: JuventusTheme.primaryBlack,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 200,
               height: 200,
-              color: Colors.grey[300],
+              decoration: BoxDecoration(
+                color: JuventusTheme.grey200,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: JuventusTheme.grey300, width: 2),
+              ),
               child: const Center(
-                child: Icon(Icons.qr_code, size: 100),
+                child: Icon(
+                  Icons.qr_code,
+                  size: 100,
+                  color: JuventusTheme.primaryBlack,
+                ),
               ),
             ),
             const SizedBox(height: 16),
             Text(
               event['title'],
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: JuventusTheme.primaryBlack,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             const Text(
               'Présentez ce code à l\'entrée',
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(
+                fontSize: 12,
+                color: JuventusTheme.grey600,
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -498,7 +607,13 @@ class _EventsScreenState extends State<EventsScreen> with SingleTickerProviderSt
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Fermer'),
+            child: const Text(
+              'Fermer',
+              style: TextStyle(
+                color: JuventusTheme.primaryBlack,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
