@@ -9,6 +9,7 @@ import 'screens/donation_goals_screen.dart';
 import 'screens/products_screen.dart';
 import 'screens/ticket_marketplace_screen.dart';
 import 'screens/fan_token_wallet_screen.dart';
+import 'screens/rewards_store_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +47,7 @@ class CSSApp extends StatelessWidget {
         '/products': (context) => const ProductsScreen(),
         '/marketplace': (context) => const TicketMarketplaceScreen(),
         '/tokens': (context) => const FanTokenWalletScreen(),
+        '/rewards': (context) => const RewardsStoreScreen(),
       },
     );
   }
