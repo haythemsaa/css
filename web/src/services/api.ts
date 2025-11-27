@@ -184,6 +184,227 @@ class ApiService {
     const response = await this.api.get(`/campaigns/${slug}`)
     return response.data
   }
+
+  // Products
+  async getProducts(params?: { category?: string; search?: string; page?: number }) {
+    const response = await this.api.get('/products', { params })
+    return response.data
+  }
+
+  async getProduct(id: number) {
+    const response = await this.api.get(`/products/${id}`)
+    return response.data
+  }
+
+  // Cart
+  async getCart() {
+    const response = await this.api.get('/cart')
+    return response.data
+  }
+
+  async addToCart(productId: number, quantity: number = 1, variantId?: number) {
+    const response = await this.api.post('/cart/items', {
+      product_id: productId,
+      quantity,
+      ...(variantId && { variant_id: variantId })
+    })
+    return response.data
+  }
+
+  async updateCartItem(itemId: number, quantity: number) {
+    const response = await this.api.put(`/cart/items/${itemId}`, { quantity })
+    return response.data
+  }
+
+  async removeFromCart(itemId: number) {
+    const response = await this.api.delete(`/cart/items/${itemId}`)
+    return response.data
+  }
+
+  async clearCart() {
+    const response = await this.api.delete('/cart')
+    return response.data
+  }
+
+  // Orders
+  async createOrder(data: {
+    payment_method: string
+    shipping_address: Record<string, any>
+    notes?: string
+  }) {
+    const response = await this.api.post('/orders', data)
+    return response.data
+  }
+
+  async getOrders(page: number = 1) {
+    const response = await this.api.get('/orders', { params: { page } })
+    return response.data
+  }
+
+  async getOrder(id: number) {
+    const response = await this.api.get(`/orders/${id}`)
+    return response.data
+  }
+
+  // Auctions
+  async getAuctions(params?: { status?: string; page?: number }) {
+    const response = await this.api.get('/auctions', { params })
+    return response.data
+  }
+
+  async getAuction(id: number) {
+    const response = await this.api.get(`/auctions/${id}`)
+    return response.data
+  }
+
+  async placeBid(auctionId: number, amount: number) {
+    const response = await this.api.post(`/auctions/${auctionId}/bids`, { amount })
+    return response.data
+  }
+
+  // Donation Goals
+  async getDonationGoals(params?: { status?: string }) {
+    const response = await this.api.get('/donation-goals', { params })
+    return response.data
+  }
+
+  async getDonationGoal(id: number) {
+    const response = await this.api.get(`/donation-goals/${id}`)
+    return response.data
+  }
+
+  async donateToDonationGoal(goalId: number, amount: number, paymentMethod: string) {
+    const response = await this.api.post(`/donation-goals/${goalId}/donate`, {
+      amount,
+      payment_method: paymentMethod
+    })
+    return response.data
+  }
+
+  // Polls
+  async getPolls(params?: { status?: string; category?: string }) {
+    const response = await this.api.get('/polls', { params })
+    return response.data
+  }
+
+  async getPoll(id: number) {
+    const response = await this.api.get(`/polls/${id}`)
+    return response.data
+  }
+
+  async votePoll(pollId: number, optionId: number) {
+    const response = await this.api.post(`/polls/${pollId}/vote`, {
+      poll_option_id: optionId
+    })
+    return response.data
+  }
+
+  // Players
+  async getPlayers(params?: { position?: string; page?: number }) {
+    const response = await this.api.get('/players', { params })
+    return response.data
+  }
+
+  async getPlayer(id: number) {
+    const response = await this.api.get(`/players/${id}`)
+    return response.data
+  }
+
+  // Events
+  async getEvents(params?: { type?: string; upcoming?: boolean }) {
+    const response = await this.api.get('/events', { params })
+    return response.data
+  }
+
+  async getEvent(id: number) {
+    const response = await this.api.get(`/events/${id}`)
+    return response.data
+  }
+
+  async registerForEvent(eventId: number, data?: Record<string, any>) {
+    const response = await this.api.post(`/events/${eventId}/register`, data)
+    return response.data
+  }
+
+  // Fan Tokens
+  async getFanTokenWallet() {
+    const response = await this.api.get('/fan-tokens/wallet')
+    return response.data
+  }
+
+  async getFanTokenTransactions() {
+    const response = await this.api.get('/fan-tokens/transactions')
+    return response.data
+  }
+
+  async getRewardsStore() {
+    const response = await this.api.get('/fan-tokens/rewards')
+    return response.data
+  }
+
+  async redeemReward(rewardId: number) {
+    const response = await this.api.post(`/fan-tokens/rewards/${rewardId}/redeem`)
+    return response.data
+  }
+
+  // Tickets Marketplace
+  async getTicketListings(params?: { match_id?: number }) {
+    const response = await this.api.get('/tickets/marketplace', { params })
+    return response.data
+  }
+
+  async createTicketListing(data: {
+    match_id: number
+    seat_section: string
+    seat_row: string
+    seat_number: string
+    price: number
+  }) {
+    const response = await this.api.post('/tickets/marketplace', data)
+    return response.data
+  }
+
+  async buyTicket(listingId: number, paymentMethod: string) {
+    const response = await this.api.post(`/tickets/marketplace/${listingId}/buy`, {
+      payment_method: paymentMethod
+    })
+    return response.data
+  }
+
+  // Badges
+  async getUserBadges() {
+    const response = await this.api.get('/badges/user')
+    return response.data
+  }
+
+  async getAllBadges() {
+    const response = await this.api.get('/badges')
+    return response.data
+  }
+
+  // Notifications
+  async getNotifications(page: number = 1) {
+    const response = await this.api.get('/notifications', { params: { page } })
+    return response.data
+  }
+
+  async markNotificationAsRead(id: number) {
+    const response = await this.api.put(`/notifications/${id}/read`)
+    return response.data
+  }
+
+  async markAllNotificationsAsRead() {
+    const response = await this.api.put('/notifications/read-all')
+    return response.data
+  }
+
+  // Search
+  async search(query: string, filters?: Record<string, any>) {
+    const response = await this.api.get('/search', {
+      params: { q: query, ...filters }
+    })
+    return response.data
+  }
 }
 
 export const api = new ApiService()

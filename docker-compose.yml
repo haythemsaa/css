@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # Backend Laravel API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../infrastructure/docker/backend/Dockerfile
+    container_name: css-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www/html
+      - ./backend/storage:/var/www/html/storage
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=css_database
+      - DB_USERNAME=css_user
+      - DB_PASSWORD=css_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - css-network
+
+  # Frontend React
+  web:
+    build:
+      context: ./web
+      dockerfile: ../infrastructure/docker/web/Dockerfile
+    container_name: css-web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - backend
+    networks:
+      - css-network
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: css-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=css_database
+      - MYSQL_USER=css_user
+      - MYSQL_PASSWORD=css_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - css-network
+
+  # Redis Cache & Queue
+  redis:
+    image: redis:7-alpine
+    container_name: css-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - css-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    build:
+      context: ./infrastructure/docker/nginx
+      dockerfile: Dockerfile
+    container_name: css-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infrastructure/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./infrastructure/docker/nginx/sites:/etc/nginx/sites-enabled
+    depends_on:
+      - backend
+      - web
+    networks:
+      - css-network
+
+  # PhpMyAdmin (Development only)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: css-phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=css_user
+      - PMA_PASSWORD=css_password
+    depends_on:
+      - mysql
+    networks:
+      - css-network
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  css-network:
+    driver: bridge
