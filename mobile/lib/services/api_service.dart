@@ -362,6 +362,70 @@ class ApiService {
     return _dio.get('/marketplace/users/$userId/reviews', queryParameters: {'page': page});
   }
 
+  // =======================
+  // FAN TOKENS & REWARDS ENDPOINTS
+  // =======================
+  Future<Response> getTokenWallet() {
+    return _dio.get('/tokens/wallet');
+  }
+
+  Future<Response> getTokenTransactions({int page = 1}) {
+    return _dio.get('/tokens/transactions', queryParameters: {'page': page});
+  }
+
+  Future<Response> claimDailyBonus() {
+    return _dio.post('/tokens/daily-bonus');
+  }
+
+  Future<Response> getTokenLeaderboard({int? year, int? month}) {
+    return _dio.get('/tokens/leaderboard', queryParameters: {
+      if (year != null) 'year': year,
+      if (month != null) 'month': month,
+    });
+  }
+
+  Future<Response> getRewards({
+    String? category,
+    bool? featured,
+    double? minCost,
+    double? maxCost,
+    bool? affordable,
+    String sortBy = 'popularity_score',
+    String sortOrder = 'desc',
+    int page = 1,
+  }) {
+    return _dio.get('/rewards', queryParameters: {
+      if (category != null) 'category': category,
+      if (featured != null) 'featured': featured,
+      if (minCost != null) 'min_cost': minCost,
+      if (maxCost != null) 'max_cost': maxCost,
+      if (affordable != null) 'affordable': affordable,
+      'sort_by': sortBy,
+      'sort_order': sortOrder,
+      'page': page,
+    });
+  }
+
+  Future<Response> getRewardDetails(int id) {
+    return _dio.get('/rewards/$id');
+  }
+
+  Future<Response> redeemReward(int id, Map<String, dynamic> data) {
+    return _dio.post('/rewards/$id/redeem', data: data);
+  }
+
+  Future<Response> getMyRedemptions({int page = 1}) {
+    return _dio.get('/redemptions', queryParameters: {'page': page});
+  }
+
+  Future<Response> getRedemptionDetails(int id) {
+    return _dio.get('/redemptions/$id');
+  }
+
+  Future<Response> cancelRedemption(int id) {
+    return _dio.delete('/redemptions/$id');
+  }
+
   // Generic GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);

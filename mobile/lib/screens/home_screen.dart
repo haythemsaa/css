@@ -593,6 +593,17 @@ class EngagementTabScreen extends StatelessWidget {
             // Engagement Options
             _buildEngagementCard(
               context,
+              title: 'Fan Tokens',
+              description: 'Gagnez des tokens et échangez des récompenses',
+              icon: Icons.stars,
+              color: JuventusTheme.accentGold,
+              onTap: () {
+                Navigator.pushNamed(context, '/tokens');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
               title: 'Sondages',
               description: 'Donnez votre avis sur les décisions du club',
               icon: Icons.poll_outlined,
