@@ -604,6 +604,17 @@ class EngagementTabScreen extends StatelessWidget {
             const SizedBox(height: 12),
             _buildEngagementCard(
               context,
+              title: 'Badges & Accomplissements',
+              description: 'Collectionnez des badges et montez de niveau',
+              icon: Icons.emoji_events_outlined,
+              color: const Color(0xFFA855F7), // Purple for badges
+              onTap: () {
+                Navigator.pushNamed(context, '/badges');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
               title: 'Sondages',
               description: 'Donnez votre avis sur les décisions du club',
               icon: Icons.poll_outlined,

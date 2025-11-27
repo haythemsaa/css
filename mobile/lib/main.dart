@@ -10,6 +10,7 @@ import 'screens/products_screen.dart';
 import 'screens/ticket_marketplace_screen.dart';
 import 'screens/fan_token_wallet_screen.dart';
 import 'screens/rewards_store_screen.dart';
+import 'screens/badges_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +49,7 @@ class CSSApp extends StatelessWidget {
         '/marketplace': (context) => const TicketMarketplaceScreen(),
         '/tokens': (context) => const FanTokenWalletScreen(),
         '/rewards': (context) => const RewardsStoreScreen(),
+        '/badges': (context) => const BadgesScreen(),
       },
     );
   }

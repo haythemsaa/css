@@ -289,6 +289,17 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [FanTokenController::class, 'cancelRedemption']);
         });
 
+        // Badges & Achievements
+        Route::prefix('badges')->group(function () {
+            Route::get('/', [BadgeController::class, 'index']);
+            Route::get('/summary', [BadgeController::class, 'getUserSummary']);
+            Route::get('/categories', [BadgeController::class, 'getByCategory']);
+            Route::get('/leaderboard', [BadgeController::class, 'getLeaderboard']);
+            Route::get('/{id}', [BadgeController::class, 'show']);
+            Route::post('/{id}/unlock', [BadgeController::class, 'unlockBadge']);
+            Route::post('/{id}/progress', [BadgeController::class, 'updateProgress']);
+        });
+
         // Notifications
         Route::get('notifications', [NotificationController::class, 'index']);
         Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);

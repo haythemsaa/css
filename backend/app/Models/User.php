@@ -162,6 +162,16 @@ class User extends Authenticatable
         return $this->hasMany(UserBadge::class);
     }
 
+    public function badgeSummary(): HasOne
+    {
+        return $this->hasOne(UserBadgeSummary::class);
+    }
+
+    public function tokenWallet(): HasOne
+    {
+        return $this->hasOne(FanTokenWallet::class);
+    }
+
     public function cards(): HasMany
     {
         return $this->hasMany(UserCard::class);
@@ -363,5 +373,35 @@ class User extends Authenticatable
         } else {
             $this->loyalty_level = 'bronze';
         }
+    }
+
+    public function updateBadgeSummary(): void
+    {
+        $summary = $this->badgeSummary ?? $this->badgeSummary()->create([]);
+
+        $unlockedBadges = $this->userBadges()->where('is_unlocked', true)->with('badge')->get();
+
+        $totalBadges = $unlockedBadges->count();
+        $commonBadges = $unlockedBadges->where('badge.rarity', 'common')->count();
+        $rareBadges = $unlockedBadges->where('badge.rarity', 'rare')->count();
+        $epicBadges = $unlockedBadges->where('badge.rarity', 'epic')->count();
+        $legendaryBadges = $unlockedBadges->where('badge.rarity', 'legendary')->count();
+
+        $totalTokens = $unlockedBadges->sum('tokens_earned');
+        $totalXp = $unlockedBadges->sum('xp_earned');
+
+        $totalAvailableBadges = Badge::active()->count();
+        $completionPercentage = $totalAvailableBadges > 0 ? ($totalBadges / $totalAvailableBadges) * 100 : 0;
+
+        $summary->update([
+            'total_badges' => $totalBadges,
+            'common_badges' => $commonBadges,
+            'rare_badges' => $rareBadges,
+            'epic_badges' => $epicBadges,
+            'legendary_badges' => $legendaryBadges,
+            'total_tokens_from_badges' => $totalTokens,
+            'total_xp_from_badges' => $totalXp,
+            'completion_percentage' => round($completionPercentage, 2),
+        ]);
     }
 }

@@ -426,6 +426,48 @@ class ApiService {
     return _dio.delete('/redemptions/$id');
   }
 
+  // ===================================
+  // Badges & Achievements
+  // ===================================
+
+  Future<Response> getBadges({
+    String? category,
+    String? rarity,
+    bool? unlockedOnly,
+    bool? lockedOnly,
+  }) {
+    return _dio.get('/badges', queryParameters: {
+      if (category != null) 'category': category,
+      if (rarity != null) 'rarity': rarity,
+      if (unlockedOnly != null) 'unlocked_only': unlockedOnly,
+      if (lockedOnly != null) 'locked_only': lockedOnly,
+    });
+  }
+
+  Future<Response> getBadgeDetails(int id) {
+    return _dio.get('/badges/$id');
+  }
+
+  Future<Response> getBadgeSummary() {
+    return _dio.get('/badges/summary');
+  }
+
+  Future<Response> getBadgesByCategory() {
+    return _dio.get('/badges/categories');
+  }
+
+  Future<Response> getBadgeLeaderboard({int limit = 50}) {
+    return _dio.get('/badges/leaderboard', queryParameters: {'limit': limit});
+  }
+
+  Future<Response> unlockBadge(int id) {
+    return _dio.post('/badges/$id/unlock');
+  }
+
+  Future<Response> updateBadgeProgress(int id, int progress) {
+    return _dio.post('/badges/$id/progress', data: {'progress': progress});
+  }
+
   // Generic GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);
