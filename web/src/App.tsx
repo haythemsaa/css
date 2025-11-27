@@ -4,11 +4,19 @@ import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import MatchesPage from './pages/MatchesPage'
+import MatchDetailPage from './pages/MatchDetailPage'
 import ContentPage from './pages/ContentPage'
+import ContentDetailPage from './pages/ContentDetailPage'
 import ShopPage from './pages/ShopPage'
+import CartPage from './pages/CartPage'
+import CheckoutPage from './pages/CheckoutPage'
 import FreeuiPage from './pages/FreeuiPage'
 import PartnersPage from './pages/PartnersPage'
 import ProfilePage from './pages/ProfilePage'
+import AuctionsPage from './pages/AuctionsPage'
+import PollsPage from './pages/PollsPage'
+import EventsPage from './pages/EventsPage'
+import CampaignsPage from './pages/CampaignsPage'
 import { useAuthStore } from './store/authStore'
 import './App.css'
 
@@ -79,6 +87,70 @@ function App() {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/matches/:id"
+          element={
+            <ProtectedRoute>
+              <MatchDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/content/:slug"
+          element={
+            <ProtectedRoute>
+              <ContentDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/auctions"
+          element={
+            <ProtectedRoute>
+              <AuctionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/polls"
+          element={
+            <ProtectedRoute>
+              <PollsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events"
+          element={
+            <ProtectedRoute>
+              <EventsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/campaigns"
+          element={
+            <ProtectedRoute>
+              <CampaignsPage />
             </ProtectedRoute>
           }
         />
