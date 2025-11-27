@@ -39,6 +39,7 @@ use App\Http\Controllers\Api\DonationGoalController;
 use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\TicketMarketplaceController;
 use App\Http\Controllers\Api\FanTokenController;
+use App\Http\Controllers\Api\PredictionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -298,6 +299,16 @@ Route::prefix('v1')->group(function () {
             Route::get('/{id}', [BadgeController::class, 'show']);
             Route::post('/{id}/unlock', [BadgeController::class, 'unlockBadge']);
             Route::post('/{id}/progress', [BadgeController::class, 'updateProgress']);
+        });
+
+        // Predictions
+        Route::prefix('predictions')->group(function () {
+            Route::get('/matches', [PredictionController::class, 'getAvailableMatches']);
+            Route::get('/my-predictions', [PredictionController::class, 'getMyPredictions']);
+            Route::get('/my-stats', [PredictionController::class, 'getMyStats']);
+            Route::get('/leaderboard', [PredictionController::class, 'getLeaderboard']);
+            Route::post('/matches/{matchId}', [PredictionController::class, 'submitPrediction']);
+            Route::post('/matches/{matchId}/process', [PredictionController::class, 'processMatch']);
         });
 
         // Notifications

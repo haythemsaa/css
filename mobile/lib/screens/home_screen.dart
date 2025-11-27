@@ -626,6 +626,17 @@ class EngagementTabScreen extends StatelessWidget {
             const SizedBox(height: 12),
             _buildEngagementCard(
               context,
+              title: 'Pronostics',
+              description: 'Pronostiquez les résultats et gagnez des points',
+              icon: Icons.sports_outlined,
+              color: JuventusTheme.success,
+              onTap: () {
+                Navigator.pushNamed(context, '/predictions');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
               title: 'Marketplace de Billets',
               description: 'Achetez et vendez des billets entre supporters',
               icon: Icons.confirmation_number_outlined,

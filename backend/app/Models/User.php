@@ -172,6 +172,21 @@ class User extends Authenticatable
         return $this->hasOne(FanTokenWallet::class);
     }
 
+    public function predictionLeaderboard(): HasOne
+    {
+        return $this->hasOne(PredictionLeaderboard::class);
+    }
+
+    public function matchPredictions(): HasMany
+    {
+        return $this->hasMany(MatchPrediction::class);
+    }
+
+    public function fantasyTeams(): HasMany
+    {
+        return $this->hasMany(FantasyTeam::class);
+    }
+
     public function cards(): HasMany
     {
         return $this->hasMany(UserCard::class);
@@ -403,5 +418,11 @@ class User extends Authenticatable
             'total_xp_from_badges' => $totalXp,
             'completion_percentage' => round($completionPercentage, 2),
         ]);
+    }
+
+    public function updatePredictionLeaderboard(MatchPrediction $prediction): void
+    {
+        $leaderboard = $this->predictionLeaderboard ?? $this->predictionLeaderboard()->create([]);
+        $leaderboard->updateFromPrediction($prediction);
     }
 }

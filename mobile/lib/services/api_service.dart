@@ -468,6 +468,34 @@ class ApiService {
     return _dio.post('/badges/$id/progress', data: {'progress': progress});
   }
 
+  // ===================================
+  // Predictions
+  // ===================================
+
+  Future<Response> getAvailableMatchesForPrediction() {
+    return _dio.get('/predictions/matches');
+  }
+
+  Future<Response> submitPrediction(int matchId, int homeScore, int awayScore, {int? firstScorerId}) {
+    return _dio.post('/predictions/matches/$matchId', data: {
+      'predicted_home_score': homeScore,
+      'predicted_away_score': awayScore,
+      if (firstScorerId != null) 'predicted_first_scorer_id': firstScorerId,
+    });
+  }
+
+  Future<Response> getMyPredictions({int page = 1}) {
+    return _dio.get('/predictions/my-predictions', queryParameters: {'page': page});
+  }
+
+  Future<Response> getMyPredictionStats() {
+    return _dio.get('/predictions/my-stats');
+  }
+
+  Future<Response> getPredictionLeaderboard({int limit = 50}) {
+    return _dio.get('/predictions/leaderboard', queryParameters: {'limit': limit});
+  }
+
   // Generic GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);
