@@ -1,0 +1,344 @@
+openapi: 3.0.3
+info:
+  title: CSS Club Sportif Sfaxien API
+  description: |
+    API complète pour l'application CSS Club Sportif Sfaxien
+
+    ## Authentification
+    L'API utilise Laravel Sanctum pour l'authentification via Bearer tokens.
+
+    ## Rate Limiting
+    - Utilisateurs gratuits: 60 requêtes/minute
+    - Utilisateurs Premium/Socios: 120 requêtes/minute
+
+    ## Environnements
+    - Production: https://api.css-sfax.tn/api/v1
+    - Staging: https://api-staging.css-sfax.tn/api/v1
+    - Development: http://localhost:8000/api/v1
+  version: 1.0.0
+  contact:
+    name: CSS Tech Team
+    email: dev@css-sfax.tn
+  license:
+    name: Propriétaire
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Development
+  - url: https://api-staging.css-sfax.tn/api/v1
+    description: Staging
+  - url: https://api.css-sfax.tn/api/v1
+    description: Production
+
+tags:
+  - name: Auth
+    description: Authentification et gestion des utilisateurs
+  - name: Contents
+    description: Gestion des contenus (articles, vidéos, podcasts)
+  - name: Matches
+    description: Matchs et compétitions
+  - name: Players
+    description: Joueurs et équipes
+  - name: Partners
+    description: Système Freeoui - Partenaires et réductions
+  - name: Donations
+    description: Dons et crowdfunding
+  - name: Socios
+    description: Espace membres Socios
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Inscription utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [first_name, last_name, email, password]
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+                email:
+                  type: string
+                  format: email
+                  example: john@example.com
+                phone:
+                  type: string
+                  example: "+21612345678"
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                password_confirmation:
+                  type: string
+                  format: password
+      responses:
+        '201':
+          description: Utilisateur créé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+        '422':
+          description: Erreur de validation
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Connexion utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+        '401':
+          description: Identifiants invalides
+
+  /contents:
+    get:
+      tags: [Contents]
+      summary: Liste des contenus
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [article, video, podcast, gallery, story]
+        - name: category_id
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Liste des contenus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Content'
+                  meta:
+                    $ref: '#/components/schemas/Pagination'
+
+  /partners:
+    get:
+      tags: [Partners]
+      summary: Liste des partenaires
+      parameters:
+        - name: category_id
+          in: query
+          schema:
+            type: integer
+        - name: city
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des partenaires
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Partner'
+
+  /reductions/generate:
+    post:
+      tags: [Partners]
+      summary: Générer un code de réduction QR
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [partner_id]
+              properties:
+                partner_id:
+                  type: integer
+                offer_id:
+                  type: integer
+      responses:
+        '201':
+          description: Code généré avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  code:
+                    $ref: '#/components/schemas/ReductionCode'
+                  expires_in_minutes:
+                    type: integer
+                    example: 15
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        user_type:
+          type: string
+          enum: [free, premium, socios]
+        loyalty_points:
+          type: integer
+        loyalty_level:
+          type: string
+          enum: [bronze, silver, gold, platinum]
+
+    Content:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+        type:
+          type: string
+          enum: [article, video, podcast, gallery, story, live]
+        access_level:
+          type: string
+          enum: [free, premium, socios]
+        is_featured:
+          type: boolean
+        views_count:
+          type: integer
+        likes_count:
+          type: integer
+        published_at:
+          type: string
+          format: date-time
+
+    Partner:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        city:
+          type: string
+        address:
+          type: string
+        reduction_value_premium:
+          type: number
+          format: float
+        reduction_value_socios:
+          type: number
+          format: float
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+        is_active:
+          type: boolean
+        is_featured:
+          type: boolean
+
+    ReductionCode:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        qr_code:
+          type: string
+        discount_percentage:
+          type: number
+        generated_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+        is_used:
+          type: boolean
+
+    Pagination:
+      type: object
+      properties:
+        current_page:
+          type: integer
+        total:
+          type: integer
+        per_page:
+          type: integer
+        last_page:
+          type: integer
+
+security:
+  - bearerAuth: []
