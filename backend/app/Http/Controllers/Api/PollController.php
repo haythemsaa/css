@@ -234,4 +234,170 @@ class PollController extends Controller
 
         return response()->json($results);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all polls
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Poll::query()->with(['options', 'creator'])->withCount('votes');
+
+        // Filter by status
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by type
+        if ($request->has('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Filter by visibility
+        if ($request->has('visibility')) {
+            $query->where('visibility', $request->visibility);
+        }
+
+        // Filter by category
+        if ($request->has('category')) {
+            $query->where('category', $request->category);
+        }
+
+        // Filter by featured
+        if ($request->has('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('question', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $polls = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($polls);
+    }
+
+    /**
+     * Admin: Create a new poll
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'question' => 'required|string|max:500',
+            'description' => 'nullable|string',
+            'type' => 'required|in:single,multiple,rating,text',
+            'category' => 'nullable|in:match,player,transfer,general,club',
+            'visibility' => 'required|in:public,premium,socios_only',
+            'status' => 'required|in:draft,active,closed',
+            'is_featured' => 'boolean',
+            'allow_anonymous' => 'boolean',
+            'show_results_before_vote' => 'boolean',
+            'multiple_votes_allowed' => 'boolean',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'options' => 'required_if:type,single,multiple|array|min:2',
+            'options.*.text' => 'required|string|max:255',
+            'options.*.image_url' => 'nullable|url',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $validated['creator_id'] = $request->user()->id;
+            $options = $validated['options'] ?? [];
+            unset($validated['options']);
+
+            $poll = Poll::create($validated);
+
+            // Create poll options
+            if (in_array($poll->type, ['single', 'multiple']) && !empty($options)) {
+                foreach ($options as $option) {
+                    $poll->options()->create($option);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sondage créé avec succès',
+                'data' => $poll->load('options'),
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la création du sondage',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Admin: Update a poll
+     */
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $poll = Poll::findOrFail($id);
+
+        $validated = $request->validate([
+            'question' => 'sometimes|string|max:500',
+            'description' => 'nullable|string',
+            'type' => 'sometimes|in:single,multiple,rating,text',
+            'category' => 'nullable|in:match,player,transfer,general,club',
+            'visibility' => 'sometimes|in:public,premium,socios_only',
+            'status' => 'sometimes|in:draft,active,closed',
+            'is_featured' => 'boolean',
+            'allow_anonymous' => 'boolean',
+            'show_results_before_vote' => 'boolean',
+            'multiple_votes_allowed' => 'boolean',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+        ]);
+
+        $poll->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sondage mis à jour avec succès',
+            'data' => $poll->fresh(['options', 'creator']),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a poll
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $poll = Poll::findOrFail($id);
+
+        // Delete all votes first
+        $poll->votes()->delete();
+
+        // Delete all options
+        $poll->options()->delete();
+
+        // Delete statistics
+        $poll->statistics()->delete();
+
+        // Delete the poll
+        $poll->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sondage supprimé avec succès',
+        ]);
+    }
 }

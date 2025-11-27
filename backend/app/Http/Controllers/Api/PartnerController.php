@@ -169,6 +169,52 @@ class PartnerController extends Controller
     }
 
     /**
+     * Admin: Get all partners (including inactive)
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Partner::query()->with('category');
+
+        // Filter by category
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by active status
+        if ($request->has('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        // Filter by featured
+        if ($request->has('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        // Filter by city
+        if ($request->has('city')) {
+            $query->where('city', $request->city);
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%")
+                  ->orWhere('city', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'priority');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $partners = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($partners);
+    }
+
+    /**
      * Admin: Create a new partner
      */
     public function adminStore(Request $request): JsonResponse

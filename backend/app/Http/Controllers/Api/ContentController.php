@@ -186,6 +186,56 @@ class ContentController extends Controller
     // ADMIN METHODS
     // ========================================
 
+    /**
+     * Get all contents for admin (no access restrictions)
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Content::query()
+            ->with(['category', 'author', 'tags']);
+
+        // Filter by type
+        if ($request->has('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Filter by category
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by access level
+        if ($request->has('access_level')) {
+            $query->where('access_level', $request->access_level);
+        }
+
+        // Filter by status
+        if ($request->has('status')) {
+            if ($request->status === 'published') {
+                $query->published();
+            } elseif ($request->status === 'draft') {
+                $query->whereNull('published_at');
+            }
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%")
+                  ->orWhere('excerpt', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $contents = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($contents);
+    }
+
     public function adminStore(Request $request): JsonResponse
     {
         $validated = $request->validate([

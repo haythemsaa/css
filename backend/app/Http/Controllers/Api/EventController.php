@@ -121,6 +121,47 @@ class EventController extends Controller
     }
 
     /**
+     * Admin: Get all events
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Event::query();
+
+        // Filter by event type
+        if ($request->has('event_type')) {
+            $query->where('event_type', $request->event_type);
+        }
+
+        // Filter by status
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by featured
+        if ($request->has('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%")
+                  ->orWhere('location', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'start_datetime');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $events = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($events);
+    }
+
+    /**
      * Admin: Create a new event
      */
     public function adminStore(Request $request): JsonResponse

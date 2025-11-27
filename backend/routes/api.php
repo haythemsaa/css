@@ -511,80 +511,80 @@ Route::prefix('v1')->group(function () {
         // CONTENT MANAGEMENT
         // ===================================
         Route::prefix('content')->group(function () {
-            Route::get('/', [ContentController::class, 'index']);
-            Route::post('/', [ContentController::class, 'index']); // AdminStore method to be added
-            Route::put('/{id}', [ContentController::class, 'index']); // AdminUpdate method to be added
-            Route::delete('/{id}', [ContentController::class, 'index']); // AdminDestroy method to be added
+            Route::get('/', [ContentController::class, 'adminIndex']);
+            Route::post('/', [ContentController::class, 'adminStore']);
+            Route::put('/{id}', [ContentController::class, 'adminUpdate']);
+            Route::delete('/{id}', [ContentController::class, 'adminDestroy']);
         });
 
         // ===================================
         // MATCH MANAGEMENT
         // ===================================
         Route::prefix('matches')->group(function () {
-            Route::get('/', [MatchController::class, 'index']);
-            Route::post('/', [MatchController::class, 'index']); // AdminStore to be added
-            Route::put('/{id}', [MatchController::class, 'index']); // AdminUpdate to be added
-            Route::delete('/{id}', [MatchController::class, 'index']); // AdminDestroy to be added
+            Route::get('/', [MatchController::class, 'adminIndex']);
+            Route::post('/', [MatchController::class, 'adminStore']);
+            Route::put('/{id}', [MatchController::class, 'adminUpdate']);
+            Route::delete('/{id}', [MatchController::class, 'adminDestroy']);
         });
 
         // ===================================
         // PLAYER MANAGEMENT
         // ===================================
         Route::prefix('players')->group(function () {
-            Route::get('/', [PlayerController::class, 'index']);
-            Route::post('/', [PlayerController::class, 'index']); // AdminStore to be added
-            Route::put('/{id}', [PlayerController::class, 'index']); // AdminUpdate to be added
-            Route::delete('/{id}', [PlayerController::class, 'index']); // AdminDestroy to be added
+            Route::get('/', [PlayerController::class, 'adminIndex']);
+            Route::post('/', [PlayerController::class, 'adminStore']);
+            Route::put('/{id}', [PlayerController::class, 'adminUpdate']);
+            Route::delete('/{id}', [PlayerController::class, 'adminDestroy']);
         });
 
         // ===================================
         // PRODUCT MANAGEMENT
         // ===================================
         Route::prefix('products')->group(function () {
-            Route::get('/', [ProductController::class, 'index']);
-            Route::post('/', [ProductController::class, 'index']); // AdminStore to be added
-            Route::put('/{id}', [ProductController::class, 'index']); // AdminUpdate to be added
-            Route::delete('/{id}', [ProductController::class, 'index']); // AdminDestroy to be added
+            Route::get('/', [ProductController::class, 'adminIndex']);
+            Route::post('/', [ProductController::class, 'adminStore']);
+            Route::put('/{id}', [ProductController::class, 'adminUpdate']);
+            Route::delete('/{id}', [ProductController::class, 'adminDestroy']);
         });
 
         // ===================================
         // EVENT MANAGEMENT
         // ===================================
         Route::prefix('events')->group(function () {
-            Route::get('/', [EventController::class, 'index']);
-            Route::post('/', [EventController::class, 'index']); // AdminStore to be added
-            Route::put('/{id}', [EventController::class, 'index']); // AdminUpdate to be added
-            Route::delete('/{id}', [EventController::class, 'index']); // AdminDestroy to be added
+            Route::get('/', [EventController::class, 'adminIndex']);
+            Route::post('/', [EventController::class, 'adminStore']);
+            Route::put('/{id}', [EventController::class, 'adminUpdate']);
+            Route::delete('/{id}', [EventController::class, 'adminDestroy']);
         });
 
         // ===================================
         // PARTNER & OFFER MANAGEMENT
         // ===================================
         Route::prefix('partners')->group(function () {
-            Route::get('/', [PartnerController::class, 'index']);
-            Route::post('/', [PartnerController::class, 'index']); // AdminStore to be added
-            Route::put('/{id}', [PartnerController::class, 'index']); // AdminUpdate to be added
-            Route::delete('/{id}', [PartnerController::class, 'index']); // AdminDestroy to be added
+            Route::get('/', [PartnerController::class, 'adminIndex']);
+            Route::post('/', [PartnerController::class, 'adminStore']);
+            Route::put('/{id}', [PartnerController::class, 'adminUpdate']);
+            Route::delete('/{id}', [PartnerController::class, 'adminDestroy']);
         });
 
         // ===================================
         // LOTTERY MANAGEMENT
         // ===================================
         Route::prefix('lottery')->group(function () {
-            Route::get('/', [LotteryController::class, 'index']);
-            Route::post('/', [LotteryController::class, 'index']); // AdminStore to be added
-            Route::put('/{id}', [LotteryController::class, 'index']); // AdminUpdate to be added
-            Route::delete('/{id}', [LotteryController::class, 'index']); // AdminDestroy to be added
+            Route::get('/', [LotteryController::class, 'adminIndex']);
+            Route::post('/', [LotteryController::class, 'adminStore']);
+            Route::put('/{id}', [LotteryController::class, 'adminUpdate']);
+            Route::delete('/{id}', [LotteryController::class, 'adminDestroy']);
         });
 
         // ===================================
         // POLL MANAGEMENT
         // ===================================
         Route::prefix('polls')->group(function () {
-            Route::get('/', [PollController::class, 'index']);
-            Route::post('/', [PollController::class, 'index']); // AdminStore to be added
-            Route::put('/{id}', [PollController::class, 'index']); // AdminUpdate to be added
-            Route::delete('/{id}', [PollController::class, 'index']); // AdminDestroy to be added
+            Route::get('/', [PollController::class, 'adminIndex']);
+            Route::post('/', [PollController::class, 'adminStore']);
+            Route::put('/{id}', [PollController::class, 'adminUpdate']);
+            Route::delete('/{id}', [PollController::class, 'adminDestroy']);
         });
 
     });

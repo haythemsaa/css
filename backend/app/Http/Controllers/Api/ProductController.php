@@ -135,6 +135,56 @@ class ProductController extends Controller
     }
 
     /**
+     * Admin: Get all products (including unavailable)
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Product::query();
+
+        // Filter by category
+        if ($request->has('category')) {
+            $query->where('category', $request->category);
+        }
+
+        // Filter by availability
+        if ($request->has('is_available')) {
+            $query->where('is_available', $request->boolean('is_available'));
+        }
+
+        // Filter by featured
+        if ($request->has('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        // Filter by stock level
+        if ($request->has('stock_status')) {
+            if ($request->stock_status === 'out_of_stock') {
+                $query->where('stock_quantity', 0);
+            } elseif ($request->stock_status === 'low_stock') {
+                $query->where('stock_quantity', '>', 0)->where('stock_quantity', '<=', 10);
+            }
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('sku', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $products = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($products);
+    }
+
+    /**
      * Admin: Create a new product
      */
     public function adminStore(Request $request): JsonResponse

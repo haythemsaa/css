@@ -156,6 +156,48 @@ class MatchController extends Controller
     }
 
     /**
+     * Admin: Get all matches (no restrictions)
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Match::query()
+            ->with(['homeTeam', 'awayTeam']);
+
+        // Filter by status
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by competition
+        if ($request->has('competition')) {
+            $query->where('competition', $request->competition);
+        }
+
+        // Filter by season
+        if ($request->has('season')) {
+            $query->where('season', $request->season);
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('home_team', 'like', "%{$request->search}%")
+                  ->orWhere('away_team', 'like', "%{$request->search}%")
+                  ->orWhere('competition', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'match_date');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $matches = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($matches);
+    }
+
+    /**
      * Admin: Create a new match
      */
     public function adminStore(Request $request): JsonResponse

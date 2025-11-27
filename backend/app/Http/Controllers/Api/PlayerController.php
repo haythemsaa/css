@@ -56,6 +56,42 @@ class PlayerController extends Controller
     }
 
     /**
+     * Admin: Get all players (including inactive)
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Player::query();
+
+        // Filter by position
+        if ($request->has('position')) {
+            $query->where('position', $request->position);
+        }
+
+        // Filter by active status
+        if ($request->has('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('first_name', 'like', "%{$request->search}%")
+                  ->orWhere('last_name', 'like', "%{$request->search}%")
+                  ->orWhere('jersey_number', $request->search);
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'jersey_number');
+        $sortOrder = $request->get('sort_order', 'asc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $players = $query->paginate($request->get('per_page', 50));
+
+        return response()->json($players);
+    }
+
+    /**
      * Admin: Create a new player
      */
     public function adminStore(Request $request): JsonResponse

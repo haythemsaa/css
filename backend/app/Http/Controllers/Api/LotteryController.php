@@ -137,6 +137,42 @@ class LotteryController extends Controller
     }
 
     /**
+     * Admin: Get all lottery draws
+     */
+    public function adminIndex(Request $request)
+    {
+        $query = LotteryDraw::query();
+
+        // Filter by status
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by active
+        if ($request->has('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%")
+                  ->orWhere('prize_description', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $draws = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($draws);
+    }
+
+    /**
      * Admin: Create a new lottery draw
      */
     public function adminStore(Request $request)
