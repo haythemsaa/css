@@ -12,6 +12,10 @@ import 'screens/fan_token_wallet_screen.dart';
 import 'screens/rewards_store_screen.dart';
 import 'screens/badges_screen.dart';
 import 'screens/predictions_screen.dart';
+import 'screens/players_screen.dart';
+import 'screens/challenges_screen.dart';
+import 'screens/partners_screen.dart';
+import 'screens/notifications_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +56,10 @@ class CSSApp extends StatelessWidget {
         '/rewards': (context) => const RewardsStoreScreen(),
         '/badges': (context) => const BadgesScreen(),
         '/predictions': (context) => const PredictionsScreen(),
+        '/players': (context) => const PlayersScreen(),
+        '/challenges': (context) => const ChallengesScreen(),
+        '/partners': (context) => const PartnersScreen(),
+        '/notifications': (context) => const NotificationsScreen(),
       },
     );
   }

@@ -678,6 +678,39 @@ class EngagementTabScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/products');
               },
             ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
+              title: 'Effectif',
+              description: 'Découvrez les joueurs de l\'équipe',
+              icon: Icons.groups_outlined,
+              color: JuventusTheme.info,
+              onTap: () {
+                Navigator.pushNamed(context, '/players');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
+              title: 'Défis',
+              description: 'Relevez les défis et gagnez des récompenses',
+              icon: Icons.flag_outlined,
+              color: JuventusTheme.warning,
+              onTap: () {
+                Navigator.pushNamed(context, '/challenges');
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildEngagementCard(
+              context,
+              title: 'Partenaires',
+              description: 'Découvrez les offres exclusives',
+              icon: Icons.local_offer_outlined,
+              color: const Color(0xFF9333EA), // Purple
+              onTap: () {
+                Navigator.pushNamed(context, '/partners');
+              },
+            ),
           ],
         ),
       ),

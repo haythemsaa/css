@@ -496,6 +496,66 @@ class ApiService {
     return _dio.get('/predictions/leaderboard', queryParameters: {'limit': limit});
   }
 
+  // ===================================
+  // Players
+  // ===================================
+
+  Future<Response> getPlayers() {
+    return _dio.get('/players');
+  }
+
+  Future<Response> getPlayerDetails(int id) {
+    return _dio.get('/players/$id');
+  }
+
+  // ===================================
+  // Challenges
+  // ===================================
+
+  Future<Response> getChallenges() {
+    return _dio.get('/challenges');
+  }
+
+  Future<Response> joinChallenge(int id) {
+    return _dio.post('/challenges/$id/join');
+  }
+
+  // ===================================
+  // Partners & Offers
+  // ===================================
+
+  Future<Response> getPartners() {
+    return _dio.get('/partners');
+  }
+
+  Future<Response> getPartnerDetails(int id) {
+    return _dio.get('/partners/$id');
+  }
+
+  Future<Response> getOffers() {
+    return _dio.get('/offers');
+  }
+
+  Future<Response> getFlashOffers() {
+    return _dio.get('/offers/flash');
+  }
+
+  // ===================================
+  // Notifications
+  // ===================================
+
+  Future<Response> getNotifications() {
+    return _dio.get('/notifications');
+  }
+
+  Future<Response> markNotificationAsRead(int id) {
+    return _dio.post('/notifications/$id/read');
+  }
+
+  Future<Response> markAllNotificationsAsRead() {
+    return _dio.post('/notifications/read-all');
+  }
+
   // Generic GET
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);
