@@ -246,4 +246,87 @@ class ForumController extends Controller
             'likes_count' => $reply->fresh()->likes_count,
         ]);
     }
+
+    // ========================================
+    // ADMIN MODERATION METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all topics (for moderation)
+     */
+    public function adminIndex(Request $request)
+    {
+        $query = ForumTopic::query()->with(['user', 'category', 'latestReply'])->withCount('replies');
+
+        // Filter by category
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by locked/pinned
+        if ($request->has('is_locked')) {
+            $query->where('is_locked', $request->boolean('is_locked'));
+        }
+
+        if ($request->has('is_pinned')) {
+            $query->where('is_pinned', $request->boolean('is_pinned'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%")
+                  ->orWhere('content', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $topics = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($topics);
+    }
+
+    /**
+     * Admin: Pin/unpin or lock/unlock a topic
+     */
+    public function adminUpdate(Request $request, $id)
+    {
+        $topic = ForumTopic::findOrFail($id);
+
+        $validated = $request->validate([
+            'is_pinned' => 'nullable|boolean',
+            'is_locked' => 'nullable|boolean',
+        ]);
+
+        $topic->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Topic modéré avec succès',
+            'topic' => $topic->fresh(),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a topic (moderation)
+     */
+    public function adminDestroy($id)
+    {
+        $topic = ForumTopic::findOrFail($id);
+
+        // Delete replies
+        ForumReply::where('topic_id', $topic->id)->delete();
+
+        // Delete topic
+        $topic->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Topic supprimé avec succès',
+        ]);
+    }
 }

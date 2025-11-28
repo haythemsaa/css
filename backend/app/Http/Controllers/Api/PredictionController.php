@@ -219,4 +219,62 @@ class PredictionController extends Controller
             'processed_count' => $predictions->count(),
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all predictions
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = MatchPrediction::query()->with(['user', 'match']);
+
+        // Filter by match
+        if ($request->has('match_id')) {
+            $query->where('match_id', $request->match_id);
+        }
+
+        // Filter by processed status
+        if ($request->has('is_processed')) {
+            $query->where('is_processed', $request->boolean('is_processed'));
+        }
+
+        // Filter by correctness
+        if ($request->has('is_correct')) {
+            $query->where('is_correct', $request->boolean('is_correct'));
+        }
+
+        // Search by user
+        if ($request->has('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('email', 'like', "%{$request->search}%")
+                  ->orWhere('first_name', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $predictions = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($predictions);
+    }
+
+    /**
+     * Admin: Delete a prediction
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $prediction = MatchPrediction::findOrFail($id);
+        $prediction->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pronostic supprimé avec succès',
+        ]);
+    }
 }

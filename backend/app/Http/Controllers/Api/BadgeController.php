@@ -362,4 +362,134 @@ class BadgeController extends Controller
             'message' => $unlocked ? 'Badge débloqué!' : 'Progression mise à jour',
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all badges
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Badge::query()->with('statistics');
+
+        // Filter by category
+        if ($request->has('category')) {
+            $query->byCategory($request->category);
+        }
+
+        // Filter by rarity
+        if ($request->has('rarity')) {
+            $query->byRarity($request->rarity);
+        }
+
+        // Filter by active status
+        if ($request->has('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        // Filter by secret
+        if ($request->has('is_secret')) {
+            $query->where('is_secret', $request->boolean('is_secret'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $badges = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($badges);
+    }
+
+    /**
+     * Admin: Create a new badge
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'icon' => 'required|string|max:255',
+            'category' => 'required|in:engagement,social,donation,content,match,collection,achievement,special',
+            'rarity' => 'required|in:common,rare,epic,legendary',
+            'required_count' => 'required|integer|min:1',
+            'unlock_type' => 'required|in:auto,manual,purchase',
+            'unlock_criteria' => 'nullable|array',
+            'token_reward' => 'nullable|integer|min:0',
+            'xp_reward' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
+            'is_secret' => 'boolean',
+            'display_order' => 'nullable|integer',
+        ]);
+
+        $badge = Badge::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Badge créé avec succès',
+            'badge' => $badge,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a badge
+     */
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $badge = Badge::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'icon' => 'sometimes|string|max:255',
+            'category' => 'sometimes|in:engagement,social,donation,content,match,collection,achievement,special',
+            'rarity' => 'sometimes|in:common,rare,epic,legendary',
+            'required_count' => 'sometimes|integer|min:1',
+            'unlock_type' => 'sometimes|in:auto,manual,purchase',
+            'unlock_criteria' => 'nullable|array',
+            'token_reward' => 'nullable|integer|min:0',
+            'xp_reward' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
+            'is_secret' => 'boolean',
+            'display_order' => 'nullable|integer',
+        ]);
+
+        $badge->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Badge mis à jour avec succès',
+            'badge' => $badge->fresh(),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a badge
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $badge = Badge::findOrFail($id);
+
+        // Delete user badges
+        UserBadge::where('badge_id', $badge->id)->delete();
+
+        // Delete badge
+        $badge->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Badge supprimé avec succès',
+        ]);
+    }
 }

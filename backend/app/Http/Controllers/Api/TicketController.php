@@ -273,4 +273,108 @@ class TicketController extends Controller
             'message' => 'Billet marqué comme utilisé',
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all tickets
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Ticket::query()->with('match');
+
+        // Filter by match
+        if ($request->has('match_id')) {
+            $query->forMatch($request->match_id);
+        }
+
+        // Filter by category
+        if ($request->has('category')) {
+            $query->ofCategory($request->category);
+        }
+
+        // Filter by sale active
+        if ($request->has('is_sale_active')) {
+            $query->where('is_sale_active', $request->boolean('is_sale_active'));
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $tickets = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($tickets);
+    }
+
+    /**
+     * Admin: Create a new ticket
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'match_id' => 'required|exists:matches,id',
+            'category' => 'required|in:vip,tribune,pelouse,family',
+            'section' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'total_quantity' => 'required|integer|min:1',
+            'available_quantity' => 'required|integer|min:0',
+            'is_sale_active' => 'boolean',
+            'sale_starts_at' => 'nullable|date',
+            'sale_ends_at' => 'nullable|date|after:sale_starts_at',
+        ]);
+
+        $ticket = Ticket::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Billet créé avec succès',
+            'ticket' => $ticket->load('match'),
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a ticket
+     */
+    public function adminUpdate(Request $request, Ticket $ticket): JsonResponse
+    {
+        $validated = $request->validate([
+            'category' => 'sometimes|in:vip,tribune,pelouse,family',
+            'section' => 'nullable|string',
+            'price' => 'sometimes|numeric|min:0',
+            'total_quantity' => 'sometimes|integer|min:1',
+            'available_quantity' => 'sometimes|integer|min:0',
+            'is_sale_active' => 'boolean',
+            'sale_starts_at' => 'nullable|date',
+            'sale_ends_at' => 'nullable|date|after:sale_starts_at',
+        ]);
+
+        $ticket->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Billet mis à jour avec succès',
+            'ticket' => $ticket->fresh('match'),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a ticket
+     */
+    public function adminDestroy(Ticket $ticket): JsonResponse
+    {
+        // Delete purchases
+        TicketPurchase::where('ticket_id', $ticket->id)->delete();
+
+        // Delete ticket
+        $ticket->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Billet supprimé avec succès',
+        ]);
+    }
 }

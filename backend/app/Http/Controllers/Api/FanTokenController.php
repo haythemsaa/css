@@ -323,4 +323,123 @@ class FanTokenController extends Controller
             ]
         );
     }
+
+    // ========================================
+    // ADMIN METHODS - REWARDS
+    // ========================================
+
+    /**
+     * Admin: Get all rewards
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Reward::query()->with('redemptions');
+
+        // Filter by category
+        if ($request->has('category')) {
+            $query->byCategory($request->category);
+        }
+
+        // Filter by availability
+        if ($request->has('is_available')) {
+            $query->where('is_available', $request->boolean('is_available'));
+        }
+
+        // Filter by featured
+        if ($request->has('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $rewards = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($rewards);
+    }
+
+    /**
+     * Admin: Create a new reward
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category' => 'required|in:merchandise,discount,experience,digital,exclusive',
+            'token_cost' => 'required|integer|min:1',
+            'stock_quantity' => 'nullable|integer|min:0',
+            'image_url' => 'nullable|url',
+            'is_available' => 'boolean',
+            'is_featured' => 'boolean',
+            'min_level_required' => 'nullable|integer|min:1',
+            'max_redemptions_per_user' => 'nullable|integer|min:1',
+        ]);
+
+        $reward = Reward::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Récompense créée avec succès',
+            'reward' => $reward,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a reward
+     */
+    public function adminUpdate(Request $request, int $id): JsonResponse
+    {
+        $reward = Reward::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'category' => 'sometimes|in:merchandise,discount,experience,digital,exclusive',
+            'token_cost' => 'sometimes|integer|min:1',
+            'stock_quantity' => 'nullable|integer|min:0',
+            'image_url' => 'nullable|url',
+            'is_available' => 'boolean',
+            'is_featured' => 'boolean',
+            'min_level_required' => 'nullable|integer|min:1',
+            'max_redemptions_per_user' => 'nullable|integer|min:1',
+        ]);
+
+        $reward->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Récompense mise à jour avec succès',
+            'reward' => $reward->fresh(),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a reward
+     */
+    public function adminDestroy(int $id): JsonResponse
+    {
+        $reward = Reward::findOrFail($id);
+
+        // Delete redemptions
+        RewardRedemption::where('reward_id', $reward->id)->delete();
+
+        // Delete reward
+        $reward->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Récompense supprimée avec succès',
+        ]);
+    }
 }

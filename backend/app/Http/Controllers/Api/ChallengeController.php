@@ -269,4 +269,137 @@ class ChallengeController extends Controller
             ],
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all challenges
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Challenge::query();
+
+        // Filter by type
+        if ($request->has('type')) {
+            $query->ofType($request->type);
+        }
+
+        // Filter by category
+        if ($request->has('category')) {
+            $query->ofCategory($request->category);
+        }
+
+        // Filter by difficulty
+        if ($request->has('difficulty')) {
+            $query->ofDifficulty($request->difficulty);
+        }
+
+        // Filter by active status
+        if ($request->has('is_available')) {
+            $query->where('is_available', $request->boolean('is_available'));
+        }
+
+        // Filter by featured
+        if ($request->has('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $challenges = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($challenges);
+    }
+
+    /**
+     * Admin: Create a new challenge
+     */
+    public function adminStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'type' => 'required|in:daily,weekly,monthly,special,seasonal',
+            'category' => 'required|in:engagement,social,donation,content,match',
+            'difficulty' => 'required|in:easy,medium,hard,expert',
+            'target_value' => 'required|integer|min:1',
+            'points_reward' => 'required|integer|min:0',
+            'token_reward' => 'nullable|integer|min:0',
+            'additional_rewards' => 'nullable|array',
+            'max_completions' => 'nullable|integer|min:1',
+            'starts_at' => 'required|date',
+            'ends_at' => 'nullable|date|after:starts_at',
+            'is_available' => 'boolean',
+            'is_featured' => 'boolean',
+        ]);
+
+        $challenge = Challenge::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Défi créé avec succès',
+            'challenge' => $challenge,
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a challenge
+     */
+    public function adminUpdate(Request $request, Challenge $challenge): JsonResponse
+    {
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'type' => 'sometimes|in:daily,weekly,monthly,special,seasonal',
+            'category' => 'sometimes|in:engagement,social,donation,content,match',
+            'difficulty' => 'sometimes|in:easy,medium,hard,expert',
+            'target_value' => 'sometimes|integer|min:1',
+            'points_reward' => 'sometimes|integer|min:0',
+            'token_reward' => 'nullable|integer|min:0',
+            'additional_rewards' => 'nullable|array',
+            'max_completions' => 'nullable|integer|min:1',
+            'starts_at' => 'sometimes|date',
+            'ends_at' => 'nullable|date|after:starts_at',
+            'is_available' => 'boolean',
+            'is_featured' => 'boolean',
+        ]);
+
+        $challenge->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Défi mis à jour avec succès',
+            'challenge' => $challenge->fresh(),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a challenge
+     */
+    public function adminDestroy(Challenge $challenge): JsonResponse
+    {
+        // Delete user challenges
+        $challenge->userChallenges()->delete();
+
+        // Delete challenge
+        $challenge->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Défi supprimé avec succès',
+        ]);
+    }
 }

@@ -197,4 +197,125 @@ class CollectibleCardController extends Controller
             'message' => 'Trade rejected',
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all collectible cards
+     */
+    public function adminIndex(Request $request)
+    {
+        $query = CollectibleCard::query()->with('player');
+
+        // Filter by rarity
+        if ($request->has('rarity')) {
+            $query->byRarity($request->rarity);
+        }
+
+        // Filter by season
+        if ($request->has('season')) {
+            $query->bySeason($request->season);
+        }
+
+        // Filter by active status
+        if ($request->has('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $cards = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($cards);
+    }
+
+    /**
+     * Admin: Create a new collectible card
+     */
+    public function adminStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'player_id' => 'required|exists:players,id',
+            'rarity' => 'required|in:common,rare,epic,legendary',
+            'season' => 'required|string|max:50',
+            'card_number' => 'required|string|max:50|unique:collectible_cards',
+            'image_url' => 'nullable|url',
+            'stats' => 'nullable|array',
+            'is_active' => 'boolean',
+            'release_date' => 'nullable|date',
+        ]);
+
+        $card = CollectibleCard::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Carte créée avec succès',
+            'card' => $card->load('player'),
+        ], 201);
+    }
+
+    /**
+     * Admin: Update a collectible card
+     */
+    public function adminUpdate(Request $request, $id)
+    {
+        $card = CollectibleCard::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'player_id' => 'sometimes|exists:players,id',
+            'rarity' => 'sometimes|in:common,rare,epic,legendary',
+            'season' => 'sometimes|string|max:50',
+            'card_number' => 'sometimes|string|max:50|unique:collectible_cards,card_number,' . $id,
+            'image_url' => 'nullable|url',
+            'stats' => 'nullable|array',
+            'is_active' => 'boolean',
+            'release_date' => 'nullable|date',
+        ]);
+
+        $card->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Carte mise à jour avec succès',
+            'card' => $card->fresh('player'),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a collectible card
+     */
+    public function adminDestroy($id)
+    {
+        $card = CollectibleCard::findOrFail($id);
+
+        // Delete user cards
+        UserCard::where('card_id', $card->id)->delete();
+
+        // Delete trades
+        CardTrade::where('offered_user_card_id', $card->id)
+                 ->orWhere('requested_user_card_id', $card->id)
+                 ->delete();
+
+        // Delete card
+        $card->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Carte supprimée avec succès',
+        ]);
+    }
 }

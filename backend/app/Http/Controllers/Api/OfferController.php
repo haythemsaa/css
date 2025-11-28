@@ -84,4 +84,117 @@ class OfferController extends Controller
 
         return response()->json($offers);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all offers
+     */
+    public function adminIndex(Request $request)
+    {
+        $query = PartnerOffer::query()->with(['partner', 'partner.category']);
+
+        // Filter by active status
+        if ($request->has('is_active')) {
+            $query->where('is_active', $request->boolean('is_active'));
+        }
+
+        // Filter by featured
+        if ($request->has('is_featured')) {
+            $query->where('is_featured', $request->boolean('is_featured'));
+        }
+
+        // Filter by flash
+        if ($request->has('is_flash')) {
+            $query->where('is_flash', $request->boolean('is_flash'));
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where('title', 'like', "%{$request->search}%");
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $offers = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($offers);
+    }
+
+    /**
+     * Admin: Create a new offer
+     */
+    public function adminStore(Request $request)
+    {
+        $validated = $request->validate([
+            'partner_id' => 'required|exists:partners,id',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'discount_free' => 'nullable|numeric|min:0|max:100',
+            'discount_premium' => 'nullable|numeric|min:0|max:100',
+            'discount_socios' => 'nullable|numeric|min:0|max:100',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date|after:starts_at',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_flash' => 'boolean',
+        ]);
+
+        $offer = PartnerOffer::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Offre créée avec succès',
+            'offer' => $offer->load(['partner', 'partner.category']),
+        ], 201);
+    }
+
+    /**
+     * Admin: Update an offer
+     */
+    public function adminUpdate(Request $request, $id)
+    {
+        $offer = PartnerOffer::findOrFail($id);
+
+        $validated = $request->validate([
+            'partner_id' => 'sometimes|exists:partners,id',
+            'title' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'discount_free' => 'nullable|numeric|min:0|max:100',
+            'discount_premium' => 'nullable|numeric|min:0|max:100',
+            'discount_socios' => 'nullable|numeric|min:0|max:100',
+            'starts_at' => 'sometimes|date',
+            'ends_at' => 'sometimes|date|after:starts_at',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_flash' => 'boolean',
+        ]);
+
+        $offer->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Offre mise à jour avec succès',
+            'offer' => $offer->fresh(['partner', 'partner.category']),
+        ]);
+    }
+
+    /**
+     * Admin: Delete an offer
+     */
+    public function adminDestroy($id)
+    {
+        $offer = PartnerOffer::findOrFail($id);
+        $offer->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Offre supprimée avec succès',
+        ]);
+    }
 }

@@ -200,4 +200,89 @@ class OrderController extends Controller
             'message' => 'Commande annulée avec succès',
         ]);
     }
+
+    // ========================================
+    // ADMIN METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all orders
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Order::query()->with(['user', 'items.product']);
+
+        // Filter by status
+        if ($request->has('status')) {
+            $query->ofStatus($request->status);
+        }
+
+        // Filter by payment status
+        if ($request->has('payment_status')) {
+            $query->where('payment_status', $request->payment_status);
+        }
+
+        // Search by order number or user
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('order_number', 'like', "%{$request->search}%")
+                  ->orWhereHas('user', function ($userQ) use ($request) {
+                      $userQ->where('email', 'like', "%{$request->search}%")
+                            ->orWhere('first_name', 'like', "%{$request->search}%")
+                            ->orWhere('last_name', 'like', "%{$request->search}%");
+                  });
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $orders = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($orders);
+    }
+
+    /**
+     * Admin: Update order status
+     */
+    public function adminUpdate(Request $request, Order $order): JsonResponse
+    {
+        $validated = $request->validate([
+            'status' => 'sometimes|in:pending,confirmed,processing,shipped,delivered,cancelled',
+            'payment_status' => 'sometimes|in:pending,processing,completed,failed,refunded',
+            'tracking_number' => 'nullable|string',
+            'admin_notes' => 'nullable|string',
+        ]);
+
+        $order->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Commande mise à jour avec succès',
+            'order' => $order->fresh(['user', 'items.product']),
+        ]);
+    }
+
+    /**
+     * Admin: Refund an order
+     */
+    public function adminDestroy(Order $order): JsonResponse
+    {
+        if (!in_array($order->status, ['pending', 'confirmed', 'processing'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cette commande ne peut pas être annulée',
+            ], 400);
+        }
+
+        $order->cancel();
+        $order->update(['payment_status' => 'refunded']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Commande annulée et remboursée avec succès',
+        ]);
+    }
 }

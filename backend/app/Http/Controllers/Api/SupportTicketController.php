@@ -154,4 +154,120 @@ class SupportTicketController extends Controller
 
         return response()->json(['message' => 'Évaluation enregistrée']);
     }
+
+    // ========================================
+    // ADMIN SUPPORT METHODS
+    // ========================================
+
+    /**
+     * Admin: Get all support tickets
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = SupportTicket::query()->with('user');
+
+        // Filter by status
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by category
+        if ($request->has('category')) {
+            $query->where('category', $request->category);
+        }
+
+        // Filter by priority
+        if ($request->has('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+        // Search by ticket number or user
+        if ($request->has('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('ticket_number', 'like', "%{$request->search}%")
+                  ->orWhere('subject', 'like', "%{$request->search}%")
+                  ->orWhereHas('user', function ($userQ) use ($request) {
+                      $userQ->where('email', 'like', "%{$request->search}%")
+                            ->orWhere('first_name', 'like', "%{$request->search}%");
+                  });
+            });
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $query->orderBy($sortBy, $sortOrder);
+
+        $tickets = $query->paginate($request->get('per_page', 20));
+
+        return response()->json($tickets);
+    }
+
+    /**
+     * Admin: Reply to a ticket
+     */
+    public function adminReply(Request $request, string $ticketNumber): JsonResponse
+    {
+        $ticket = SupportTicket::where('ticket_number', $ticketNumber)->firstOrFail();
+
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $message = SupportTicketMessage::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => $request->user()->id,
+            'message' => $request->input('message'),
+            'is_staff_reply' => true,
+        ]);
+
+        // Update ticket status
+        $ticket->update(['status' => 'waiting_user']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Réponse envoyée',
+            'ticket_message' => $message,
+        ], 201);
+    }
+
+    /**
+     * Admin: Close a ticket
+     */
+    public function adminUpdate(Request $request, string $ticketNumber): JsonResponse
+    {
+        $ticket = SupportTicket::where('ticket_number', $ticketNumber)->firstOrFail();
+
+        $validated = $request->validate([
+            'status' => 'required|in:open,in_progress,waiting_user,resolved,closed',
+            'priority' => 'nullable|in:low,medium,high,urgent',
+        ]);
+
+        $ticket->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Ticket mis à jour',
+            'ticket' => $ticket->fresh('user'),
+        ]);
+    }
+
+    /**
+     * Admin: Delete a ticket
+     */
+    public function adminDestroy(string $ticketNumber): JsonResponse
+    {
+        $ticket = SupportTicket::where('ticket_number', $ticketNumber)->firstOrFail();
+
+        // Delete messages
+        SupportTicketMessage::where('ticket_id', $ticket->id)->delete();
+
+        // Delete ticket
+        $ticket->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Ticket supprimé avec succès',
+        ]);
+    }
 }
