@@ -1,0 +1,16 @@
+[Unit]
+Description=Laravel Horizon - CSS Socios
+After=network.target mysql.service redis.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=5s
+ExecStart=/usr/bin/php /var/www/css/backend/artisan horizon
+StandardOutput=append:/var/log/laravel-horizon.log
+StandardError=append:/var/log/laravel-horizon-error.log
+
+[Install]
+WantedBy=multi-user.target
