@@ -587,6 +587,122 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [PollController::class, 'adminDestroy']);
         });
 
+        // ===================================
+        // BADGE MANAGEMENT
+        // ===================================
+        Route::prefix('badges')->group(function () {
+            Route::get('/', [BadgeController::class, 'adminIndex']);
+            Route::post('/', [BadgeController::class, 'adminStore']);
+            Route::put('/{id}', [BadgeController::class, 'adminUpdate']);
+            Route::delete('/{id}', [BadgeController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // CAMPAIGN MANAGEMENT
+        // ===================================
+        Route::prefix('campaigns')->group(function () {
+            Route::get('/', [CampaignController::class, 'adminIndex']);
+            Route::post('/', [CampaignController::class, 'adminStore']);
+            Route::put('/{id}', [CampaignController::class, 'adminUpdate']);
+            Route::delete('/{id}', [CampaignController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // CHALLENGE MANAGEMENT
+        // ===================================
+        Route::prefix('challenges')->group(function () {
+            Route::get('/', [ChallengeController::class, 'adminIndex']);
+            Route::post('/', [ChallengeController::class, 'adminStore']);
+            Route::put('/{id}', [ChallengeController::class, 'adminUpdate']);
+            Route::delete('/{id}', [ChallengeController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // COLLECTIBLE CARD MANAGEMENT
+        // ===================================
+        Route::prefix('collectible-cards')->group(function () {
+            Route::get('/', [CollectibleCardController::class, 'adminIndex']);
+            Route::post('/', [CollectibleCardController::class, 'adminStore']);
+            Route::put('/{id}', [CollectibleCardController::class, 'adminUpdate']);
+            Route::delete('/{id}', [CollectibleCardController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // FAN TOKEN & REWARDS MANAGEMENT
+        // ===================================
+        Route::prefix('rewards')->group(function () {
+            Route::get('/', [FanTokenController::class, 'adminIndex']);
+            Route::post('/', [FanTokenController::class, 'adminStore']);
+            Route::put('/{id}', [FanTokenController::class, 'adminUpdate']);
+            Route::delete('/{id}', [FanTokenController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // GIFT CAMPAIGN MANAGEMENT
+        // ===================================
+        Route::prefix('gifts')->group(function () {
+            Route::get('/', [GiftController::class, 'adminIndex']);
+            Route::post('/', [GiftController::class, 'adminStore']);
+            Route::put('/{id}', [GiftController::class, 'adminUpdate']);
+            Route::delete('/{id}', [GiftController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // OFFER MANAGEMENT
+        // ===================================
+        Route::prefix('offers')->group(function () {
+            Route::get('/', [OfferController::class, 'adminIndex']);
+            Route::post('/', [OfferController::class, 'adminStore']);
+            Route::put('/{id}', [OfferController::class, 'adminUpdate']);
+            Route::delete('/{id}', [OfferController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // ORDER MANAGEMENT
+        // ===================================
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [OrderController::class, 'adminIndex']);
+            Route::put('/{id}', [OrderController::class, 'adminUpdate']);
+            Route::delete('/{id}', [OrderController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // PREDICTION MANAGEMENT
+        // ===================================
+        Route::prefix('predictions')->group(function () {
+            Route::get('/', [PredictionController::class, 'adminIndex']);
+            Route::delete('/{id}', [PredictionController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // TICKET MANAGEMENT
+        // ===================================
+        Route::prefix('tickets')->group(function () {
+            Route::get('/', [TicketController::class, 'adminIndex']);
+            Route::post('/', [TicketController::class, 'adminStore']);
+            Route::put('/{id}', [TicketController::class, 'adminUpdate']);
+            Route::delete('/{id}', [TicketController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // FORUM MODERATION
+        // ===================================
+        Route::prefix('forum')->group(function () {
+            Route::get('/topics', [ForumController::class, 'adminIndex']);
+            Route::put('/topics/{id}', [ForumController::class, 'adminUpdate']);
+            Route::delete('/topics/{id}', [ForumController::class, 'adminDestroy']);
+        });
+
+        // ===================================
+        // SUPPORT TICKET MANAGEMENT
+        // ===================================
+        Route::prefix('support-tickets')->group(function () {
+            Route::get('/', [SupportTicketController::class, 'adminIndex']);
+            Route::post('/{ticketNumber}/reply', [SupportTicketController::class, 'adminReply']);
+            Route::put('/{ticketNumber}', [SupportTicketController::class, 'adminUpdate']);
+            Route::delete('/{ticketNumber}', [SupportTicketController::class, 'adminDestroy']);
+        });
+
     });
 });
 
